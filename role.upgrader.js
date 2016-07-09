@@ -17,7 +17,8 @@ var roleUpgrader = {
         }
         if(creep.memory.transfering){
             // Transfering mode, go dump it at the nearest constroller
-            var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
+            //ToDo change hard coded string
+            var hostiles = Game.rooms["E11S48"].find(FIND_HOSTILE_CREEPS);
             if(hostiles.length > 0) {
                 fillTower(creep);
             } else { 
