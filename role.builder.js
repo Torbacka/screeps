@@ -9,7 +9,7 @@ var roleBuilder = {
 	    if(!creep.memory.transfering && creep.carry.energy == creep.carryCapacity) {
 	        creep.memory.transfering = true;
 	    }
-
+        log("test");
 	    if(creep.memory.transfering) {
 	        var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if(targets.length) {
@@ -45,6 +45,9 @@ var roleBuilder = {
             }
 	    }
 	}
+    function log(message) {
+        console.log(message);
+    }
 };
 
 module.exports = roleBuilder;
