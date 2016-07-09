@@ -16,13 +16,38 @@ var roleUpgrader = {
             }
         }
         if(creep.memory.transfering){
-            // Transfering mode, go dump it at the nearest upgrader
-            
-            if( creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE ) {
-                creep.moveTo(creep.room.controller);
+            // Transfering mode, go dump it at the nearest constroller
+            var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
+            if(hostiles.length > 0) {
+                fillTower(creep);
+            } else { 
+                upgradeController(creep);
             }
+            
         }
     }
 };
+
+function upgradeController(creep) {
+    if ( creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE ) {
+        creep.moveTo(creep.room.controller);
+    }
+}
+
+function fillTower(creep) {
+    
+    var targets = creep.room.find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType === STRUCTURE_TOWER) &&
+                structure.energy < structure.energyCapacity;
+        }
+    });
+    if(targets.length > 0) {
+        if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(targets[0]);
+        }
+    } 
+        
+}
 
 module.exports = roleUpgrader;
