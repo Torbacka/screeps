@@ -17,7 +17,7 @@ var container = {
         });
         
         if(creeps.length > 0 ) {
-            container.transfer(creeps[0], RESOURCE_ENERGY, 50);
+            container.transfer(creeps[0], RESOURCE_ENERGY, creeps[0].carryCapacity);
         }
     }
 
