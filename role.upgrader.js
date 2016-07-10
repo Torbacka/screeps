@@ -10,10 +10,7 @@ var roleUpgrader = {
         }
         if(!creep.memory.transfering) {
             // Transfering mode false, go and fill yourself
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[creep.memory.sourceNr]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[creep.memory.sourceNr]);
-            }
+            collectEngery(creep);
         }
         if(creep.memory.transfering){
             // Transfering mode, go dump it at the nearest constroller
@@ -28,6 +25,16 @@ var roleUpgrader = {
         }
     }
 };
+function collectEngery(creep) {
+    var targets = creep.room.find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType === STRUCTURE_CONTAINER );
+        }
+    });
+    if(targets.length > 0) {
+        creep.moveTo(targets[creep.memory.sourceNr]);
+    }
+}
 
 function upgradeController(creep) {
     if ( creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE ) {

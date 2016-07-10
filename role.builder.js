@@ -28,15 +28,22 @@ var roleBuilder = {
             }
 	    }
 	    else {
-	        var sources = creep.room.find(FIND_SOURCES);
-            if (creep.harvest(sources[creep.memory.sourceNr]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[creep.memory.sourceNr]);
-            }
+	        collectEngery(creep);
 	    }
 	}
    
 };
 
+function collectEngery(creep) {
+    var targets = creep.room.find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType === STRUCTURE_CONTAINER );
+        }
+    });
+    if(targets.length > 0) {
+        creep.moveTo(targets[creep.memory.sourceNr]);
+    }
+}
 function calculateTasks(creep) {
     //repairWAll
     targets = creep.room.find(FIND_STRUCTURES, {

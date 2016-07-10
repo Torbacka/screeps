@@ -18,8 +18,8 @@ var roleHarvester = {
            
             var targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
-                        return (structure.structureType === STRUCTURE_CONTAINER );
-                            //structure.store < structure.energyCapacity;
+                        return (structure.structureType === STRUCTURE_CONTAINER ) &&
+                            structure.store['energy'] < structure.storeCapacity;
                     }
             });
             if(targets.length > 0) {
@@ -29,20 +29,6 @@ var roleHarvester = {
                 }
             } 
             
-            /*
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType === STRUCTURE_TOWER ||structure.structureType === STRUCTURE_CONTAINER ||structure.structureType === STRUCTURE_EXTENSION || structure.structureType === STRUCTURE_SPAWN) &&
-                            structure.energy < structure.energyCapacity;
-                    }
-            });
-            if(targets.length > 0) {
-                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
-                }
-            } 
-            //If there is nothing else to do upgrade
-            */
             else {
                 if( creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE ) {
                     creep.moveTo(creep.room.controller);
@@ -50,18 +36,5 @@ var roleHarvester = {
             }
         }
     }
-};/*
-function findNearestContainer(creep, targets) {
-    var paths = [];
-    for(var target in targets) {
-        paths.push(Room.findPath(creep.pos, target));
-    }
-    var shortest = Number.MAX_VALUE;
-    for(var i = 0;i < paths.length; i++) {
-        if(shortest < paths.length ) {
-            shortest = paths.length;
-            creep.memory.container = i;
-        }
-    }
-}*/
+};
 module.exports = roleHarvester;

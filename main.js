@@ -8,12 +8,16 @@ var garbagecollector = require('garbagecollector');
 var tower = require('tower');
 var container = require ('container');
 module.exports.loop = function () {
-    
+    var i = 0;
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         
         if(creep.memory.role == 'harvester') {
-            creep.memory.sourceNr = 0;
+            if(i%2==0) {
+                creep.memory.sourceNr = 0;
+            } else {
+                 creep.memory.sourceNr = 1;
+            }
             roleHarvester.run(creep);
         }
         if(creep.memory.role == 'builder') { 
@@ -30,13 +34,16 @@ module.exports.loop = function () {
         if(creep.memory.role == 'transporter') {
             roleTransporter.run(creep);
         }
+        i++;
     }
     
     rolePopulate.run(Game.spawns.ComandCenter);
     garbagecollector();
     tower.guard("E11S48");
     var containers = Game.rooms["E11S48"].find(
-                FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_CONTAINER}});
-    container.fill(container[0]);
-    container.fill(container[1]);
+                FIND_STRUCTURES, {filter: {structureType: STRUCTURE_CONTAINER}});
+    //containers.forEach(container => console.log(container.structureType));
+    //console.log("\n\n")
+    container.fill(containers[0]);
+   container.fill(containers[1]);
 }
