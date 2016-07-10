@@ -6,6 +6,7 @@ var roleDefender = require('role.defender');
 var roleTransporter = require('role.transporter');
 var garbagecollector = require('garbagecollector');
 var tower = require('tower');
+var container = require ('container');
 module.exports.loop = function () {
     
     for(var name in Game.creeps) {
@@ -34,4 +35,8 @@ module.exports.loop = function () {
     rolePopulate.run(Game.spawns.ComandCenter);
     garbagecollector();
     tower.guard("E11S48");
+    var containers = Game.rooms["E11S48"].find(
+                FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_CONTAINER}});
+    container.fill(container[0]);
+    container.fill(container[1]);
 }
