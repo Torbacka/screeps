@@ -4,7 +4,7 @@ var rolePopulate = {
     run: function(spawn) {
         // Ensure each creep role is above its minimum population level in an area around each spawn
     
-        var roles =  { 'upgrader':0, 'builder':0, 'defender':0 , 'harvester':0};
+        var roles =  { 'upgrader':0, 'builder':0, 'defender':0 ,'transporter':0, 'harvester':0};
         
         for(var name in Game.creeps) {
             var creep = Game.creeps[name];

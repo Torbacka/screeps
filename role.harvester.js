@@ -18,12 +18,12 @@ var roleHarvester = {
            
             var targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
-                        return (structure.structureType === STRUCTURE_CONTAINER ) &&
-                            structure.energy < structure.energyCapacity;
+                        return (structure.structureType === STRUCTURE_CONTAINER );
+                            //structure.store < structure.energyCapacity;
                     }
             });
             if(targets.length > 0) {
-                var container = creep.memory.soruceNr == 0 ? 1 : 0;
+                var container = creep.memory.soruceNr == 0 ? 0 : 1;
                 if(creep.transfer(targets[container], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[container]);
                 }
@@ -40,8 +40,9 @@ var roleHarvester = {
                 if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
                 }
-            } */
+            } 
             //If there is nothing else to do upgrade
+            */
             else {
                 if( creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE ) {
                     creep.moveTo(creep.room.controller);
