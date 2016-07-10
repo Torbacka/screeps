@@ -14,7 +14,7 @@ var roleHarvester = {
             }
         }
         else {
-            /*
+            
            
             var targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
@@ -22,16 +22,14 @@ var roleHarvester = {
                             structure.energy < structure.energyCapacity;
                     }
             });
-            if(!creep.memory.container) {
-                 findNearestContainer(creep,targets);
-            }
             if(targets.length > 0) {
-                if(creep.transfer(targets[creep.memory.container], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[creep.memory.container]);
+                var container = creep.memory.soruceNr == 0 ? 1 : 0;
+                if(creep.transfer(targets[container], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[container]);
                 }
             } 
-            */
-
+            
+            /*
             var targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType === STRUCTURE_TOWER ||structure.structureType === STRUCTURE_CONTAINER ||structure.structureType === STRUCTURE_EXTENSION || structure.structureType === STRUCTURE_SPAWN) &&
@@ -42,7 +40,7 @@ var roleHarvester = {
                 if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
                 }
-            } 
+            } */
             //If there is nothing else to do upgrade
             else {
                 if( creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE ) {
