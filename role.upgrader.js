@@ -32,7 +32,8 @@ function collectEngery(creep) {
         }
     });
     if(targets.length > 0) {
-        creep.moveTo(targets[creep.memory.sourceNr]);
+        var container = creep.memory.soruceNr == 0 ? 0 : 1;
+        creep.moveTo(targets[container]);
     }
 }
 

@@ -12,11 +12,12 @@ var container = {
     fill: function(container){
         var creeps = container.pos.findInRange(FIND_MY_CREEPS, 2, {
             filter: (creep) => {
-                        return (creep.memory.role === 'transporter');
+                        return (creep.memory.role === 'transporter'||creep.memory.role === 'upgrader'||creep.memory.role === 'builder');
                     }
         });
+        
         if(creeps.length > 0 ) {
-            container.transfer(creeps[0], RESOURCE_ENERGY, 200);
+            container.transfer(creeps[0], RESOURCE_ENERGY, 50);
         }
     }
 
