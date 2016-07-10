@@ -3,15 +3,15 @@ var roleBuilder = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-	    if (creep.memory.transfering && creep.carry.energy == 0) {
+        if (creep.memory.transfering && creep.carry.energy == 0) {
             creep.memory.transfering = false;
-	    }
-	    if (!creep.memory.transfering && creep.carry.energy == creep.carryCapacity) {
-	        creep.memory.transfering = true;
-	    }
+        }
+        if (!creep.memory.transfering && creep.carry.energy == creep.carryCapacity) {
+            creep.memory.transfering = true;
+        }
 
-	    if (creep.memory.transfering) {
-	        
+        if (creep.memory.transfering) {
+            
             var task = calculateTasks(creep);
             switch(task[0]) {
                 case 'repairWall' :
@@ -26,11 +26,11 @@ var roleBuilder = {
                 default:
                     upgradeController(creep);
             }
-	    }
-	    else {
-	        collectEngery(creep);
-	    }
-	}
+        }
+        else {
+            collectEngery(creep);
+        }
+    }
    
 };
 

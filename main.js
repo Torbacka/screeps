@@ -13,11 +13,6 @@ module.exports.loop = function () {
         var creep = Game.creeps[name];
         
         if(creep.memory.role == 'harvester') {
-            if(i%2==0) {
-                creep.memory.sourceNr = 0;
-            } else {
-                 creep.memory.sourceNr = 1;
-            }
             roleHarvester.run(creep);
         }
         if(creep.memory.role == 'builder') { 
