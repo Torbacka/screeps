@@ -22,7 +22,7 @@ var rolePopulate = {
                     var lastSource = role[name][lengthList-1].sourceNr;
                     source = lastSource === 0 ? 1 : 0;;
                 } else if(name === 'transporter'){
-                    source = 1;
+                    source = 0;
                 }  else if(name === 'upgrader'){
                     source = 1;
                 } else if(name === 'defender'){
