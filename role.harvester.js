@@ -14,9 +14,27 @@ var roleHarvester = {
             }
         }
         else {
+            /*
+           
             var targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
-                        return (structure.structureType === STRUCTURE_TOWER ||structure.structureType === STRUCTURE_EXTENSION || structure.structureType === STRUCTURE_SPAWN) &&
+                        return (structure.structureType === STRUCTURE_CONTAINER ) &&
+                            structure.energy < structure.energyCapacity;
+                    }
+            });
+            if(!creep.memory.container) {
+                 findNearestContainer(creep,targets);
+            }
+            if(targets.length > 0) {
+                if(creep.transfer(targets[creep.memory.container], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[creep.memory.container]);
+                }
+            } 
+            */
+
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType === STRUCTURE_TOWER ||structure.structureType === STRUCTURE_CONTAINER ||structure.structureType === STRUCTURE_EXTENSION || structure.structureType === STRUCTURE_SPAWN) &&
                             structure.energy < structure.energyCapacity;
                     }
             });
@@ -33,6 +51,18 @@ var roleHarvester = {
             }
         }
     }
-};
-
+};/*
+function findNearestContainer(creep, targets) {
+    var paths = [];
+    for(var target in targets) {
+        paths.push(Room.findPath(creep.pos, target));
+    }
+    var shortest = Number.MAX_VALUE;
+    for(var i = 0;i < paths.length; i++) {
+        if(shortest < paths.length ) {
+            shortest = paths.length;
+            creep.memory.container = i;
+        }
+    }
+}*/
 module.exports = roleHarvester;

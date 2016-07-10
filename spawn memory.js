@@ -1,7 +1,7 @@
 Game.spawns.ComandCenter.memory.creepSpecs = 
-{'harvester':[WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE],
-'builder':[WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE],
- 'upgrader':[WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE],
+{'harvester':[WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE],
+'builder':[WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE],
+ 'upgrader':[WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE],
  'defender':[ATTACK,ATTACK,ATTACK,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,MOVE]};
 
  Game.spawns.ComandCenter.memory.minPopulation = {'harvester':5, 'builder':3, 'upgrader':5,'defender':0};
