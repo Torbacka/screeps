@@ -23,7 +23,7 @@ var populate = {
         switch(totalEnergy) {
             case 650:
             default:
-                creepArray =[WORK, WORK,WORK, WORK, WORK,WORK,CARRY, CARRY,MOVE,MOVE, MOVE, MOVE, MOVE];
+                creepArray =[WORK, WORK,WORK, WORK, WORK,WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE];
                 break;    
         }
         
