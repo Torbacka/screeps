@@ -16,10 +16,15 @@ const tower = {
         if (towers.length === 0) {
             return;
         }
+        console.log(
+            Game.rooms[roomName].controller.safeMode
+        );
         if (hostiles.length > 0) {
             const username = hostiles[0].owner.username;
             Game.notify(`User ${username} spotted in room ${roomName}`);
-
+            if (Game.rooms[roomName].controller.safeMode === undefined) {
+                Game.rooms[roomName].controller.activateSafeMode();
+            }
             towers.forEach(tower => tower.attack(hostiles[0]));
         } else {
             const targets = getRepairObjects(towers[0]);
