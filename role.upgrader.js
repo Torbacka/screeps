@@ -3,7 +3,7 @@ const roleUpgrader = {
     /** @param {Creep} creep **/
     run: function (creep, source = null) {
         if (source == null) {
-            var source = creep.room.find(FIND_SOURCES, {
+            source = creep.room.find(FIND_SOURCES, {
                 filter: function (object) {
                     return object.pos.x === 39
                 }

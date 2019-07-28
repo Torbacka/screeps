@@ -28,12 +28,12 @@ var populate = {
         }
         
         if (energyAvailable >= 650) {
-            if(harvesters.length < 5) {
+            if(harvesters.length < 3) {
                 newName = 'Harvester' + Game.time;
                 console.log('Spawning new harvester: ' + newName);
                 Game.spawns['Spawn1'].spawnCreep(creepArray, newName, 
                     {memory: {role: 'harvester'}});
-            } else if((constructionSites.length === 0 && upgraders.length < 6) || upgraders.length < 5) {
+            } else if((constructionSites.length === 0 && upgraders.length < 3) || upgraders.length < 2 ) {
                 newName = 'Upgrader' + Game.time;
                 console.log('Spawning new upgrader: ' + newName);
                 Game.spawns['Spawn1'].spawnCreep(creepArray, newName, 
