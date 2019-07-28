@@ -10,9 +10,9 @@
 var populate = {
     run: function() {
         let newName;
-        const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-        const builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-        const upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
+        const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === 'harvester');
+        const builders = _.filter(Game.creeps, (creep) => creep.memory.role === 'builder');
+        const upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === 'upgrader');
         const room = Game.rooms['W38N35'];
 
 
@@ -23,12 +23,12 @@ var populate = {
         switch(totalEnergy) {
             case 650:
             default:
-                creepArray =[WORK, WORK,WORK, WORK, WORK,CARRY, CARRY, WORK,MOVE, MOVE, MOVE, MOVE];
+                creepArray =[WORK, WORK,WORK, WORK, WORK,WORK,CARRY, CARRY,MOVE,MOVE, MOVE, MOVE, MOVE];
                 break;    
         }
         
         if (energyAvailable >= 650) {
-            if(harvesters.length < 7) {
+            if(harvesters.length < 5) {
                 newName = 'Harvester' + Game.time;
                 console.log('Spawning new harvester: ' + newName);
                 Game.spawns['Spawn1'].spawnCreep(creepArray, newName, 

@@ -4,6 +4,7 @@ let roleBuilder = require('role.builder');
 let garbagecollector = require('garbagecollector');
 let populate = require('populate');
 let tower = require('tower');
+let gatherStatistics = require('gatherStatistics');
 
 module.exports.loop = function () {
     let name;
@@ -42,4 +43,5 @@ module.exports.loop = function () {
     }
     tower.guard("W38N35");
     garbagecollector();
+    gatherStatistics();
 };
