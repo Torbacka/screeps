@@ -5,7 +5,7 @@ module.exports = () => {
     /*var statString = "";
     var time = 0;
     Memory.statistics.forEach((stat) => {
-        statString += "" + stat.progress + ";" + time + "\n";
+        statString += "" + stat.progress + ";" + time + ";" + stat.timestamp +  "\n";
         time +=100;
     });
     console.log(statString);
