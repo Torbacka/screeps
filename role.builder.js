@@ -1,102 +1,38 @@
-var roleBuilder = {
+const roleBuilder = {
 
-    /** @param {Creep} creep **/
-    run: function(creep) {
-
-        if (creep.memory.transfering && creep.carry.energy == 0) {
-            creep.memory.transfering = false;
+    /** @param {Creep} creep *
+     * @param source
+     */
+    run: function (creep, source = null) {
+        if (source == null) {
+            source = creep.room.find(FIND_SOURCES, {
+                filter: function (object) {
+                    return object.pos.x === 39
+                }
+            })[0];
         }
-        if (!creep.memory.transfering && creep.carry.energy == creep.carryCapacity) {
-            creep.memory.transfering = true;
+        if (creep.memory.building && creep.carry.energy === 0) {
+            creep.memory.building = false;
+            creep.say('🔄 harvest');
+        }
+        if (!creep.memory.building && creep.carry.energy === creep.carryCapacity) {
+            creep.memory.building = true;
+            creep.say('🚧 build');
         }
 
-        if (creep.memory.transfering) {
-            
-            var task = calculateTasks(creep);
-            switch(task[0]) {
-                case 'repairWall' :
-                    repairWall(creep, task[1]);
-                    break;
-                case 'build' :
-                    build(creep, task[1]);
-                    break;
-                case 'repair' :
-                    repair(creep, task[1]);
-                    break;
-                default:
-                    upgradeController(creep);
+        if (creep.memory.building) {
+            var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+            if (targets.length) {
+                if (creep.build(targets[0]) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            }
+        } else {
+            if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
         }
-        else {
-            collectEngery(creep);
-        }
     }
-   
 };
-
-function collectEngery(creep) {
-    var targets = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-            return (structure.structureType === STRUCTURE_CONTAINER );
-        }
-    });
-    if(targets.length > 0) {
-        var container = creep.memory.soruceNr == 0 ? 0 : 1;
-        creep.moveTo(targets[container]);
-    }
-}
-function calculateTasks(creep) {
-    //repairWAll
-    targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_RAMPART && structure.hits < structure.hitsMax*0.1) ||
-                        (structure.structureType == STRUCTURE_WALL && structure.hits < structure.hitsMax*0.0001);
-                    }
-                });
-    if (targets.length > 0) {
-        return ['repairWall', targets];
-    }
-    //Build
-    var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-    if (targets.length> 0) {
-        return ['build',targets];
-    }
-    //repair rest
-    targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_ROAD && structure.hits < structure.hitsMax*0.9) ||
-                        (structure.structureType == STRUCTURE_CONTAINER && structure.hits < structure.hitsMax);
-                    }
-                });
-    if (targets.length > 0) {
-        return ['repair', targets];
-    }
-
-    //return default
-    return ['default',[]];
-}
-
-function build(creep, targets) {
-    if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(targets[0]);
-    }
-}
-//Send one creep to one wall
-function repairWall(creep, targets) {
-    if (creep.repair(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
-    }
-}
-//Send one creep to one wall
-function repair(creep, targets) {
-    if (creep.repair(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
-    }
-}
-function upgradeController(creep) {
-    if ( creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE ) {
-        creep.moveTo(creep.room.controller);
-    }
-}
 
 module.exports = roleBuilder;

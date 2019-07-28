@@ -1,62 +1,33 @@
-var roleUpgrader = {
+const roleUpgrader = {
 
     /** @param {Creep} creep **/
-    run: function(creep) {
-       
-        if(creep.carry.energy == 0) {
-            creep.memory.transfering = false;
-        } else if(creep.carry.energy == creep.carryCapacity) {
-            creep.memory.transfering = true;
+    run: function (creep, source = null) {
+        if (source == null) {
+            var source = creep.room.find(FIND_SOURCES, {
+                filter: function (object) {
+                    return object.pos.x === 39
+                }
+            })[0];
         }
-        if(!creep.memory.transfering) {
-            // Transfering mode false, go and fill yourself
-            collectEngery(creep);
+
+        if (creep.memory.upgrading && creep.carry.energy === 0) {
+            creep.memory.upgrading = false;
+            creep.say('🔄 harvest');
         }
-        if(creep.memory.transfering){
-            // Transfering mode, go dump it at the nearest constroller
-            //ToDo change hard coded string
-            var hostiles = Game.rooms["E11S48"].find(FIND_HOSTILE_CREEPS);
-            if(hostiles.length > 0) {
-                fillTower(creep);
-            } else { 
-                upgradeController(creep);
+        if (!creep.memory.upgrading && creep.carry.energy === creep.carryCapacity) {
+            creep.memory.upgrading = true;
+            creep.say('🚧 upgrading');
+        }
+        if (creep.memory.upgrading) {
+            if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
             }
-            
+        } else {
+            if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+            }
         }
     }
 };
-function collectEngery(creep) {
-    var targets = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-            return (structure.structureType === STRUCTURE_CONTAINER );
-        }
-    });
-    if(targets.length > 0) {
-        var container = creep.memory.soruceNr == 0 ? 0 : 1;
-        creep.moveTo(targets[container]);
-    }
-}
-
-function upgradeController(creep) {
-    if ( creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE ) {
-        creep.moveTo(creep.room.controller);
-    }
-}
-
-function fillTower(creep) {
-    
-    var targets = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-            return (structure.structureType === STRUCTURE_TOWER) &&
-                structure.energy < structure.energyCapacity;
-        }
-    });
-    if(targets.length > 0) {
-        if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(targets[0]);
-        }
-    } 
-        
-}
 
 module.exports = roleUpgrader;
