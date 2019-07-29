@@ -6,6 +6,21 @@ var roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+        if (creep.carry.energy < creep.carryCapacity)
+        {
+            const energy = creep.pos.findInRange(
+                FIND_DROPPED_RESOURCES,
+                6
+            );
+
+            if (energy.length) {
+                console.log('found ' + energy[0].energy + ' energy at ', energy[0].pos + '  ' + creep.pickup(energy[0]) === ERR_NOT_IN_RANGE);
+                if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                    return;
+                }
+            }
+        }
         const source = creep.room.find(FIND_SOURCES, {
             filter: function (object) {
                 return object.pos.x === 27
@@ -57,7 +72,7 @@ var roleHarvester = {
                 const towers = Game.rooms["W38N35"].find(
                     FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
 
-                if (towers.length > 0 && towers[0].energy < 500) {
+                if (towers.length > 0 && towers[0].energy < 700) {
                     roleTransporter.run(creep, source);
                 } else if (constructionSites.length) {
                     roleBuilder.run(creep, source);

@@ -1,11 +1,10 @@
-let roleHarvester = require('role.harvester');
-let roleUpgrader = require('role.upgrader');
-let roleBuilder = require('role.builder');
-let garbagecollector = require('garbagecollector');
-let populate = require('populate');
-let tower = require('tower');
-let gatherStatistics = require('gatherStatistics');
-
+let roleHarvester = require('./role.harvester');
+let roleUpgrader = require('./role.upgrader');
+let roleBuilder = require('./role.builder');
+let garbagecollector = require('./garbagecollector');
+let populate = require('./populate');
+let tower = require('./tower');
+let gatherStatistics = require('./gatherStatistics');
 module.exports.loop = function () {
     let name;
     console.log("Start!");
@@ -15,7 +14,6 @@ module.exports.loop = function () {
             console.log('Clearing non-existing creep memory:', name);
         }
     }
-    
     populate.run();
 
    
