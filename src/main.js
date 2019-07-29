@@ -16,8 +16,6 @@ module.exports.loop = function () {
     }
     populate.run();
 
-    console.log("Fungerar!");
-    
     if(Game.spawns['Spawn1'].spawning) {
         let spawningCreep = Game.creeps[Game.spawns['Spawn1'].spawning.name];
         Game.spawns['Spawn1'].room.visual.text(
