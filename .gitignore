@@ -1,6 +1,7 @@
 .idea/
 *.iml
-test
 test.js
 test.json
 screeps.json
+node_modules/
+dist/

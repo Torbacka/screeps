@@ -1,10 +1,10 @@
-let roleHarvester = require('./role.harvester');
-let roleUpgrader = require('./role.upgrader');
-let roleBuilder = require('./role.builder');
-let garbagecollector = require('./garbagecollector');
-let populate = require('./populate');
-let tower = require('./tower');
-let gatherStatistics = require('./gatherStatistics');
+let roleHarvester = require('role/harvester');
+let roleUpgrader = require('role/upgrader');
+let roleBuilder = require('role/builder');
+let garbagecollector = require('garbagecollector');
+let populate = require('populate');
+let tower = require('tower');
+let gatherStatistics = require('gatherStatistics');
 module.exports.loop = function () {
     let name;
     console.log("Start!");
@@ -16,7 +16,7 @@ module.exports.loop = function () {
     }
     populate.run();
 
-   
+    console.log("Fungerar!");
     
     if(Game.spawns['Spawn1'].spawning) {
         let spawningCreep = Game.creeps[Game.spawns['Spawn1'].spawning.name];

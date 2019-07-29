@@ -1,26 +1,11 @@
-var roleBuilder = require('role.builder');
-var roleUpgrader = require('role.upgrader');
-var roleTransporter = require('role.transporter');
+var roleBuilder = require('role/builder');
+var roleUpgrader = require('role/upgrader');
+var roleTransporter = require('role/transporter');
 
-var roleHarvester = {
+var harvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        if (creep.carry.energy < creep.carryCapacity)
-        {
-            const energy = creep.pos.findInRange(
-                FIND_DROPPED_RESOURCES,
-                6
-            );
-
-            if (energy.length) {
-                console.log('found ' + energy[0].energy + ' energy at ', energy[0].pos + '  ' + creep.pickup(energy[0]) === ERR_NOT_IN_RANGE);
-                if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ffffff'}});
-                    return;
-                }
-            }
-        }
         const source = creep.room.find(FIND_SOURCES, {
             filter: function (object) {
                 return object.pos.x === 27
@@ -40,7 +25,16 @@ var roleHarvester = {
             	        creep.say('🚧 Storing');
         }
 	    if(!creep.memory.harvesting) {
-            if(creep.harvest(source) === ERR_NOT_IN_RANGE) {
+            const energy = creep.pos.findInRange(
+                FIND_DROPPED_RESOURCES,
+                6
+            );
+            if (energy.length) {
+                console.log('found ' + energy[0].energy + ' energy at ', energy[0].pos + '  ' + creep.pickup(energy[0]) === ERR_NOT_IN_RANGE);
+                if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            } else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
         }
@@ -84,4 +78,4 @@ var roleHarvester = {
 	}
 };
 
-module.exports = roleHarvester;
+module.exports = harvester;

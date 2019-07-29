@@ -1,4 +1,4 @@
-var roleTransporter = {
+var transporter = {
     run: function(creep, source){
         if (source == null) {
             source =  creep.room.find(FIND_SOURCES,  {filter: function(object) {return object.pos.x == 39}})[0];
@@ -30,4 +30,4 @@ var roleTransporter = {
 };
 
 
-module.exports = roleTransporter;
+module.exports = transporter;

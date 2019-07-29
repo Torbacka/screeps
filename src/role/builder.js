@@ -1,4 +1,4 @@
-const roleBuilder = {
+const builder = {
 
     /** @param {Creep} creep *
      * @param source
@@ -35,4 +35,4 @@ const roleBuilder = {
     }
 };
 
-module.exports = roleBuilder;
+module.exports = builder;

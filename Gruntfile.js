@@ -113,10 +113,63 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask('replace', 'Replaces file paths with _', function () {
+        grunt.file.recurse('./dist/', ReplaceImports);
+    });
+
+// gObj = global grunt object
+    let ReplaceImports = function (abspath, rootdir, subdir, filename) {
+        if (abspath.match(/.js$/) == null) {
+            return;
+        }
+        let file = grunt.file.read(abspath);
+        let updatedFile = '';
+
+        let lines = file.split('\n');
+        for (let line of lines) {
+            // Compiler: IgnoreLine
+            if ((line).match(/[.]*\/\/ Compiler: IgnoreLine[.]*/)) {
+                continue;
+            }
+            let reqStr = line.match(/(?:require\(")([^_a-zA-Z0-9]*)([^"]*)/);
+            let reqStr2 = line.match(/(?:require\(')([^_a-zA-Z0-9]*)([^']*)/);
+            if ((reqStr && reqStr != "") ||(reqStr2 && reqStr2 != "")) {
+                let reqPath = subdir ? subdir.split('/') : []; // relative path
+                let upPaths = line.match(/\.\//gi);
+                if (upPaths) {
+                    for (let i in upPaths) {
+                        reqPath.splice(reqPath.length - 1);
+                    }
+                } else {
+                    let isRelative = line.match(/\.\//gi);
+                    if (!isRelative || isRelative == "") {
+                        // absolute path
+                        reqPath = [];
+                    }
+                }
+
+                let rePathed = "";
+                if (reqPath && reqPath.length > 0) {
+                    while (reqPath.length > 0) {
+
+                        rePathed += reqPath.shift() + "_";
+                    }
+                }
+                line = line.replace(/require\("([\.\/]*)([^"]*)/, "require\(\"" + rePathed + "$2");
+                line = line.replace(/\//gi, '_');
+            }
+
+            updatedFile += (line + '\n');
+        }
+
+        grunt.file.write((rootdir + '/' + (subdir ? subdir + '/' : '') + filename), updatedFile);
+    }
+
     // Combine the above into a default task
-    grunt.registerTask('default', ['clean', 'copy', 'concat', 'file_append', 'screeps']);
+    grunt.registerTask('default', ['package', 'screeps']);
     grunt.registerTask('raw', ['clean', 'copy', 'screeps']);
-    grunt.registerTask('package', ['clean', 'copy', 'concat', 'file_append']);
+    grunt.registerTask('package', ['clean', 'copy', 'concat', 'file_append', 'replace']);
     grunt.registerTask('test', ['jsbeautifier:verify']);
     grunt.registerTask('pretty', ['jsbeautifier:modify']);
+
 };
