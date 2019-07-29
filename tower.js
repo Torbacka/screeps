@@ -27,39 +27,35 @@ const tower = {
         } else {
             const targets = getRepairObjects(towers[0]);
 
-            if (targets.length > 0) {
-                towers.forEach(tower => tower.repair(targets[0]));
-            } else if (towers[0].energy > (towers[0].energyCapacity * 0.7)) {
-                /*var walls = getWalls(towers[0]);
-
-                if(Game.spawns['Spawn1'].memory.wallToRepair &&  (Game.spawns['Spawn1'].memory.wallToRepair > walls.length)) {
-                    console.log( (Game.spawns['Spawn1'].memory.wallToRepair > walls.length));
-                   Game.spawns['Spawn1'].memory.wallToRepair = 0;
+            towers.forEach(tower => {
+                if (targets.length > 0) {
+                    tower.repair(targets[0])
+                } else if (tower.energy > tower.energyCapacity * 0.1) {
+                    let walls = getWalls(towers[0]);
+                    walls.sort((wall1, wall2) => (wall1.hits > wall2.hits) ? 1 : -1);
+                    towers.forEach(tower => tower.repair(walls[0]));
                 }
-                var walls = getWalls(towers[0]);
-                towers.forEach(tower => tower.repair(walls[0]));
-                Game.spawns['Spawn1'].memory.wallToRepair += 1;*/
-            }
-
+            });
         }
     }
-
 };
+
 
 function getWalls(tower) {
     return tower.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax*0.001);
-            }
+        filter: (structure) => {
+            return (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.001)
+                || (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.03);
+        }
     });
 }
+
 function getRepairObjects(tower) {
     return tower.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax*0.9) ||
-                        (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax)||
-                        (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax*0.1);
-                    }
+        filter: (structure) => {
+            return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax * 0.9) ||
+                (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax);
+        }
     });
 
 }
