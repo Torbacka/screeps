@@ -9,9 +9,9 @@
 
 const tower = {
 
-    guard: function (roomName) {
-        const hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
-        const towers = Game.rooms[roomName].find(
+    guard: function (room) {
+        const hostiles = room.find(FIND_HOSTILE_CREEPS);
+        const towers = room.find(
           FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
         if (towers.length === 0) {
             return;
@@ -20,8 +20,8 @@ const tower = {
         if (hostiles.length > 0) {
             const username = hostiles[0].owner.username;
             Game.notify(`User ${username} spotted in room ${roomName}`);
-            if (Game.rooms[roomName].controller.safeMode === undefined) {
-                Game.rooms[roomName].controller.activateSafeMode();
+            if (room.controller.safeMode === undefined) {
+                room.controller.activateSafeMode();
             }
             towers.forEach(tower => tower.attack(hostiles[0]));
         } else {

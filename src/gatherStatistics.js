@@ -1,4 +1,4 @@
-module.exports = () => {
+module.exports = (room) => {
     if (Memory.statistics === undefined) {
         Memory.statistics = [];
     }
@@ -12,14 +12,13 @@ module.exports = () => {
     */
 
     if (Game.time % 100 === 0) {
-        Object.values(Game.rooms).forEach((room) => {
-            let statistics = {
-                'progress': room.controller.progress,
-                'progressTotal': room.controller.progressTotal,
-                'timestamp': Date.now()
-            };
-            Memory.statistics.push(statistics);
-            console.log("Pushing stats");
-        });
+        let statistics = {
+            'progress': room.controller.progress,
+            'progressTotal': room.controller.progressTotal,
+            'timestamp': Date.now(),
+            'roomName': room.name
+        };
+        Memory.statistics.push(statistics);
+        console.log("Pushing stats");
     }
 };

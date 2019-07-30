@@ -6,11 +6,7 @@ var harvester = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
-        const source = creep.room.find(FIND_SOURCES, {
-            filter: function (object) {
-                return object.pos.x === 27
-            }
-        })[0];
+        const source = creep.room.find(FIND_SOURCES)[1];
 
         if (creep.memory.harvesting && creep.carry.energy === 0) {
             creep.memory.harvesting = false;

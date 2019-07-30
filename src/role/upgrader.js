@@ -3,13 +3,9 @@ const upgrader = {
     /** @param {Creep} creep **/
     run: function (creep, source = null) {
         if (source == null) {
-            source = creep.room.find(FIND_SOURCES, {
-                filter: function (object) {
-                    return object.pos.x === 39
-                }
-            })[0];
+            source = creep.room.find(FIND_SOURCES)[0];
         }
-
+        console.log(JSON.stringify(source));
         if (creep.memory.upgrading && creep.carry.energy === 0) {
             creep.memory.upgrading = false;
             creep.say('🔄 harvest');
