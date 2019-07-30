@@ -13,6 +13,8 @@ var populate = {
         const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === 'harvester');
         const builders = _.filter(Game.creeps, (creep) => creep.memory.role === 'builder');
         const upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === 'upgrader');
+        const attacker = _.filter(Game.creeps, (creep) => creep.memory.role === 'attacker');
+        const claimer = _.filter(Game.creeps, (creep) => creep.memory.role === 'claimer');
         const room = Game.rooms['W38N35'];
 
 
@@ -43,6 +45,16 @@ var populate = {
                 console.log('Spawning new Builder: ' + newName);
                 Game.spawns['Spawn1'].spawnCreep(creepArray, newName,
                   {memory: {role: 'builder'}});
+            } else if (attacker.length < 0) {
+                newName = 'Attacker' + Game.time;
+                creepArray = [ATTACK, ATTACK,ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
+                Game.spawns['Spawn1'].spawnCreep(creepArray, newName,
+                  {memory: {role: 'attacker'}});
+            } else if (claimer.length < 0) {
+                newName = 'Attacker' + Game.time;
+                creepArray = [CLAIM, CLAIM, MOVE, MOVE];
+                Game.spawns['Spawn1'].spawnCreep(creepArray, newName,
+                  {memory: {role: 'claimer'}});
             }
         }
     }
