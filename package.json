@@ -1,0 +1,28 @@
+{
+  "name": "screep",
+  "version": "1.0.0",
+  "description": "Some novice screeps code",
+  "main": "Gruntfile.js",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-file-append": "0.0.7",
+    "grunt-jsbeautifier": "^0.2.13",
+    "grunt-screeps": "^1.4.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/torbacka/screep.git"
+  },
+  "author": "Daniel Törbacka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/torbacka/screep/issues"
+  },
+  "homepage": "https://github.com/torbacka/screep#readme"
+}
