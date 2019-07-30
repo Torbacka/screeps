@@ -5,29 +5,29 @@ var roleTransporter = require('role/transporter');
 var harvester = {
 
     /** @param {Creep} creep **/
-    run: function(creep) {
+    run: function (creep) {
         const source = creep.room.find(FIND_SOURCES, {
             filter: function (object) {
                 return object.pos.x === 27
             }
         })[0];
 
-        if(creep.memory.harvesting && creep.carry.energy === 0) {
-                    creep.memory.harvesting = false;
-                    creep.memory.upgrading = false;
-                    creep.memory.building = false;
-                    creep.say('🔄 harvest');
-	    }
-	     if(!creep.memory.harvesting && creep.carry.energy === creep.carryCapacity) {
-            	        creep.memory.harvesting = true;
-            	        creep.memory.upgrading = true;
-                        creep.memory.building = true;
-            	        creep.say('🚧 Storing');
+        if (creep.memory.harvesting && creep.carry.energy === 0) {
+            creep.memory.harvesting = false;
+            creep.memory.upgrading = false;
+            creep.memory.building = false;
+            creep.say('🔄 harvest');
         }
-	    if(!creep.memory.harvesting) {
+        if (!creep.memory.harvesting && creep.carry.energy === creep.carryCapacity) {
+            creep.memory.harvesting = true;
+            creep.memory.upgrading = true;
+            creep.memory.building = true;
+            creep.say('🚧 Storing');
+        }
+        if (!creep.memory.harvesting) {
             const energy = creep.pos.findInRange(
-                FIND_DROPPED_RESOURCES,
-                6
+              FIND_DROPPED_RESOURCES,
+              6
             );
             if (energy.length) {
                 console.log('found ' + energy[0].energy + ' energy at ', energy[0].pos + '  ' + creep.pickup(energy[0]) === ERR_NOT_IN_RANGE);
@@ -42,29 +42,29 @@ var harvester = {
             const extension = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_EXTENSION) &&
-                        structure.energy < structure.energyCapacity;
+                      structure.energy < structure.energyCapacity;
                 }
             });
 
             const spawn = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_SPAWN) &&
-                        structure.energy < structure.energyCapacity;
+                      structure.energy < structure.energyCapacity;
                 }
             });
-            if(extension.length > 0) {
-                if(creep.transfer(extension[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+            if (extension.length > 0) {
+                if (creep.transfer(extension[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(extension[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
-            } else if(spawn.length > 0) {
-                if(creep.transfer(spawn[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+            } else if (spawn.length > 0) {
+                if (creep.transfer(spawn[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(spawn[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
-                
+
             } else {
                 const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
                 const towers = Game.rooms["W38N35"].find(
-                    FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+                  FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
 
                 if (towers.length > 0 && towers[0].energy < 700) {
                     roleTransporter.run(creep, source);
@@ -75,7 +75,7 @@ var harvester = {
                 }
             }
         }
-	}
+    }
 };
 
 module.exports = harvester;

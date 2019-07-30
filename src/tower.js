@@ -12,7 +12,7 @@ const tower = {
     guard: function (roomName) {
         const hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
         const towers = Game.rooms[roomName].find(
-            FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+          FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
         if (towers.length === 0) {
             return;
         }
@@ -45,7 +45,7 @@ function getWalls(tower) {
     return tower.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.001)
-                || (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.03);
+              || (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.03);
         }
     });
 }
@@ -54,7 +54,7 @@ function getRepairObjects(tower) {
     return tower.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax * 0.9) ||
-                (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax);
+              (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax);
         }
     });
 
