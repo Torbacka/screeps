@@ -1,8 +1,8 @@
-let roleHarvester = require('role/harvester');
-let roleUpgrader = require('role/upgrader');
-let roleBuilder = require('role/builder');
-let roleAttacker = require('role/attacker');
-let roleClaimer = require('role/claim');
+let roleHarvester = require('role_harvester');
+let roleUpgrader = require('role_upgrader');
+let roleBuilder = require('role_builder');
+let roleAttacker = require('role_attacker');
+let roleClaimer = require('role_claim');
 let garbagecollector = require('garbagecollector');
 let populate = require('populate');
 let tower = require('tower');
@@ -11,8 +11,10 @@ let gatherStatistics = require('gatherStatistics');
 module.exports.loop = function () {
     console.log("New game tick!!!!!!!");
     Object.values(Game.rooms).forEach((room) => {
-        let hostilePresent = room.find(FIND_HOSTILE_CREEPS).length > 0;
         room.find(FIND_CREEPS).forEach((creep) => {
+            if (creep.memory.role === undefined) {
+                return;
+            }
             if (creep.memory.role === 'harvester') {
                 roleHarvester.run(creep);
             }
