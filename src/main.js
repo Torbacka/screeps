@@ -1,8 +1,10 @@
-let roleHarvester = require('role_harvester');
-let roleUpgrader = require('role_upgrader');
-let roleBuilder = require('role_builder');
-let roleAttacker = require('role_attacker');
-let roleClaimer = require('role_claim');
+let roleHarvester = require('role/harvester');
+let roleUpgrader = require('role/upgrader');
+let roleBuilder = require('role/builder');
+let roleAttacker = require('role/attacker');
+let roleClaimer = require('role/claim');
+let roleTransporter = require('role/transporter');
+let roleMiner = require('role/miner');
 let garbagecollector = require('garbagecollector');
 let populate = require('populate');
 let tower = require('tower');
@@ -29,6 +31,12 @@ module.exports.loop = function () {
             }
             if (creep.memory.role === 'claimer') {
                 roleClaimer.run(creep, "W36N36");
+            }
+            if (creep.memory.role === 'transporter') {
+                roleTransporter.run(creep);
+            }
+            if (creep.memory.role === 'miner') {
+                roleMiner.run(creep);
             }
         });
         tower.guard(room);

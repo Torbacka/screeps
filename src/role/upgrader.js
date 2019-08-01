@@ -5,7 +5,6 @@ const upgrader = {
         if (source == null) {
             source = creep.room.find(FIND_SOURCES)[0];
         }
-        console.log(JSON.stringify(source));
         if (creep.memory.upgrading && creep.carry.energy === 0) {
             creep.memory.upgrading = false;
             creep.say('🔄 harvest');

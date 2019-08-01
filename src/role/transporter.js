@@ -1,9 +1,15 @@
-var transporter = {
+const transporter = {
     run: function (creep, containers = null) {
         if (containers == null) {
-            containers = creep.room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_CONTAINER}});
+            containers = creep.room.find(FIND_STRUCTURES, {
+                filter: (i) => {
+                    return (i.structureType === STRUCTURE_CONTAINER)
+                }
+            });
+
         }
         let source = null;
+        console.log("Containers: " + JSON.stringify(containers));
         if (containers.length === 0) {
             source = creep.room.find(FIND_SOURCES)[0];
         }
@@ -26,10 +32,11 @@ var transporter = {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity)
                       || (structure.structureType === STRUCTURE_SPAWN && structure.energy < structure.energyCapacity)
-                      || (structure.structureType === STRUCTURE_TOWER && structure.energy < structure.energyCapacity)
+                      || (structure.structureType === STRUCTURE_TOWER && structure.energy < structure.energyCapacity*0.7)
                       || (structure.structureType === STRUCTURE_STORAGE && structure.energy < structure.energyCapacity)
                 }
             });
+            console.log("Targets for transport:" + targets.length);
             if (targets.length > 0) {
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
@@ -37,8 +44,11 @@ var transporter = {
             }
         } else {
             if (containers.length > 0) {
-                if (creep.transfer(containers[creep.memory.container]) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(containers[creep.memory.container], {visualizePathStyle: {stroke: '#ffaa00'}});
+                console.log("Contariner: " + JSON.stringify(containers[creep.memory.container]));
+                console.log("Should run to containers"+  creep.withdraw(creep.transfer(containers[creep.memory.container], RESOURCE_ENERGY)));
+                if (creep.withdraw(containers[creep.memory.container], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    let ret = creep.moveTo(containers[creep.memory.container], {visualizePathStyle: {stroke: '#ffaa00'}});
+                    console.log("Why does this not print:" + ret);
                 }
             } else {
                 const energy = creep.pos.findInRange(

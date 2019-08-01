@@ -13,7 +13,6 @@ const populate = {
         let spawn = Object.values(Game.spawns).filter((spawn) => {
             return spawn.room.name === room.name
         })[0];
-        console.log(JSON.stringify(spawn.name));
 
         if (spawn.spawning) {
             let spawningCreep = Game.creeps[spawn.spawning.name];
@@ -30,6 +29,8 @@ const populate = {
         const upgraders = _.filter(creeps, (creep) => creep.memory.role === 'upgrader');
         const attacker = _.filter(creeps, (creep) => creep.memory.role === 'attacker');
         const claimer = _.filter(creeps, (creep) => creep.memory.role === 'claimer');
+        const transporter = _.filter(creeps, (creep) => creep.memory.role === 'transporter');
+        const miner = _.filter(creeps, (creep) => creep.memory.role === 'miner');
 
         const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
         const totalEnergy = room.energyCapacityAvailable;
@@ -39,16 +40,17 @@ const populate = {
         let creepNumbers = {
             'harvester': 3,
             'upgraders': 3,
+            'miner': 0,
             'builders': 0
         };
-        console.log("totalEngery: " + totalEnergy + "  fff " + (totalEnergy >= 1300));
 
         if (totalEnergy >= 1300) {
-            console.log("kommer jag hit!");
             creepArray = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
             creepNumbers = {
                 'harvester': 3,
                 'upgraders': 3,
+                'transporter': 0,
+                'miner': 0,
                 'builders': 0
             };
         } else if (totalEnergy>= 800) {
@@ -56,22 +58,26 @@ const populate = {
             creepNumbers = {
                 'harvester': 7,
                 'upgraders': 4,
+                'transporter': 0,
+                'miner': 0,
                 'builders': 3
             };
         } else if (totalEnergy >= 550) {
-            console.log("kommer jag hit!");
             creepArray = [WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE, MOVE];
             creepNumbers = {
                 'harvester': 7,
                 'upgraders': 4,
+                'transporter': 0,
+                'miner': 0,
                 'builders': 3
             };
         } else if (totalEnergy >= 400) {
-            console.log("kommer jag hit!");
             creepArray = [WORK, WORK, CARRY, MOVE, MOVE, MOVE];
             creepNumbers = {
                 'harvester': 5,
                 'upgraders': 5,
+                'transporter': 0,
+                'miner': 0,
                 'builders': 3
             };
         } else {
@@ -79,6 +85,8 @@ const populate = {
             creepNumbers = {
                 'harvester': 7,
                 'upgraders': 3,
+                'transporter': 0,
+                'miner': 0,
                 'builders': 4
             };
         }
@@ -87,10 +95,11 @@ const populate = {
             creepNumbers = {
                 'harvester': 7,
                 'upgraders': 3,
+                'transporter': 0,
+                'miner': 0,
                 'builders': 4
             };
         }
-        console.log(JSON.stringify(creepNumbers));
         //1800
 
         if (harvesters.length < creepNumbers.harvester) {
@@ -121,6 +130,20 @@ const populate = {
             creepArray = [CLAIM, CLAIM, MOVE, MOVE];
             spawn.spawnCreep(creepArray, newName,
               {memory: {role: 'claimer'}});
+        } else if (transporter.length < creepNumbers.transporter) {
+            newName = 'Transporter' + Game.time;
+            creepArray = [CARRY, CARRY, CARRY, CARRY,CARRY, CARRY,
+                          CARRY, CARRY, CARRY, CARRY,CARRY, CARRY,
+                          CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,
+                          CARRY, CARRY,MOVE, MOVE, MOVE, MOVE, MOVE,
+                          MOVE, MOVE, MOVE, MOVE, MOVE];
+            spawn.spawnCreep(creepArray, newName,
+              {memory: {role: 'transporter'}});
+        } else if (miner.length < creepNumbers.miner) {
+            newName = 'Miner' + Game.time;
+            creepArray = [WORK, WORK, WORK, WORK, WORK, WORK, MOVE, MOVE];
+            spawn.spawnCreep(creepArray, newName,
+              {memory: {role: 'miner'}});
         }
 
     }
