@@ -63,7 +63,7 @@ var harvester = {
                   FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
 
                 if (towers.length > 0 && towers[0].energy < 700) {
-                    roleTransporter.run(creep, source);
+                    roleTransporter.run(creep);
                 } else if (constructionSites.length) {
                     roleBuilder.run(creep, source);
                 } else {

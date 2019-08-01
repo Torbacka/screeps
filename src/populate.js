@@ -9,7 +9,6 @@
 
 const populate = {
     run: function (room) {
-        console.log("kommer jag hit 234151");
         //let spawn = Game.spawns['Spawn1'];
         let spawn = Object.values(Game.spawns).filter((spawn) => {
             return spawn.room.name === room.name
@@ -51,6 +50,13 @@ const populate = {
                 'harvester': 3,
                 'upgraders': 3,
                 'builders': 0
+            };
+        } else if (totalEnergy>= 800) {
+            creepArray = [WORK, WORK, WORK,CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];
+            creepNumbers = {
+                'harvester': 7,
+                'upgraders': 4,
+                'builders': 3
             };
         } else if (totalEnergy >= 550) {
             console.log("kommer jag hit!");
