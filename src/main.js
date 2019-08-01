@@ -13,7 +13,7 @@ let gatherStatistics = require('gatherStatistics');
 module.exports.loop = function () {
     console.log("New game tick!!!!!!!");
     Object.values(Game.rooms).forEach((room) => {
-        room.find(FIND_CREEPS).forEach((creep) => {
+        room.find(FIND_MY_CREEPS).forEach((creep) => {
             if (creep.memory.role === undefined) {
                 return;
             }
