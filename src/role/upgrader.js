@@ -1,6 +1,8 @@
 const upgrader = {
 
-    /** @param {Creep} creep **/
+    /** @param {Creep} creep *
+     * @param source
+     */
     run: function (creep, source = null) {
         if (source == null) {
             source = creep.room.find(FIND_SOURCES)[0];
@@ -18,16 +20,22 @@ const upgrader = {
                 creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         } else {
-            const energy = creep.pos.findInRange(
-              FIND_DROPPED_RESOURCES,
-              6
-            );
-            if (energy.length) {
-                console.log('found ' + energy[0].energy + ' energy at ', energy[0].pos + '  ' + creep.pickup(energy[0]) === ERR_NOT_IN_RANGE);
-                if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
+            let storage = creep.room.find(FIND_STRUCTURES, {
+                filter: (i) => {
+                    return (i.structureType === STRUCTURE_STORAGE)
                 }
-            } else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+            });
+
+            if (storage.length > 0) {
+                console.log("Upgrader: " + creep.room.name +"     " +JSON.stringify(storage.length)  +" "+ (storage[0].store[RESOURCE_ENERGY]  > 0) +" "+ (creep.withdraw(storage[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE));
+
+                if (creep.withdraw(storage[0], RESOURCE_ENERGY) === OK) {
+                   console.log("Upgradering getting engery");
+                } else  if (storage[0].store[RESOURCE_ENERGY]  > 0 && creep.withdraw(storage[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(storage[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+            }
+            else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
         }

@@ -24,7 +24,7 @@ const transporter = {
                 creep.memory.container = 0;
             }
         }
-        if (!creep.memory.transfering && creep.carry.energy === creep.carryCapacity) {
+        if (!creep.memory.transfering && (creep.carry.energy === creep.carryCapacity || containers[creep.memory.container].store[RESOURCE_ENERGY] > 30)) {
             creep.memory.transfering = true;
         }
         if (creep.memory.transfering) {
@@ -33,7 +33,7 @@ const transporter = {
                     return (structure.structureType === STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity)
                       || (structure.structureType === STRUCTURE_SPAWN && structure.energy < structure.energyCapacity)
                       || (structure.structureType === STRUCTURE_TOWER && structure.energy < structure.energyCapacity*0.7)
-                      || (structure.structureType === STRUCTURE_STORAGE && structure.energy < structure.energyCapacity)
+                      || (structure.structureType === STRUCTURE_STORAGE)
                 }
             });
             console.log("Targets for transport:" + targets.length);
@@ -45,10 +45,8 @@ const transporter = {
         } else {
             if (containers.length > 0) {
                 console.log("Contariner: " + JSON.stringify(containers[creep.memory.container]));
-                console.log("Should run to containers"+  creep.withdraw(creep.transfer(containers[creep.memory.container], RESOURCE_ENERGY)));
                 if (creep.withdraw(containers[creep.memory.container], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                    let ret = creep.moveTo(containers[creep.memory.container], {visualizePathStyle: {stroke: '#ffaa00'}});
-                    console.log("Why does this not print:" + ret);
+                    creep.moveTo(containers[creep.memory.container], {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             } else {
                 const energy = creep.pos.findInRange(
