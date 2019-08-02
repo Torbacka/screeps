@@ -18,7 +18,7 @@ const tower = {
 
         if (hostiles.length > 0) {
             const username = hostiles[0].owner.username;
-            Game.notify(`User ${username} spotted in room ${roomName}`);
+            Game.notify(`User ${username} spotted in room ${room.name}`);
             if (room.controller.safeMode === undefined) {
                 room.controller.activateSafeMode();
             }

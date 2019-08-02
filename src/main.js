@@ -14,7 +14,7 @@ module.exports.loop = function () {
     console.log("New game tick!!!!!!!");
     Object.values(Game.rooms).forEach((room) => {
         room.find(FIND_MY_CREEPS).forEach((creep) => {
-            if (creep.memory.role === undefined) {
+            if (!_.has(creep.memory, 'role')) {
                 return;
             }
             if (creep.memory.role === 'harvester') {
@@ -47,3 +47,4 @@ module.exports.loop = function () {
 
     });
 };
+
