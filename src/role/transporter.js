@@ -24,7 +24,7 @@ const transporter = {
                 creep.memory.container = 0;
             }
         }
-        if (!creep.memory.transfering && (creep.carry.energy === creep.carryCapacity || containers[creep.memory.container].store[RESOURCE_ENERGY] > 30)) {
+        if (!creep.memory.transfering && (creep.carry.energy === creep.carryCapacity || containers[creep.memory.container].store[RESOURCE_ENERGY] < 30)) {
             creep.memory.transfering = true;
         }
         if (creep.memory.transfering) {
