@@ -60,7 +60,7 @@ const populate = {
             }
         };
 
-        if (totalEnergy >= 1300) {
+        if (totalEnergy >= 1800) {
             creepArray = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
             creepNumbers = {
                 'harvester': {
@@ -77,12 +77,37 @@ const populate = {
                     'number': 2
                 },
                 'miner': {
-                    'body': [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
+                    'body': [WORK, WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
                     'number': 2
                 },
                 'builders': {
                     'body': creepArray,
                     'number': 2
+                }
+            };
+        }  else if (totalEnergy>= 1300) {
+            creepArray = [WORK, WORK, WORK, WORK, WORK, WORK,CARRY,CARRY, CARRY,
+                         MOVE, MOVE, MOVE,  MOVE, MOVE, MOVE,MOVE, MOVE, MOVE];
+            creepNumbers = {
+                'harvester': {
+                    'body': creepArray,
+                    'number': 5
+                },
+                'upgraders': {
+                    'body': creepArray,
+                    'number': 5
+                },
+                'transporter': {
+                    'body': creepArray,
+                    'number': 0
+                },
+                'miner': {
+                    'body': creepArray,
+                    'number': 0
+                },
+                'builders': {
+                    'body': creepArray,
+                    'number': 3
                 }
             };
         } else if (totalEnergy>= 800) {
@@ -134,12 +159,12 @@ const populate = {
                 }
             };
         }
-        if (creeps.length === 0) {
+        if (creeps.length < 2) {
             creepArray = [WORK, CARRY, MOVE, MOVE];
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
-                    'number': 1
+                    'number': 7
                 },
                 'upgraders': {
                     'body': creepArray,
