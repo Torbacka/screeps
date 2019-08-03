@@ -77,7 +77,7 @@ const populate = {
                     'number': 2
                 },
                 'miner': {
-                    'body': [WORK, WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
+                    'body': [WORK, WORK, WORK,WORK,WORK, WORK, WORK, WORK, MOVE,MOVE, MOVE],
                     'number': 2
                 },
                 'builders': {
@@ -87,7 +87,7 @@ const populate = {
             };
         }  else if (totalEnergy>= 1300) {
             creepArray = [WORK, WORK, WORK, WORK, WORK, WORK,CARRY,CARRY, CARRY,
-                         MOVE, MOVE, MOVE,  MOVE, MOVE, MOVE,MOVE, MOVE, MOVE];
+                MOVE, MOVE, MOVE,  MOVE, MOVE, MOVE,MOVE, MOVE, MOVE];
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
@@ -226,4 +226,5 @@ const populate = {
 };
 
 module.exports = populate;
+
 
