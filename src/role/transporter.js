@@ -24,9 +24,15 @@ const transporter = {
                 creep.memory.container = 0;
             }
         }
-        if (!creep.memory.transfering && (creep.carry.energy === creep.carryCapacity || containers[creep.memory.container].store[RESOURCE_ENERGY] < 30)) {
+        if (containers.length > 0) {
+            if (containers[creep.memory.container].store[RESOURCE_ENERGY] < 30) {
+                creep.memory.transfering = true;
+            }
+        }
+        if (!creep.memory.transfering && creep.carry.energy === creep.carryCapacity) {
             creep.memory.transfering = true;
         }
+
         if (creep.memory.transfering) {
             const targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {

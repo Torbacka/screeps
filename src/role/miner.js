@@ -5,6 +5,9 @@ var transporter = {
                 return (i.structureType === STRUCTURE_CONTAINER)
             }
         });
+        if (containers.length === 0) {
+            return;
+        }
         if (!creep.memory.container) {
             let creeps = creep.room.find(FIND_MY_CREEPS);
             const miners = _.filter(creeps, (creep) => creep.memory.role === 'miner');
@@ -18,9 +21,8 @@ var transporter = {
                 } else {
                     container = 0
                 }
-              });
+            });
             creep.memory.container = container;
-
         }
         let sourceNumber;
         if (creep.memory.container === 0) {
@@ -32,6 +34,7 @@ var transporter = {
         if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
             creep.moveTo(containers[creep.memory.container].pos, {visualizePathStyle: {stroke: '#ffaa00'}});
         }
+
     }
 };
 
