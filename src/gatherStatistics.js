@@ -8,7 +8,7 @@ module.exports = (room) => {
         statString += "" + stat.progress + ";" + time + ";" + stat.timestamp +  "\n";
         time +=100;
     });
-    console.log(statString);
+
     */
 
     if (Game.time % 100 === 0) {
@@ -19,6 +19,6 @@ module.exports = (room) => {
             'roomName': room.name
         };
         Memory.statistics.push(statistics);
-        console.log("Pushing stats");
+
     }
 };

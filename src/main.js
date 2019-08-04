@@ -1,5 +1,3 @@
-'use strict';
-global.GRUNT_PACKAGE=true
 let roleHarvester = require('role_harvester');
 let roleUpgrader = require('role_upgrader');
 let roleBuilder = require('role_builder');
@@ -16,7 +14,6 @@ const profiler = require('screeps-profiler');
 profiler.enable();
 module.exports.loop = function () {
     profiler.wrap(function() {
-        console.log("New game tick!!!!!!!");
         Object.values(Game.rooms).forEach((room) => {
             room.find(FIND_MY_CREEPS).forEach((creep) => {
                 if (!_.has(creep.memory, 'role')) {

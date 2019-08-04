@@ -188,7 +188,7 @@ const populate = {
 
         if (harvesters.length < creepNumbers.harvester.number) {
             newName = 'Harvester' + Game.time;
-            console.log('Spawning new harvester: ' + newName);
+
             spawn.spawnCreep(creepNumbers.harvester.body, newName,
               {memory: {role: 'harvester'}});
         } else if (miner.length < creepNumbers.miner.number) {
@@ -201,12 +201,12 @@ const populate = {
               {memory: {role: 'transporter'}});
         } else if ((constructionSites.length === 0 && upgraders.length < 3) || upgraders.length < creepNumbers.upgraders.number) {
             newName = 'Upgrader' + Game.time;
-            console.log('Spawning new upgrader: ' + newName);
+
             spawn.spawnCreep(creepNumbers.upgraders.body, newName,
               {memory: {role: 'upgrader'}});
         } else if (constructionSites.length > 0 && builders.length < creepNumbers.builders.number) {
             newName = 'Builder' + Game.time;
-            console.log('Spawning new Builder: ' + newName);
+
             spawn.spawnCreep(creepNumbers.builders.body, newName,
               {memory: {role: 'builder'}});
         } else if (attacker.length < 0) {

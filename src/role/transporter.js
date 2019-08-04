@@ -9,7 +9,7 @@ const transporter = {
 
         }
         let source = null;
-        console.log("Containers: " + JSON.stringify(containers));
+
         if (containers.length === 0) {
             source = creep.room.find(FIND_SOURCES)[0];
         }
@@ -42,7 +42,7 @@ const transporter = {
                       || (structure.structureType === STRUCTURE_STORAGE)
                 }
             });
-            console.log("Targets for transport:" + targets.length);
+
             if (targets.length > 0) {
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
@@ -50,7 +50,7 @@ const transporter = {
             }
         } else {
             if (containers.length > 0) {
-                console.log("Contariner: " + JSON.stringify(containers[creep.memory.container]));
+
                 if (creep.withdraw(containers[creep.memory.container], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(containers[creep.memory.container], {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
@@ -60,7 +60,7 @@ const transporter = {
                   6
                 );
                 if (energy.length) {
-                    console.log('found ' + energy[0].energy + ' energy at ', energy[0].pos + '  ' + creep.pickup(energy[0]) === ERR_NOT_IN_RANGE);
+
                     if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
                         creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
                     }

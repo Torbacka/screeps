@@ -27,10 +27,10 @@ const upgrader = {
             });
 
             if (storage.length > 0) {
-                console.log("Upgrader: " + creep.room.name +"     " +JSON.stringify(storage.length)  +" "+ (storage[0].store[RESOURCE_ENERGY]  > 0) +" "+ (creep.withdraw(storage[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE));
+
 
                 if (creep.withdraw(storage[0], RESOURCE_ENERGY) === OK) {
-                   console.log("Upgradering getting engery");
+
                 } else  if (storage[0].store[RESOURCE_ENERGY]  > 0 && creep.withdraw(storage[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(storage[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
