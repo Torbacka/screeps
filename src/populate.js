@@ -68,7 +68,12 @@ const populate = {
                     'number': 0
                 },
                 'upgraders': {
-                    'body': [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK,WORK,WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+                    'body': [WORK, WORK, WORK, WORK, WORK,
+                             WORK, WORK, WORK, WORK, WORK,
+                             WORK, WORK, WORK, WORK,  WORK,
+                             WORK, WORK, WORK, WORK,  WORK,
+                             WORK, WORK, WORK, WORK,  WORK,
+                             CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE, MOVE],
                     'number': 1
                 },
                 'transporter': {
@@ -199,7 +204,7 @@ const populate = {
             newName = 'Transporter' + Game.time;
             spawn.spawnCreep(creepNumbers.transporter.body, newName,
               {memory: {role: 'transporter'}});
-        } else if ((constructionSites.length === 0 && upgraders.length < 3) || upgraders.length < creepNumbers.upgraders.number) {
+        } else if ( upgraders.length < creepNumbers.upgraders.number) {
             newName = 'Upgrader' + Game.time;
 
             spawn.spawnCreep(creepNumbers.upgraders.body, newName,
@@ -226,5 +231,3 @@ const populate = {
 };
 
 module.exports = populate;
-
-
