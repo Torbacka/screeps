@@ -24,13 +24,9 @@ var transporter = {
             });
             creep.memory.container = container;
         }
-        let sourceNumber;
-        if (creep.memory.container === 0) {
-            sourceNumber = 1;
-        } else {
-            sourceNumber = 0
-        }
-        let source = creep.room.find(FIND_SOURCES)[sourceNumber];
+
+        let source = creep.room.find(FIND_SOURCES)[creep.memory.container];
+        console.log(creep.name + "  " + JSON.stringify(source.pos));
         if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
             creep.moveTo(containers[creep.memory.container].pos, {visualizePathStyle: {stroke: '#ffaa00'}});
         }

@@ -5,6 +5,7 @@ let roleAttacker = require('role_attacker');
 let roleClaimer = require('role_claim');
 let roleTransporter = require('role_transporter');
 let roleMiner = require('role_miner');
+let roleUpgraderHelper = require('role_upgraderHelper');
 let garbagecollector = require('garbagecollector');
 let populate = require('populate');
 let tower = require('tower');
@@ -13,7 +14,8 @@ const profiler = require('screeps-profiler');
 
 profiler.enable();
 module.exports.loop = function () {
-    profiler.wrap(function() {
+
+    profiler.wrap(function () {
         Object.values(Game.rooms).forEach((room) => {
             room.find(FIND_MY_CREEPS).forEach((creep) => {
                 if (!_.has(creep.memory, 'role')) {
@@ -39,6 +41,9 @@ module.exports.loop = function () {
                 }
                 if (creep.memory.role === 'miner') {
                     roleMiner.run(creep);
+                }
+                if (creep.memory.role === 'upgraderHelper') {
+                    roleUpgraderHelper.run(creep);
                 }
             });
             tower.guard(room);

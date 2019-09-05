@@ -31,6 +31,7 @@ const populate = {
         const claimer = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'claimer'));
         const transporter = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'transporter'));
         const miner = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'miner'));
+        const upgraderHelper = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'upgraderHelper'));
 
         const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
         const totalEnergy = room.energyCapacityAvailable;
@@ -75,6 +76,15 @@ const populate = {
                              WORK, WORK, WORK, WORK,  WORK,
                              CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE, MOVE],
                     'number': 1
+                }, 'upgraderHelper': {
+                    'body': [WORK, WORK, WORK, WORK, WORK,
+                        WORK, WORK, WORK, WORK, WORK,
+                        WORK, WORK, WORK, WORK,  WORK,
+                        CARRY, CARRY, CARRY, CARRY, CARRY,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,
+                        MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'number': 1
                 },
                 'transporter': {
                     'body': [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,CARRY, CARRY, CARRY, CARRY,
@@ -82,8 +92,8 @@ const populate = {
                     'number': 2
                 },
                 'miner': {
-                    'body': [WORK, WORK, WORK,WORK,WORK, WORK, WORK, WORK, MOVE,MOVE, MOVE],
-                    'number': 2
+                    'body': [WORK, WORK, WORK,WORK,WORK, MOVE],
+                    'number': 2room
                 },
                 'builders': {
                     'body': creepArray,
@@ -101,6 +111,15 @@ const populate = {
                 'upgraders': {
                     'body': creepArray,
                     'number': 5
+                },'upgraderHelper': {
+                    'body': [WORK, WORK, WORK, WORK, WORK,
+                        WORK, WORK, WORK, WORK, WORK,
+                        WORK, WORK, WORK, WORK,  WORK,
+                        CARRY, CARRY, CARRY, CARRY, CARRY,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,
+                        MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'number': 0
                 },
                 'transporter': {
                     'body': creepArray,
@@ -125,6 +144,16 @@ const populate = {
                 'upgraders': {
                     'body': creepArray,
                     'number': 7
+                },
+                'upgraderHelper': {
+                    'body': [WORK, WORK, WORK, WORK, WORK,
+                        WORK, WORK, WORK, WORK, WORK,
+                        WORK, WORK, WORK, WORK,  WORK,
+                        CARRY, CARRY, CARRY, CARRY, CARRY,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,
+                        MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'number': 0
                 },
                 'transporter': {
                     'body': creepArray,
@@ -153,6 +182,15 @@ const populate = {
                 'transporter': {
                     'body': creepArray,
                     'number': 0
+                },'upgraderHelper': {
+                    'body': [WORK, WORK, WORK, WORK, WORK,
+                        WORK, WORK, WORK, WORK, WORK,
+                        WORK, WORK, WORK, WORK,  WORK,
+                        CARRY, CARRY, CARRY, CARRY, CARRY,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,
+                        MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'number': 0
                 },
                 'miner': {
                     'body': creepArray,
@@ -169,7 +207,7 @@ const populate = {
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
-                    'number': 7
+                    'number': 2
                 },
                 'upgraders': {
                     'body': creepArray,
@@ -204,16 +242,16 @@ const populate = {
             newName = 'Transporter' + Game.time;
             spawn.spawnCreep(creepNumbers.transporter.body, newName,
               {memory: {role: 'transporter'}});
-        } else if ( upgraders.length < creepNumbers.upgraders.number) {
-            newName = 'Upgrader' + Game.time;
-
-            spawn.spawnCreep(creepNumbers.upgraders.body, newName,
-              {memory: {role: 'upgrader'}});
-        } else if (constructionSites.length > 0 && builders.length < creepNumbers.builders.number) {
+        }  else if (constructionSites.length > 0 && builders.length < creepNumbers.builders.number) {
             newName = 'Builder' + Game.time;
 
             spawn.spawnCreep(creepNumbers.builders.body, newName,
               {memory: {role: 'builder'}});
+        }else if ( upgraders.length < creepNumbers.upgraders.number) {
+            newName = 'Upgrader' + Game.time;
+
+            spawn.spawnCreep(creepNumbers.upgraders.body, newName,
+              {memory: {role: 'upgrader'}});
         } else if (attacker.length < 0) {
             newName = 'Attacker' + Game.time;
             creepArray = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];

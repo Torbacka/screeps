@@ -8,6 +8,11 @@ const transporter = {
             });
 
         }
+        const storage = creep.room.find(FIND_STRUCTURES, {
+            filter: function (structure) {
+                return structure.structureType === STRUCTURE_STORAGE //&& _.sum(structure.store) < structure.storeCapacity;
+            }
+        });
         let source = null;
 
         if (containers.length === 0) {
@@ -25,7 +30,13 @@ const transporter = {
             }
         }
         if (containers.length > 0) {
-            if (containers[creep.memory.container].store[RESOURCE_ENERGY] < 30) {
+
+            if (containers.length === 1 ) {
+                if (containers[0].store[RESOURCE_ENERGY] < 30 && creep.carry.energy > 0) {
+                    console.log("kommer jag hit" + containers[0].store[RESOURCE_ENERGY]);
+                    creep.memory.transfering = true;
+                }
+            } else if (containers[creep.memory.container].store[RESOURCE_ENERGY] < 30 && creep.carry.energy > 0)  {
                 creep.memory.transfering = true;
             }
         }
@@ -43,7 +54,7 @@ const transporter = {
                 }
             });
 
-            Console.log("Transportation tragetgs: " + JSON.stringify(targets));
+            //console.log("Transportation tragetgs: " + JSON.stringify(targets));
 
             if (targets.length > 0) {
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
@@ -55,6 +66,12 @@ const transporter = {
 
                 if (creep.withdraw(containers[creep.memory.container], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(containers[creep.memory.container], {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+            } else if (Array.isArray(storage) && storage[0] !== null) {
+
+                if (creep.withdraw(storage[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    let moveTo = creep.moveTo(storage[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+
                 }
             } else {
                 const energy = creep.pos.findInRange(

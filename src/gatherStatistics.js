@@ -10,7 +10,7 @@ module.exports = (room) => {
     });
 
     */
-
+/*
     if (Game.time % 100 === 0) {
         let statistics = {
             'progress': room.controller.progress,
@@ -21,4 +21,5 @@ module.exports = (room) => {
         Memory.statistics.push(statistics);
 
     }
+    */
 };
