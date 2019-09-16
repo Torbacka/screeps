@@ -1,7 +1,7 @@
 module.exports = (room) => {
-    if (Memory.statistics === undefined) {
+    /*if (Memory.statistics === undefined) {
         Memory.statistics = [];
-    }
+    }*/
     /*var statString = "";
     var time = 0;
     Memory.statistics.forEach((stat) => {

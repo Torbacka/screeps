@@ -31,12 +31,12 @@ const transporter = {
         }
         if (containers.length > 0) {
 
-            if (containers.length === 1 ) {
+            if (containers.length === 1) {
                 if (containers[0].store[RESOURCE_ENERGY] < 30 && creep.carry.energy > 0) {
                     console.log("kommer jag hit" + containers[0].store[RESOURCE_ENERGY]);
                     creep.memory.transfering = true;
                 }
-            } else if (containers[creep.memory.container].store[RESOURCE_ENERGY] < 30 && creep.carry.energy > 0)  {
+            } else if (containers[creep.memory.container].store[RESOURCE_ENERGY] < 30 && creep.carry.energy > 0) {
                 creep.memory.transfering = true;
             }
         }
@@ -49,16 +49,27 @@ const transporter = {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity)
                       || (structure.structureType === STRUCTURE_SPAWN && structure.energy < structure.energyCapacity)
-                      || (structure.structureType === STRUCTURE_TOWER && structure.energy < structure.energyCapacity*0.7)
+                      || (structure.structureType === STRUCTURE_TOWER && structure.energy < structure.energyCapacity * 0.7)
                       || (structure.structureType === STRUCTURE_STORAGE)
-                }
+                },
+
+            });
+            const structureValue = {
+                "spawn": 1,
+                "extension": 2,
+                "tower": 3,
+                "storage": 4
+            };
+
+            let sortedTargets = targets.sort((target1, target2) => {
+                let structureValue1 = structureValue[target1.structureType];
+                let structureValue2 = structureValue[target2.structureType];
+                return structureValue1 - structureValue2;
             });
 
-            //console.log("Transportation tragetgs: " + JSON.stringify(targets));
-
-            if (targets.length > 0) {
-                if (creep.transfer(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+            if (sortedTargets.length > 0) {
+                if (creep.transfer(sortedTargets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sortedTargets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
         } else {

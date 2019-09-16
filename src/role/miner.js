@@ -26,7 +26,6 @@ var transporter = {
         }
 
         let source = creep.room.find(FIND_SOURCES)[creep.memory.container];
-        console.log(creep.name + "  " + JSON.stringify(source.pos));
         if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
             creep.moveTo(containers[creep.memory.container].pos, {visualizePathStyle: {stroke: '#ffaa00'}});
         }

@@ -93,7 +93,7 @@ const populate = {
                 },
                 'miner': {
                     'body': [WORK, WORK, WORK,WORK,WORK, MOVE],
-                    'number': 2room
+                    'number': 2
                 },
                 'builders': {
                     'body': creepArray,
@@ -207,7 +207,7 @@ const populate = {
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
-                    'number': 2
+                    'number': 1
                 },
                 'upgraders': {
                     'body': creepArray,
