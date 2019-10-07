@@ -124,7 +124,7 @@ const populate = {
                 },
                 'upgraders': {
                     'body': creepArray,
-                    'number': 5
+                    'number': 3
                 },'upgraderHelper': {
                     'body': [WORK, WORK, WORK, WORK, WORK,
                         WORK, WORK, WORK, WORK, WORK,
