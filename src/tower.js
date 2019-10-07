@@ -27,13 +27,17 @@ const tower = {
         } else {
             const targets = getRepairObjects(towers[0]);
 
-            towers.forEach(tower => {
+            towers.forEach((tower, i) => {
                 if (targets.length > 0) {
-                    tower.repair(targets[0])
+                    if (i < targets.length) {
+                        tower.repair(targets[i])
+                    }
                 } else if (tower.energy > tower.energyCapacity * 0.1) {
                     let walls = getWalls(towers[0]);
                     walls.sort((wall1, wall2) => (wall1.hits > wall2.hits) ? 1 : -1);
-                    towers.forEach(tower => tower.repair(walls[0]));
+                    if (i < walls.length) {
+                        tower.repair(walls[i]);
+                    }
                 }
             });
         }
@@ -44,8 +48,8 @@ const tower = {
 function getWalls(tower) {
     return tower.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.001)
-              || (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.003);
+            return (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.01)
+              || (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.03);
         }
     });
 }

@@ -207,7 +207,7 @@ const populate = {
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
-                    'number': 1
+                    'number': 2
                 },
                 'upgraders': {
                     'body': creepArray,
