@@ -24,6 +24,10 @@ const populate = {
         }
         let newName;
         let creeps = room.find(FIND_CREEPS);
+        let hostileCreep = 0;
+        Object.values(Game.rooms).forEach((room) => {
+            hostileCreep += room.find(FIND_HOSTILE_CREEPS);
+        });
         const harvesters = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'harvester'));
         const builders = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'builder'));
         const upgraders = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'upgrader'));
@@ -32,11 +36,12 @@ const populate = {
         const transporter = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'transporter'));
         const miner = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'miner'));
         const upgraderHelper = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'upgraderHelper'));
+        const defender = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'defender'));
 
         const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
         const totalEnergy = room.energyCapacityAvailable;
         const energyAvailable = room.energyAvailable;
-
+        //console.log("totalEngery:" + totalEnergy);
         let creepArray = [];
         let creepNumbers  = {
             'harvester': {
@@ -58,6 +63,10 @@ const populate = {
             'builders': {
                 'body': creepArray,
                 'number': 3
+            },'defender': {
+                'body': [TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK,
+                    MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
+                'number': 0
             }
         };
 
@@ -98,6 +107,11 @@ const populate = {
                 'builders': {
                     'body': creepArray,
                     'number': 2
+                },
+                'defender': {
+                    'body': [TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'number': 1
                 }
             };
         }  else if (totalEnergy>= 1300) {
@@ -132,6 +146,11 @@ const populate = {
                 'builders': {
                     'body': creepArray,
                     'number': 3
+                },
+                'defender': {
+                    'body': [TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'number': 0
                 }
             };
         } else if (totalEnergy>= 800) {
@@ -166,6 +185,11 @@ const populate = {
                 'builders': {
                     'body': creepArray,
                     'number': 3
+                },
+                'defender': {
+                    'body': [TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'number': 0
                 }
             };
         } else {
@@ -199,6 +223,11 @@ const populate = {
                 'builders': {
                     'body': creepArray,
                     'number': 3
+                },
+                'defender': {
+                    'body': [TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'number': 0
                 }
             };
         }
@@ -263,7 +292,12 @@ const populate = {
             spawn.spawnCreep(creepArray, newName,
               {memory: {role: 'claimer'}});
         }
-
+        else if (defender.length < 0 && hostileCreep > 0) {
+            newName = 'Defender' + Game.time;
+            creepArray = [CLAIM, CLAIM, MOVE, MOVE];
+            spawn.spawnCreep(creepArray, newName,
+              {memory: {role: 'Defender'}});
+        }
     }
 
 };

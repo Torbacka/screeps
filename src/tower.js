@@ -28,15 +28,17 @@ const tower = {
             const targets = getRepairObjects(towers[0]);
 
             towers.forEach((tower, i) => {
-                if (targets.length > 0) {
-                    if (i < targets.length) {
-                        tower.repair(targets[i])
-                    }
-                } else if (tower.energy > tower.energyCapacity * 0.1) {
-                    let walls = getWalls(towers[0]);
-                    walls.sort((wall1, wall2) => (wall1.hits > wall2.hits) ? 1 : -1);
-                    if (i < walls.length) {
-                        tower.repair(walls[i]);
+                if (tower.energy >= tower.energyCapacity*0.5) {
+                    if (targets.length > 0) {
+                        if (i < targets.length) {
+                            tower.repair(targets[i])
+                        }
+                    } else if (tower.energy > tower.energyCapacity * 0.1) {
+                        let walls = getWalls(towers[0]);
+                        walls.sort((wall1, wall2) => (wall1.hits > wall2.hits) ? 1 : -1);
+                        if (i < walls.length) {
+                            tower.repair(walls[i]);
+                        }
                     }
                 }
             });

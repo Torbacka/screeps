@@ -6,6 +6,7 @@ let roleClaimer = require('role_claim');
 let roleTransporter = require('role_transporter');
 let roleMiner = require('role_miner');
 let roleUpgraderHelper = require('role_upgraderHelper');
+let roleDefender = require('role_defender');
 let garbagecollector = require('garbagecollector');
 let populate = require('populate');
 let tower = require('tower');
@@ -44,6 +45,9 @@ module.exports.loop = function () {
                 }
                 if (creep.memory.role === 'upgraderHelper') {
                     roleUpgraderHelper.run(creep);
+                }
+                if (creep.memory.role === 'defender') {
+                    roleDefender.run(creep);
                 }
             });
             tower.guard(room);
