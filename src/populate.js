@@ -98,7 +98,7 @@ const populate = {
                 'transporter': {
                     'body': [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,CARRY, CARRY, CARRY, CARRY,
                         MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
-                    'number': 2
+                    'number': 1
                 },
                 'miner': {
                     'body': [WORK, WORK, WORK,WORK,WORK, MOVE],
@@ -138,7 +138,7 @@ const populate = {
                 'transporter': {
                     'body': [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,CARRY, CARRY, CARRY, CARRY,
                         MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
-                    'number': 2
+                    'number': 1
                 },
                 'miner': {
                     'body': [WORK, WORK, WORK,WORK,WORK, MOVE],
