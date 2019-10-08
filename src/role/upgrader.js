@@ -26,7 +26,7 @@ const upgrader = {
                 }
             });
 
-            if (storage.length > 0) {
+            if (storage.length > 0 && storage.energy > 0) {
 
 
                 if (creep.withdraw(storage[0], RESOURCE_ENERGY) === OK) {
