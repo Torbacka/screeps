@@ -4,37 +4,47 @@ const upgrader = {
      * @param source
      * @param target
      */
-    run: function (creep, source = null, target = "W39N33") {
-        console.log("Target: " + target + " room name: " + creep.room.name);
+    run: function (creep, source = null, target = "W40N34") {
+
         if (creep.room.name !== target) {
-            console.log("kommer jag hit!!");
             creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(target)), {visualizePathStyle: {stroke: '#ffffff'}});
         } else {
-            console.log("kommer jag hit!!");
             if (source == null) {
-                source = creep.room.find(FIND_SOURCES)[0];
+                source = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
             }
-            if (creep.memory.upgrading && creep.carry.energy === 0) {
-                creep.memory.upgrading = false;
+            if (creep.memory.building && creep.carry.energy === 0) {
+                creep.memory.building = false;
                 creep.say('🔄 harvest');
             }
-            if (!creep.memory.upgrading && creep.carry.energy === creep.carryCapacity) {
-                creep.memory.upgrading = true;
-                creep.say('🚧 upgrading');
+            if (!creep.memory.building && creep.carry.energy === creep.carryCapacity) {
+                creep.memory.building = true;
+                creep.say('🚧 build');
             }
-            if (creep.memory.upgrading) {
-                console.log("kommer jag hit!!");
-                if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+
+            if (creep.memory.building) {
+                const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+                if (targets.length) {
+                    if (creep.build(targets[0]) === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                    }
                 }
             } else {
+                const energy = creep.pos.findInRange(
+                  FIND_DROPPED_RESOURCES,
+                  6
+                );
+
                 let storage = creep.room.find(FIND_STRUCTURES, {
                     filter: (i) => {
                         return (i.structureType === STRUCTURE_STORAGE)
                     }
                 });
+                if (energy.length) {
 
-                if (storage.length > 0 && storage[0].store[RESOURCE_ENERGY]  > 0) {
+                    if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
+                    }
+                } else if (storage.length > 0 && storage[0].store[RESOURCE_ENERGY]  > 0) {
                     if (creep.withdraw(storage[0], RESOURCE_ENERGY) === OK) {
 
                     } else  if (storage[0].store[RESOURCE_ENERGY]  > 0 && creep.withdraw(storage[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {

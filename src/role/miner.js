@@ -26,8 +26,6 @@ var transporter = {
         }
 
         let source = creep.room.find(FIND_SOURCES)[creep.memory.container];
-        if (creep.room.name === "W37N35")
-        console.log((!containers[creep.memory.container].pos.isEqualTo(creep.pos)) + "   Container pos: " + containers[creep.memory.container].pos + "Creep pos: " +creep.pos );
         if (!containers[creep.memory.container].pos.isEqualTo(creep.pos)) {
 
             creep.moveTo(containers[creep.memory.container].pos, {visualizePathStyle: {stroke: '#ffaa00'}});

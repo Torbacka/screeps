@@ -6,6 +6,7 @@ let roleClaimer = require('role_claim');
 let roleTransporter = require('role_transporter');
 let roleMiner = require('role_miner');
 let roleUpgraderHelper = require('role_upgraderHelper');
+let roleBuilderHelper = require('role_builderHelper');
 let roleDefender = require('role_defender');
 let garbagecollector = require('garbagecollector');
 let populate = require('populate');
@@ -29,13 +30,13 @@ module.exports.loop = function () {
                     roleUpgrader.run(creep);
                 }
                 if (creep.memory.role === 'builder') {
-                    roleBuilder.run(creep, null, "W37N35");
+                    roleBuilder.run(creep, null, "W37N34");
                 }
                 if (creep.memory.role === 'attacker') {
-                    roleAttacker.run(creep, "W37N35");
+                    roleAttacker.run(creep, "W39N33");
                 }
                 if (creep.memory.role === 'claimer') {
-                    roleClaimer.run(creep, "W36N36");
+                    roleClaimer.run(creep, "W39N33");
                 }
                 if (creep.memory.role === 'transporter') {
                     roleTransporter.run(creep);
@@ -44,10 +45,13 @@ module.exports.loop = function () {
                     roleMiner.run(creep);
                 }
                 if (creep.memory.role === 'upgraderHelper') {
-                    roleUpgraderHelper.run(creep);
+                    roleUpgraderHelper.run(creep, null, "W39N33");
                 }
                 if (creep.memory.role === 'defender') {
                     roleDefender.run(creep);
+                }
+                if (creep.memory.role === 'BuilderHelper') {
+                    roleBuilderHelper.run(creep, null, "W39N33");
                 }
             });
             tower.guard(room);

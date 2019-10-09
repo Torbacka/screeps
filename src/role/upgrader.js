@@ -26,9 +26,7 @@ const upgrader = {
                 }
             });
 
-            if (storage.length > 0 && storage.energy > 0) {
-
-
+            if (storage.length > 0 && storage[0].store[RESOURCE_ENERGY]  > 0) {
                 if (creep.withdraw(storage[0], RESOURCE_ENERGY) === OK) {
 
                 } else  if (storage[0].store[RESOURCE_ENERGY]  > 0 && creep.withdraw(storage[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {

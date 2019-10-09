@@ -6,6 +6,13 @@ const attacker = {
             let hostileSpawns = creep.room.find(FIND_HOSTILE_SPAWNS);
             let hostileCreeps = creep.room.find(FIND_HOSTILE_CREEPS);
             let hostileConstructionSites = creep.room.find(FIND_HOSTILE_STRUCTURES);
+            let sites  = [];
+            hostileConstructionSites.forEach((site) => {
+                if (site.structureType !== STRUCTURE_STORAGE) {
+                    sites.push(site);
+                }
+            });
+            sites.forEach((site) => console.log(site.structureType));
 
             if (hostileSpawns.length) {
 
@@ -17,10 +24,9 @@ const attacker = {
                 if (creep.attack(hostileCreeps[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(hostileCreeps[0], {visualizePathStyle: {stroke: '#ff0019'}});
                 }
-            } else if(hostileConstructionSites.length) {
-
-                if (creep.attack(hostileConstructionSites[0]) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(hostileConstructionSites[0], {visualizePathStyle: {stroke: '#ff0019'}});
+            } else if(sites.length) {
+                if (creep.attack(sites[0]) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sites[0], {visualizePathStyle: {stroke: '#ff0019'}});
                 }
             }
         }

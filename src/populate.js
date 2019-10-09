@@ -13,7 +13,9 @@ const populate = {
         let spawn = Object.values(Game.spawns).filter((spawn) => {
             return spawn.room.name === room.name
         })[0];
-
+        if (spawn == null) {
+            return;
+        }
         if (spawn.spawning) {
             let spawningCreep = Game.creeps[spawn.spawning.name];
             spawn.room.visual.text(
@@ -36,12 +38,12 @@ const populate = {
         const transporter = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'transporter'));
         const miner = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'miner'));
         const upgraderHelper = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'upgraderHelper'));
+        const builderHelper = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'builderHelper'));
         const defender = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'defender'));
 
         const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
         const totalEnergy = room.energyCapacityAvailable;
         const energyAvailable = room.energyAvailable;
-        //console.log("totalEngery:" + totalEnergy);
         let creepArray = [];
         let creepNumbers  = {
             'harvester': {
@@ -62,7 +64,7 @@ const populate = {
             },
             'builders': {
                 'body': creepArray,
-                'number': 3
+                'number': 2
             },'defender': {
                 'body': [TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK,
                     MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
@@ -81,8 +83,6 @@ const populate = {
                     'body': [WORK, WORK, WORK, WORK, WORK,
                              WORK, WORK, WORK, WORK, WORK,
                              WORK, WORK, WORK, WORK,  WORK,
-                             WORK, WORK, WORK, WORK,  WORK,
-                             WORK, WORK, WORK, WORK,  WORK,
                              CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE, MOVE],
                     'number': 1
                 }, 'upgraderHelper': {
@@ -98,11 +98,15 @@ const populate = {
                 'transporter': {
                     'body': [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,CARRY, CARRY, CARRY, CARRY,
                         MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
-                    'number': 1
+                    'number': 2
                 },
                 'miner': {
                     'body': [WORK, WORK, WORK,WORK,WORK, MOVE],
                     'number': 2
+                },
+                'claimer': {
+                    'body': [CLAIM, MOVE],
+                    'number': 0
                 },
                 'builders': {
                     'body': creepArray,
@@ -138,7 +142,7 @@ const populate = {
                 'transporter': {
                     'body': [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,CARRY, CARRY, CARRY, CARRY,
                         MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
-                    'number': 1
+                    'number': 2
                 },
                 'miner': {
                     'body': [WORK, WORK, WORK,WORK,WORK, MOVE],
@@ -284,14 +288,34 @@ const populate = {
               {memory: {role: 'upgrader'}});
         } else if (attacker.length < 0) {
             newName = 'Attacker' + Game.time;
-            creepArray = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
+            creepArray = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK,ATTACK, ATTACK, ATTACK,ATTACK, ATTACK, ATTACK,ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
             spawn.spawnCreep(creepArray, newName,
               {memory: {role: 'attacker'}});
         } else if (claimer.length < 0) {
             newName = 'Claimer' + Game.time;
-            creepArray = [CLAIM, CLAIM, MOVE, MOVE];
+            creepArray = creepNumbers.claimer.body;
             spawn.spawnCreep(creepArray, newName,
               {memory: {role: 'claimer'}});
+        }else if (builderHelper.length < 0 &&  room.name === "W38N35") {
+            newName = 'BuilderHelper' + Game.time;
+            spawn.spawnCreep( [WORK, WORK, WORK, WORK, WORK,
+                  WORK, WORK, WORK, WORK, WORK,
+                  WORK, WORK, WORK, WORK,  WORK,
+                  CARRY, CARRY, CARRY, CARRY, CARRY,
+                  MOVE, MOVE, MOVE, MOVE, MOVE,
+                  MOVE, MOVE, MOVE, MOVE, MOVE,
+                  MOVE, MOVE, MOVE, MOVE, MOVE], newName,
+              {memory: {role: 'BuilderHelper'}});
+        } else if (upgraderHelper.length < 0 &&  room.name === "W38N35") {
+            newName = 'upgraderHelper' + Game.time;
+            spawn.spawnCreep( [WORK, WORK, WORK, WORK, WORK,
+                  WORK, WORK, WORK, WORK, WORK,
+                  WORK, WORK, WORK, WORK,  WORK,
+                  CARRY, CARRY, CARRY, CARRY, CARRY,
+                  MOVE, MOVE, MOVE, MOVE, MOVE,
+                  MOVE, MOVE, MOVE, MOVE, MOVE,
+                  MOVE, MOVE, MOVE, MOVE, MOVE], newName,
+              {memory: {role: 'upgraderHelper'}});
         }
         else if (defender.length < 0 && hostileCreep > 0) {
             newName = 'Defender' + Game.time;
