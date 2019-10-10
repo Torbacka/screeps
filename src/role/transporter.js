@@ -33,7 +33,6 @@ const transporter = {
 
             if (containers.length === 1) {
                 if (containers[0].store[RESOURCE_ENERGY] < 30 && creep.carry.energy > 0) {
-                    console.log("kommer jag hit" + containers[0].store[RESOURCE_ENERGY]);
                     creep.memory.transfering = true;
                 }
             } else if (containers[creep.memory.container].store[RESOURCE_ENERGY] < 30 && creep.carry.energy > 0) {

@@ -7,10 +7,8 @@ const upgrader = {
     run: function (creep, source = null, target = "W39N33") {
         console.log("Target: " + target + " room name: " + creep.room.name);
         if (creep.room.name !== target) {
-            console.log("kommer jag hit!!");
             creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(target)), {visualizePathStyle: {stroke: '#ffffff'}});
         } else {
-            console.log("kommer jag hit!!");
             if (source == null) {
                 source = creep.room.find(FIND_SOURCES)[0];
             }
@@ -23,7 +21,6 @@ const upgrader = {
                 creep.say('🚧 upgrading');
             }
             if (creep.memory.upgrading) {
-                console.log("kommer jag hit!!");
                 if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
                 }

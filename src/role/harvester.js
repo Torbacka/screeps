@@ -59,11 +59,17 @@ var harvester = {
 
             } else {
                 const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
-                const towers = Game.rooms["W38N35"].find(
+                const repairObjects = getRepairObjects(creep);
+                const towers = creep.room.find(
                   FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-
-                if (towers.length > 0 && towers[0].energy < 700) {
-                    roleTransporter.run(creep);
+                console.log("Construction sites:" + constructionSites.length);
+                if (repairObjects.length > 0) {
+                    if(creep.repair(repairObjects[0]) === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(repairObjects[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                        creep.say('repair');
+                    }
+                } else if (towers.length > 0 && towers[0].energy < 700) {
+                    //roleTransporter.run(creep);
                 } else if (constructionSites.length) {
                     roleBuilder.run(creep, source);
                 } else {
@@ -73,5 +79,15 @@ var harvester = {
         }
     }
 };
+
+function getRepairObjects(creep) {
+    return creep.room.find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax * 0.75) ||
+              (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax);
+        }
+    });
+
+}
 
 module.exports = harvester;
