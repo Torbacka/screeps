@@ -69,7 +69,7 @@ var harvester = {
                         creep.say('repair');
                     }
                 } else if (towers.length > 0 && towers[0].energy < 700) {
-                    //roleTransporter.run(creep);
+                    roleTransporter.run(creep);
                 } else if (constructionSites.length) {
                     roleBuilder.run(creep, source);
                 } else {
