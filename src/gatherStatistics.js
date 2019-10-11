@@ -1,25 +1,15 @@
 module.exports = (room) => {
-    /*if (Memory.statistics === undefined) {
-        Memory.statistics = [];
-    }*/
-    /*var statString = "";
-    var time = 0;
-    Memory.statistics.forEach((stat) => {
-        statString += "" + stat.progress + ";" + time + ";" + stat.timestamp +  "\n";
-        time +=100;
-    });
-
-    */
-/*
-    if (Game.time % 100 === 0) {
-        let statistics = {
-            'progress': room.controller.progress,
-            'progressTotal': room.controller.progressTotal,
-            'timestamp': Date.now(),
-            'roomName': room.name
-        };
-        Memory.statistics.push(statistics);
-
+    if (Game.time % 10 === 0) {
+        if (Memory.statistics === undefined) {
+            Memory.statistics = {};
+            Memory.statistics[room.name] = {};
+        } else if (Memory.statistics[room.name] === undefined) {
+            Memory.statistics[room.name] = {};
+        }
+        let roomStat = Memory.statistics[room.name];
+        if (roomStat.controller === undefined) {
+            roomStat.controller =  {};
+        }
+        roomStat.controller.progress = room.controller.progress.valueOf();
     }
-    */
 };

@@ -62,7 +62,6 @@ var harvester = {
                 const repairObjects = getRepairObjects(creep);
                 const towers = creep.room.find(
                   FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                console.log("Construction sites:" + constructionSites.length);
                 if (repairObjects.length > 0) {
                     if(creep.repair(repairObjects[0]) === ERR_NOT_IN_RANGE) {
                         creep.moveTo(repairObjects[0], {visualizePathStyle: {stroke: '#ffffff'}});
