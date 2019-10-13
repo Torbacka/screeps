@@ -16,7 +16,6 @@ const profiler = require('screeps-profiler');
 
 profiler.enable();
 module.exports.loop = function () {
-
     profiler.wrap(function () {
         Object.values(Game.rooms).forEach((room) => {
             room.find(FIND_MY_CREEPS).forEach((creep) => {
