@@ -124,23 +124,23 @@ const populate = {
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
-                    'number': 5
+                    'number': 0
                 },
                 'upgraders': {
                     'body': creepArray,
-                    'number': 3
+                    'number': 9
                 },'upgraderHelper': {
                     'body': creepArray,
                     'number': 5
                 },
                 'transporter': {
-                    'body': [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,CARRY, CARRY, CARRY, CARRY,
-                        MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
-                    'number': 0
+                    'body': [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE],
+                    'number': 2
                 },
                 'miner': {
                     'body': [WORK, WORK, WORK,WORK,WORK, MOVE],
-                    'number': 0
+                    'number': 2
                 },
                 'builders': {
                     'body': creepArray,

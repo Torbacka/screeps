@@ -8,11 +8,6 @@ const transporter = {
             });
 
         }
-        const storage = creep.room.find(FIND_STRUCTURES, {
-            filter: function (structure) {
-                return structure.structureType === STRUCTURE_STORAGE //&& _.sum(structure.store) < structure.storeCapacity;
-            }
-        });
         let source = null;
 
         if (containers.length === 0) {
@@ -44,7 +39,7 @@ const transporter = {
         }
 
         if (creep.memory.transfering) {
-            const targets = creep.room.find(FIND_STRUCTURES, {
+            let targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity)
                       || (structure.structureType === STRUCTURE_SPAWN && structure.energy < structure.energyCapacity)
@@ -52,6 +47,17 @@ const transporter = {
                       || (structure.structureType === STRUCTURE_STORAGE)
                 },
 
+            });
+
+            let hostileConstructionSites = creep.room.find(FIND_HOSTILE_STRUCTURES);
+            let hostileStorage  = undefined;
+            hostileConstructionSites.forEach((site) => {
+                if (site.structureType === STRUCTURE_STORAGE) {
+                    hostileStorage = site;
+                }
+            });
+            targets = targets.filter(target => {
+                return target !== hostileStorage;
             });
             const structureValue = {
                 "spawn": 1,
@@ -72,29 +78,21 @@ const transporter = {
                 }
             }
         } else {
-            if (containers.length > 0) {
+            const energy = creep.pos.findInRange(
+              FIND_DROPPED_RESOURCES,
+              6
+            );
+            if (energy.length) {
+
+                if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
+                }
+            } else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+            } else if (containers.length > 0) {
 
                 if (creep.withdraw(containers[creep.memory.container], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(containers[creep.memory.container], {visualizePathStyle: {stroke: '#ffaa00'}});
-                }
-            } else if (Array.isArray(storage) && storage[0] !== null) {
-
-                if (creep.withdraw(storage[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                    let moveTo = creep.moveTo(storage[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-
-                }
-            } else {
-                const energy = creep.pos.findInRange(
-                  FIND_DROPPED_RESOURCES,
-                  6
-                );
-                if (energy.length) {
-
-                    if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
-                        creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
-                    }
-                } else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             }
         }

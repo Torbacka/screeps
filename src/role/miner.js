@@ -25,11 +25,18 @@ var transporter = {
             creep.memory.container = container;
         }
 
-        let source = creep.room.find(FIND_SOURCES)[creep.memory.container];
-        if (!containers[creep.memory.container].pos.isEqualTo(creep.pos)) {
+        let sources = creep.room.find(FIND_SOURCES);
+        let container = containers[creep.memory.container];
+        let closestSource = sources[creep.memory.container];
+        sources.forEach(source => {
+            if (Math.abs(source.pos.x - container.pos.x) <= 1 ||  Math.abs(source.pos.y - container.pos.y) <= 1) {
+                closestSource = source;
+            }
+        });
+        if (!container.pos.isEqualTo(creep.pos)) {
 
-            creep.moveTo(containers[creep.memory.container].pos, {visualizePathStyle: {stroke: '#ffaa00'}});
-        } else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+            creep.moveTo(container.pos, {visualizePathStyle: {stroke: '#ffaa00'}});
+        } else if (creep.harvest(closestSource) === ERR_NOT_IN_RANGE) {
             console.log("Working!");
         }
 
