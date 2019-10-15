@@ -82,9 +82,8 @@ const populate = {
                 'upgraders': {
                     'body': [WORK, WORK, WORK, WORK, WORK,
                              WORK, WORK, WORK, WORK, WORK,
-                             WORK, WORK, WORK, WORK,  WORK,
-                             CARRY, CARRY, CARRY, CARRY, CARRY,MOVE, MOVE, MOVE, MOVE],
-                    'number': 4
+                             CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+                    'number': 1
                 }, 'upgraderHelper': {
                     'body': [WORK, WORK, WORK, WORK, WORK,
                         WORK, WORK, WORK, WORK, WORK,
@@ -98,7 +97,7 @@ const populate = {
                 'transporter': {
                     'body': [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,CARRY, CARRY, CARRY, CARRY,
                         MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
-                    'number': 2
+                    'number': 1
                 },
                 'miner': {
                     'body': [WORK, WORK, WORK,WORK,WORK, MOVE],
@@ -131,7 +130,7 @@ const populate = {
                         CARRY, CARRY, CARRY, CARRY,
                         CARRY, CARRY, CARRY,MOVE,MOVE,MOVE, MOVE, MOVE, MOVE, MOVE,
                         MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE,MOVE],
-                    'number': 1
+                    'number': 5
                 }, 'upgraderHelper': {
                     'body': [WORK, WORK, WORK, WORK, WORK,
                         WORK, WORK, WORK, WORK, WORK,
