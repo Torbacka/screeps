@@ -50,8 +50,8 @@ const tower = {
 function getWalls(tower) {
     return tower.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.01)
-              || (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.03);
+            return (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.0033)
+              || (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.01);
         }
     });
 }
