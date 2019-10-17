@@ -39,48 +39,39 @@ const transporter = {
         }
 
         if (creep.memory.transfering) {
-            let targets = creep.room.find(FIND_STRUCTURES, {
+            let target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType === STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity)
-                      || (structure.structureType === STRUCTURE_SPAWN && structure.energy < structure.energyCapacity)
-                      || (structure.structureType === STRUCTURE_TOWER && structure.energy < structure.energyCapacity * 0.7)
-                      || (structure.structureType === STRUCTURE_STORAGE)
+                    return (structure.structureType === STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity) ||
+                      (structure.structureType === STRUCTURE_SPAWN && structure.energy < structure.energyCapacity)
                 },
-
             });
 
-            let hostileConstructionSites = creep.room.find(FIND_HOSTILE_STRUCTURES);
-            let hostileStorage  = undefined;
-            hostileConstructionSites.forEach((site) => {
-                if (site.structureType === STRUCTURE_STORAGE) {
-                    hostileStorage = site;
-                }
-            });
-            targets = targets.filter(target => {
-                return target !== hostileStorage;
-            });
-            const structureValue = {
-                "spawn": 1,
-                "extension": 2,
-                "tower": 3,
-                "storage": 4
-            };
+            if (target === null) {
+                target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType === STRUCTURE_TOWER && structure.energy < structure.energyCapacity * 0.7)
+                    },
+                });
+            }
+            if (target === null) {
+                target = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType === STRUCTURE_STORAGE)
+                    },
+                });
+            }
 
-            let sortedTargets = targets.sort((target1, target2) => {
-                let structureValue1 = structureValue[target1.structureType];
-                let structureValue2 = structureValue[target2.structureType];
-                return structureValue1 - structureValue2;
-            });
-
-            if (sortedTargets.length > 0) {
-                if (creep.transfer(sortedTargets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(sortedTargets[0], {visualizePathStyle: {stroke: '#ffffff'}});
-                }
+            if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         } else {
             const energy = creep.pos.findInRange(
               FIND_DROPPED_RESOURCES,
-              6
+              6,  {
+                  filter: (resource) => {
+                      return resource.energy > 50
+                  }
+              }
             );
             if (energy.length) {
 
