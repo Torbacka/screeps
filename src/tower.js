@@ -21,7 +21,7 @@ const tower = {
             const username = hostiles[0].owner.username;
             Game.notify(`User ${username} spotted in room ${room.name}`);
             if (room.controller.safeMode === undefined) {
-                room.controller.activateSafeMode();
+                //room.controller.activateSafeMode();
             }
             towers.forEach(tower => tower.attack(hostiles[0]));
         } else {

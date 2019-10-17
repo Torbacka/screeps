@@ -164,6 +164,42 @@ const populate = {
                     'number': 1
                 }
             };
+        }else if (totalEnergy>= 1800) {
+            creepArray = [WORK, WORK, WORK, WORK, WORK, WORK,WORK, WORK, WORK, WORK,CARRY, CARRY, CARRY, CARRY,
+                MOVE, MOVE, MOVE,  MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE];
+            creepNumbers = {
+                'harvester': {
+                    'body': creepArray,
+                    'number': 0
+                },
+                'upgraders': {
+                    'body': [WORK, WORK, WORK, WORK, WORK, WORK,WORK, WORK, WORK, WORK, CARRY,
+                        MOVE, MOVE, MOVE,  MOVE, MOVE, MOVE,MOVE, MOVE, MOVE],
+                    'number': 1
+                },'upgraderHelper': {
+                    'body': [WORK, WORK, WORK, WORK, WORK, WORK,WORK, WORK, WORK, WORK, CARRY,
+                        MOVE, MOVE, MOVE,  MOVE, MOVE, MOVE,MOVE, MOVE, MOVE],
+                    'number': 5
+                },
+                'transporter': {
+                    'body': [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE],
+                    'number': 2
+                },
+                'miner': {
+                    'body': [WORK, WORK, WORK,WORK,WORK, MOVE],
+                    'number': 2
+                },
+                'builders': {
+                    'body': creepArray,
+                    'number': 2
+                },
+                'defender': {
+                    'body': [TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK,
+                        MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'number': 0
+                }
+            };
         }  else if (totalEnergy>= 1300) {
             creepArray = [WORK, WORK, WORK, WORK, WORK, WORK,CARRY,CARRY, CARRY,
                 MOVE, MOVE, MOVE,  MOVE, MOVE, MOVE,MOVE, MOVE, MOVE];
@@ -326,9 +362,9 @@ const populate = {
 
             spawn.spawnCreep(creepNumbers.upgraders.body, newName,
               {memory: {role: 'upgrader'}});
-        } else if (attacker.length < 0) {
+        } else if (attacker.length < 0 &&  room.name === "W39N33") {
             newName = 'Attacker' + Game.time;
-            creepArray = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK,ATTACK, ATTACK, ATTACK,ATTACK, ATTACK, ATTACK,ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
+            creepArray = [ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK,ATTACK, ATTACK, ATTACK,MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE];
             spawn.spawnCreep(creepArray, newName,
               {memory: {role: 'attacker'}});
         } else if (claimer.length < 0) {
@@ -336,7 +372,7 @@ const populate = {
             creepArray = creepNumbers.claimer.body;
             spawn.spawnCreep(creepArray, newName,
               {memory: {role: 'claimer'}});
-        }else if (builderHelper.length < 0 &&  room.name === "W38N35") {
+        }else if (builderHelper.length < 0 ) {
             newName = 'BuilderHelper' + Game.time;
             spawn.spawnCreep( [WORK, WORK, WORK, WORK, WORK,
                   WORK, WORK, WORK, WORK, WORK,

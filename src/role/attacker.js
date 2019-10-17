@@ -8,9 +8,9 @@ const attacker = {
             let hostileConstructionSites = creep.room.find(FIND_HOSTILE_STRUCTURES);
             let sites  = [];
             hostileConstructionSites.forEach((site) => {
-                if (site.structureType !== STRUCTURE_STORAGE) {
+                //if (site.structureType !== STRUCTURE_STORAGE) {
                     sites.push(site);
-                }
+                //}
             });
             sites.forEach((site) => console.log(site.structureType));
 
