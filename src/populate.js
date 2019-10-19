@@ -267,7 +267,7 @@ const populate = {
                 }
             };
         }
-        if (creeps.length < 2) {
+        if (creeps.length < 2 && totalEnergy < 3000) {
             creepArray = [WORK, CARRY, MOVE, MOVE];
             creepNumbers = {
                 'harvester': {

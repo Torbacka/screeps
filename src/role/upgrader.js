@@ -4,6 +4,8 @@ const upgrader = {
      * @param source
      */
     run: function (creep, source = null) {
+        let storage = creep.room.storage;
+        let terminal = creep.room.terminal;
         if (source == null) {
             source = creep.room.find(FIND_SOURCES)[0];
         }
@@ -16,21 +18,19 @@ const upgrader = {
             creep.say('🚧 upgrading');
         }
         if (creep.memory.upgrading) {
-            if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
+            if (terminal !== undefined && terminal.store[RESOURCE_ENERGY] < 100000) {
+                if(creep.transfer(terminal, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(terminal, {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            } else if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         } else {
-            let storage = creep.room.find(FIND_STRUCTURES, {
-                filter: (i) => {
-                    return (i.structureType === STRUCTURE_STORAGE)
-                }
-            });
+            if (storage.store[RESOURCE_ENERGY] > 0) {
+                 if (creep.withdraw(storage, RESOURCE_ENERGY) === OK) {
 
-            if (storage.length > 0 && storage[0].store[RESOURCE_ENERGY]  > 0) {
-                if (creep.withdraw(storage[0], RESOURCE_ENERGY) === OK) {
-
-                } else  if (storage[0].store[RESOURCE_ENERGY]  > 0 && creep.withdraw(storage[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(storage[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                } else if (storage.store[RESOURCE_ENERGY] > 0 && creep.withdraw(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             }
             else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
