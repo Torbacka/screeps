@@ -10,6 +10,7 @@ let roleBuilderHelper = require('role_builderHelper');
 let roleDefender = require('role_defender');
 let garbagecollector = require('garbagecollector');
 let populate = require('populate');
+let market = require('market');
 let tower = require('tower');
 let gatherStatistics = require('gatherStatistics');
 const profiler = require('screeps-profiler');
@@ -55,6 +56,7 @@ module.exports.loop = function () {
             });
             tower.guard(room);
             populate.run(room);
+            market.trade(room);
             gatherStatistics(room);
             garbagecollector();
 
