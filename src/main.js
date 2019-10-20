@@ -54,7 +54,7 @@ module.exports.loop = function () {
                 if (creep.memory.role === 'BuilderHelper') {
                     roleBuilderHelper.run(creep, null, "W39N33");
                 }if (creep.memory.role === 'mineralMiner') {
-                    roleBuilderHelper.run(creep);
+                    roleMineralMiner.run(creep);
                 }
             });
             tower.guard(room);

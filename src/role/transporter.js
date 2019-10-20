@@ -8,15 +8,18 @@ const transporter = {
             });
 
         }
-        let source = null;
-
-        if (containers.length === 0) {
-            source = creep.room.find(FIND_SOURCES)[0];
-        }
+        let mineralContainer = containers[containers.length - 1];
+        containers.forEach(container => {
+            let resourceTypes = Object.keys(container.store);
+            if (!resourceTypes.includes(RESOURCE_ENERGY)) {
+                mineralContainer = container
+            }
+        });
+        console.log(JSON.stringify(mineralContainer.store, null, 2));
         if (creep.memory.container === undefined) {
             creep.memory.container = 0;
         }
-        if (creep.memory.transfering && creep.carry.energy === 0) {
+        if (creep.memory.transfering && _.sum(creep.carry) === 0) {
             creep.memory.transfering = false;
             if (creep.memory.container === 0) {
                 creep.memory.container = 1;
@@ -27,61 +30,72 @@ const transporter = {
         if (containers.length > 0) {
 
             if (containers.length === 1) {
-                if (containers[0].store[RESOURCE_ENERGY] < 30 && creep.carry.energy > 0) {
+                if (containers[0].store[RESOURCE_ENERGY] < 30 &&  _.sum(creep.carry) > 0) {
                     creep.memory.transfering = true;
                 }
-            } else if (containers[creep.memory.container].store[RESOURCE_ENERGY] < 30 && creep.carry.energy > 0) {
+            } else if (containers[creep.memory.container].store[RESOURCE_ENERGY] < 30 &&  _.sum(creep.carry) > 0) {
                 creep.memory.transfering = true;
             }
         }
-        if (!creep.memory.transfering && creep.carry.energy === creep.carryCapacity) {
+        if (!creep.memory.transfering &&  _.sum(creep.carry) === creep.carryCapacity) {
             creep.memory.transfering = true;
         }
 
         if (creep.memory.transfering) {
-            let target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType === STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity) ||
-                      (structure.structureType === STRUCTURE_SPAWN && structure.energy < structure.energyCapacity)
-                },
-            });
-
-            if (target === null) {
-                target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType === STRUCTURE_TOWER && structure.energy < structure.energyCapacity * 0.7)
-                    },
-                });
-            }
-            if (target === null) {
+            let target;
+            if (creep.carry.energy === 0) {
                 target = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType === STRUCTURE_STORAGE)
                     },
                 });
-            }
+            } else {
+                target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType === STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity) ||
+                          (structure.structureType === STRUCTURE_SPAWN && structure.energy < structure.energyCapacity)
+                    },
+                });
 
-            if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+
+                if (target === null) {
+                    target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                        filter: (structure) => {
+                            return (structure.structureType === STRUCTURE_TOWER && structure.energy < structure.energyCapacity * 0.7)
+                        },
+                    });
+                }
+                if (target === null) {
+                    target = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+                        filter: (structure) => {
+                            return (structure.structureType === STRUCTURE_STORAGE)
+                        },
+                    });
+                }
+            }
+            if (creep.transfer(target, Object.keys(creep.carry)[0]) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         } else {
             const energy = creep.pos.findInRange(
               FIND_DROPPED_RESOURCES,
-              6,  {
+              6, {
                   filter: (resource) => {
                       return resource.energy > 50
                   }
               }
             );
+            console.log(_.sum(mineralContainer.store));
             if (energy.length) {
 
                 if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
                 }
-            } else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+            } else if (_.sum(mineralContainer.store) > 1200) {
+                if (creep.withdraw(mineralContainer, Object.keys(mineralContainer.store)[0]) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(mineralContainer, {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
             } else if (containers.length > 0) {
-
                 if (creep.withdraw(containers[creep.memory.container], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(containers[creep.memory.container], {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
