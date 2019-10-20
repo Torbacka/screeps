@@ -40,7 +40,14 @@ const populate = {
         const upgraderHelper = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'upgraderHelper'));
         const builderHelper = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'builderHelper'));
         const defender = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'defender'));
+        const mineralMiner = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'mineralMiner'));
 
+        let extractors = room.find(FIND_STRUCTURES, {
+            filter: (i) => {
+                return (i.structureType === STRUCTURE_EXTRACTOR)
+            }
+        });
+        const extractorExists = extractors.length > 0;
         const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
         const totalEnergy = room.energyCapacityAvailable;
         const energyAvailable = room.energyAvailable;
@@ -104,6 +111,9 @@ const populate = {
                 'miner': {
                     'body': [WORK, WORK, WORK,WORK,WORK, MOVE],
                     'number': 2
+                }, 'mineralMiner': {
+                    'body': [WORK, WORK, WORK,WORK,WORK, WORK, WORK, WORK,WORK,WORK, MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'number': 1
                 },
                 'claimer': {
                     'body': [CLAIM, MOVE],
@@ -312,7 +322,11 @@ const populate = {
 
             spawn.spawnCreep(creepNumbers.builders.body, newName,
               {memory: {role: 'builder'}});
-        }else if ( upgraders.length < creepNumbers.upgraders.number) {
+        }else if (extractorExists && mineralMiner.length < creepNumbers.mineralMiner.number) {
+            newName = 'MineralMiner' + Game.time;
+            spawn.spawnCreep(creepNumbers.mineralMiner.body, newName,
+              {memory: {role: 'mineralMiner'}});
+        } else if ( upgraders.length < creepNumbers.upgraders.number) {
             newName = 'Upgrader' + Game.time;
 
             spawn.spawnCreep(creepNumbers.upgraders.body, newName,

@@ -1,4 +1,4 @@
-var transporter = {
+const miner = {
     run: function (creep) {
         const containers = creep.room.find(FIND_STRUCTURES, {
             filter: (i) => {
@@ -29,7 +29,7 @@ var transporter = {
         let container = containers[creep.memory.container];
         let closestSource = sources[creep.memory.container];
         sources.forEach(source => {
-            if (Math.abs(source.pos.x - container.pos.x) <= 1 ||  Math.abs(source.pos.y - container.pos.y) <= 1) {
+            if (Math.abs(source.pos.x - container.pos.x) <= 1 || Math.abs(source.pos.y - container.pos.y) <= 1) {
                 closestSource = source;
             }
         });
@@ -43,4 +43,4 @@ var transporter = {
     }
 };
 
-module.exports = transporter;
+module.exports = miner;

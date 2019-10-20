@@ -5,6 +5,7 @@ let roleAttacker = require('role_attacker');
 let roleClaimer = require('role_claim');
 let roleTransporter = require('role_transporter');
 let roleMiner = require('role_miner');
+let roleMineralMiner = require('role_mineralMiner');
 let roleUpgraderHelper = require('role_upgraderHelper');
 let roleBuilderHelper = require('role_builderHelper');
 let roleDefender = require('role_defender');
@@ -52,6 +53,8 @@ module.exports.loop = function () {
                 }
                 if (creep.memory.role === 'BuilderHelper') {
                     roleBuilderHelper.run(creep, null, "W39N33");
+                }if (creep.memory.role === 'mineralMiner') {
+                    roleBuilderHelper.run(creep);
                 }
             });
             tower.guard(room);
