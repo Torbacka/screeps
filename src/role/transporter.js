@@ -15,7 +15,6 @@ const transporter = {
                 mineralContainer = container
             }
         });
-        console.log(JSON.stringify(mineralContainer.store, null, 2));
         if (creep.memory.container === undefined) {
             creep.memory.container = 0;
         }
@@ -81,11 +80,10 @@ const transporter = {
               FIND_DROPPED_RESOURCES,
               6, {
                   filter: (resource) => {
-                      return resource.energy > 50
+                      return resource.amount > 50
                   }
               }
             );
-            console.log(_.sum(mineralContainer.store));
             if (energy.length) {
 
                 if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {

@@ -154,6 +154,9 @@ const populate = {
                 'miner': {
                     'body': [WORK, WORK, WORK,WORK,WORK, MOVE],
                     'number': 2
+                },'mineralMiner': {
+                    'body': [WORK, WORK, WORK,WORK,WORK, WORK, WORK, WORK,WORK,WORK, MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'number': 1
                 },
                 'builders': {
                     'body': creepArray,
@@ -322,7 +325,7 @@ const populate = {
 
             spawn.spawnCreep(creepNumbers.builders.body, newName,
               {memory: {role: 'builder'}});
-        }else if (extractorExists && mineralMiner.length < creepNumbers.mineralMiner.number) {
+        }else if (extractorExists && creepNumbers.mineralMiner && mineralMiner.length < creepNumbers.mineralMiner.number) {
             newName = 'MineralMiner' + Game.time;
             spawn.spawnCreep(creepNumbers.mineralMiner.body, newName,
               {memory: {role: 'mineralMiner'}});
