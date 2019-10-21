@@ -18,7 +18,7 @@ const upgrader = {
             creep.say('🚧 upgrading');
         }
         if (creep.memory.upgrading) {
-            if (storage.store[RESOURCE_ENERGY]  > 100000 && terminal !== undefined && terminal.store[RESOURCE_ENERGY] < 100000) {
+            if (storage.store[RESOURCE_ENERGY]  > 150000 && terminal !== undefined && terminal.store[RESOURCE_ENERGY] < 100000) {
                 if(creep.transfer(terminal, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(terminal, {visualizePathStyle: {stroke: '#ffffff'}});
                 }

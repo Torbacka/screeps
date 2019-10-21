@@ -23,12 +23,27 @@ const tower = {
             if (room.controller.safeMode === undefined) {
                 //room.controller.activateSafeMode();
             }
+            hostiles.sort((enemy1, enemy2) => {
+                let healingPars1 = enemy1.body.filter((part) => {
+                    return part.type === HEAL
+                });
+                let healingPars2 = enemy2.body.filter((part) => {
+                    return part.type === HEAL
+                });
+                let attackPart1 = enemy1.body.filter((part) => {
+                    return part.type === HEAL
+                });
+                let attackPart2 = enemy2.body.filter((part) => {
+                    return part.type === ATTACK
+                });
+                return (healingPars2.length - healingPars1.length) || (attackPart2.length - attackPart1.length);
+            });
             towers.forEach(tower => tower.attack(hostiles[0]));
         } else {
             const targets = getRepairObjects(towers[0]);
 
             towers.forEach((tower, i) => {
-                if (tower.energy >= tower.energyCapacity*0.5) {
+                if (tower.energy >= tower.energyCapacity * 0.5) {
                     if (targets.length > 0) {
                         if (i < targets.length) {
                             tower.repair(targets[i])
