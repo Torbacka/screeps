@@ -21,7 +21,6 @@ const tower = {
             const username = hostiles[0].owner.username;
             Game.notify(`User ${username} spotted in room ${room.name}`);
             if (room.controller.safeMode === undefined) {
-                //room.controller.activateSafeMode();
             }
             hostiles.sort((enemy1, enemy2) => {
                 let healingPars1 = enemy1.body.filter((part) => {
