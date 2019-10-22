@@ -1,10 +1,11 @@
 const market = {
     trade: (room) => {
         if (room.terminal && (Game.time % 10 === 0)) {
-            if (room.terminal.store[RESOURCE_ENERGY] > 2000) {
+            if (room.terminal.store[RESOURCE_ENERGY] > 500) {
                 const orders = Game.market.getAllOrders(order => {
                     return (order.resourceType === RESOURCE_ENERGY &&
-                      order.type === ORDER_BUY)
+                      order.type === ORDER_BUY) &&
+                      getCalcTransactionCost(room, order) < 0.55
                 });
                 //console.log("Energy buy orders found : " + orders.length);
                 orders.sort((a, b) => {

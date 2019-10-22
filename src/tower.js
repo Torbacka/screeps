@@ -30,7 +30,7 @@ const tower = {
                     return part.type === HEAL
                 });
                 let attackPart1 = enemy1.body.filter((part) => {
-                    return part.type === HEAL
+                    return part.type === ATTACK
                 });
                 let attackPart2 = enemy2.body.filter((part) => {
                     return part.type === ATTACK

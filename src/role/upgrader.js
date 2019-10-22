@@ -18,7 +18,7 @@ const upgrader = {
             creep.say('🚧 upgrading');
         }
         if (creep.memory.upgrading) {
-            if (storage.store[RESOURCE_ENERGY]  > 150000 && terminal !== undefined && terminal.store[RESOURCE_ENERGY] < 100000) {
+            if (storage && storage.store[RESOURCE_ENERGY]  > 150000 && terminal && terminal.store[RESOURCE_ENERGY] < 100000) {
                 if(creep.transfer(terminal, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(terminal, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
@@ -26,7 +26,7 @@ const upgrader = {
                 creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         } else {
-            if (storage.store[RESOURCE_ENERGY] > 0) {
+            if (storage && storage.store[RESOURCE_ENERGY] > 0) {
                  if (creep.withdraw(storage, RESOURCE_ENERGY) === OK) {
 
                 } else if (storage.store[RESOURCE_ENERGY] > 0 && creep.withdraw(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
