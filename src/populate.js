@@ -54,7 +54,7 @@ const populate = {
         const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
         let minerals = room.find(FIND_MINERALS, {
             filter: (mineral) => {
-                return mineral.amount > 0
+                return mineral.mineralAmount > 0
             }
         });
         const totalEnergy = room.energyCapacityAvailable;
