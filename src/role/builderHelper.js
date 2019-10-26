@@ -4,7 +4,7 @@ const upgrader = {
      * @param source
      * @param target
      */
-    run: function (creep, source = null, target = "W40N34") {
+    run: function (creep, source = null, target = "W38N34") {
 
         if (creep.room.name !== target) {
             creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(target)), {visualizePathStyle: {stroke: '#ffffff'}});
