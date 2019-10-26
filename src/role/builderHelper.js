@@ -22,8 +22,14 @@ const upgrader = {
             }
 
             if (creep.memory.building) {
+                const repairObjects = getRepairObjects(creep);
                 const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-                if (targets.length) {
+                if (repairObjects.length > 0) {
+                    if(creep.repair(repairObjects[0]) === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(repairObjects[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                        creep.say('repair');
+                    }
+                } else if(targets.length) {
                     if (creep.build(targets[0]) === ERR_NOT_IN_RANGE) {
                         creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                     }
@@ -58,5 +64,15 @@ const upgrader = {
         }
     }
 };
+
+function getRepairObjects(creep) {
+    return creep.room.find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax * 0.75) ||
+              (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax);
+        }
+    });
+
+}
 
 module.exports = upgrader;

@@ -46,13 +46,13 @@ module.exports.loop = function () {
                     roleMiner.run(creep);
                 }
                 if (creep.memory.role === 'upgraderHelper') {
-                    roleUpgraderHelper.run(creep, null, "W39N33");
+                    roleUpgraderHelper.run(creep, null, "W38N34");
                 }
                 if (creep.memory.role === 'defender') {
                     roleDefender.run(creep);
                 }
                 if (creep.memory.role === 'BuilderHelper') {
-                    roleBuilderHelper.run(creep, null, "W39N33");
+                    roleBuilderHelper.run(creep, null, "W38N34");
                 }if (creep.memory.role === 'mineralMiner') {
                     roleMineralMiner.run(creep);
                 }

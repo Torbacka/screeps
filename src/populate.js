@@ -30,7 +30,13 @@ const populate = {
         Object.values(Game.rooms).forEach((room) => {
             hostileCreep += room.find(FIND_HOSTILE_CREEPS);
         });
-
+        let groupedCreeps;
+        if (room.name === 'W38N35') {
+            let allCreeps = Object.values(Game.creeps).filter(creep => {
+                return creep.ticksToLive > 160;
+            });
+            groupedCreeps = groupBy(allCreeps, creep => creep.memory.role);
+        }
         //let groupedCreeps = groupBy(creeps, creep => creep.memory.role);
 
         const harvesters = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'harvester'));
@@ -313,7 +319,6 @@ const populate = {
                 }
             };
         }
-        //1800
 
         if (harvesters.length < creepNumbers.harvester.number) {
             newName = 'Harvester' + Game.time;
@@ -352,7 +357,7 @@ const populate = {
             creepArray = creepNumbers.claimer.body;
             spawn.spawnCreep(creepArray, newName,
               {memory: {role: 'claimer'}});
-        } else if (builderHelper.length < 0) {
+        } else if (groupedCreeps && (groupedCreeps.get('BuilderHelper') === undefined || groupedCreeps.get('BuilderHelper').length < 1) && room.name === "W38N35") {
             newName = 'BuilderHelper' + Game.time;
             spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK,
                   WORK, WORK, WORK, WORK, WORK,
@@ -362,11 +367,13 @@ const populate = {
                   MOVE, MOVE, MOVE, MOVE, MOVE,
                   MOVE, MOVE, MOVE, MOVE, MOVE], newName,
               {memory: {role: 'BuilderHelper'}});
-        } else if (upgraderHelper.length < 0 && room.name === "W38N35") {
+        } else if (groupedCreeps && (groupedCreeps.get('upgraderHelper') === undefined || groupedCreeps.get('upgraderHelper').length < 2) && room.name === "W38N35") {
             newName = 'upgraderHelper' + Game.time;
             spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK,
                   WORK, WORK, WORK, WORK, WORK,
                   WORK, WORK, WORK, WORK, WORK,
+                  CARRY, CARRY, CARRY, CARRY, CARRY,
+                  CARRY, CARRY, CARRY, CARRY, CARRY,
                   CARRY, CARRY, CARRY, CARRY, CARRY,
                   MOVE, MOVE, MOVE, MOVE, MOVE,
                   MOVE, MOVE, MOVE, MOVE, MOVE,

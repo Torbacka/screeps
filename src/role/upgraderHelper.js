@@ -5,12 +5,11 @@ const upgrader = {
      * @param target
      */
     run: function (creep, source = null, target = "W39N33") {
-        console.log("Target: " + target + " room name: " + creep.room.name);
         if (creep.room.name !== target) {
             creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(target)), {visualizePathStyle: {stroke: '#ffffff'}});
         } else {
             if (source == null) {
-                source = creep.room.find(FIND_SOURCES)[0];
+                source = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
             }
             if (creep.memory.upgrading && creep.carry.energy === 0) {
                 creep.memory.upgrading = false;
