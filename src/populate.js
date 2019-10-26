@@ -126,7 +126,10 @@ const populate = {
                     'body': [WORK, WORK, WORK, WORK, WORK, MOVE],
                     'number': 2
                 }, 'mineralMiner': {
-                    'body': [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'body': [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK,
+                             WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK,
+                             WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK,
+                             MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
                     'number': 1
                 },
                 'claimer': {
