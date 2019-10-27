@@ -80,7 +80,7 @@ const transporter = {
               FIND_DROPPED_RESOURCES,
               6, {
                   filter: (resource) => {
-                      return resource.amount > 50
+                      return resource.amount > 400
                   }
               }
             );
@@ -89,7 +89,7 @@ const transporter = {
                 if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
                 }
-            } else if (_.sum(mineralContainer.store) > 1200) {
+            } else if (_.sum(mineralContainer.store) > 1700) {
                 if (creep.withdraw(mineralContainer, Object.keys(mineralContainer.store)[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(mineralContainer, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }

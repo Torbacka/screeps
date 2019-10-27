@@ -37,6 +37,7 @@ const populate = {
             });
             groupedCreeps = groupBy(allCreeps, creep => creep.memory.role);
         }
+        let hostalCreep_W38N34 = Game.rooms['W38N34'].find(FIND_HOSTILE_CREEPS);
         //let groupedCreeps = groupBy(creeps, creep => creep.memory.role);
 
         const harvesters = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'harvester'));
@@ -117,9 +118,17 @@ const populate = {
                     'number': 1
                 },
                 'transporter': {
-                    'body': [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,
-                        CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,
-                        MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+                    'body': [CARRY, CARRY, CARRY, CARRY, CARRY,
+                             CARRY, CARRY, CARRY, CARRY, CARRY,
+                             CARRY, CARRY, CARRY, CARRY, CARRY,
+                             CARRY, CARRY, CARRY, CARRY, CARRY,
+                             CARRY, CARRY, CARRY, CARRY, CARRY,
+                             CARRY, CARRY, CARRY, CARRY, CARRY,
+                             CARRY, CARRY,
+                             MOVE, MOVE, MOVE, MOVE, MOVE,
+                             MOVE, MOVE, MOVE, MOVE, MOVE,
+                             MOVE, MOVE, MOVE, MOVE, MOVE,
+                             MOVE],
                     'number': 1
                 },
                 'miner': {
@@ -297,8 +306,8 @@ const populate = {
                 }
             };
         }
-        if (creeps.length < 2 && totalEnergy < 3000) {
-            creepArray = [WORK, CARRY, MOVE, MOVE];
+        if (creeps.length < 2 ) {
+            creepArray = [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
@@ -364,7 +373,9 @@ const populate = {
             newName = 'BuilderHelper' + Game.time;
             spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK,
                   WORK, WORK, WORK, WORK, WORK,
-                  WORK, WORK, WORK, WORK, WORK,
+                  CARRY, CARRY, CARRY, CARRY, CARRY,
+                  CARRY, CARRY, CARRY, CARRY, CARRY,
+                  CARRY, CARRY, CARRY, CARRY, CARRY,
                   CARRY, CARRY, CARRY, CARRY, CARRY,
                   MOVE, MOVE, MOVE, MOVE, MOVE,
                   MOVE, MOVE, MOVE, MOVE, MOVE,
