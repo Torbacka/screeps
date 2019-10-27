@@ -15,6 +15,7 @@ let market = require('market');
 let tower = require('tower');
 let gatherStatistics = require('gatherStatistics');
 const profiler = require('screeps-profiler');
+require('constants');
 
 profiler.enable();
 module.exports.loop = function () {
@@ -24,34 +25,34 @@ module.exports.loop = function () {
                 if (!_.has(creep.memory, 'role')) {
                     return;
                 }
-                if (creep.memory.role === 'harvester') {
+                if (creep.memory.role === HARVESTER) {
                     roleHarvester.run(creep);
                 }
-                if (creep.memory.role === 'upgrader') {
+                if (creep.memory.role === UPGRADER) {
                     roleUpgrader.run(creep);
                 }
-                if (creep.memory.role === 'builder') {
+                if (creep.memory.role === BUILDER) {
                     roleBuilder.run(creep, null, "W37N34");
                 }
-                if (creep.memory.role === 'attacker') {
+                if (creep.memory.role === ATTACKER) {
                     roleAttacker.run(creep, "W38N34");
                 }
-                if (creep.memory.role === 'claimer') {
-                    roleClaimer.run(creep, "W39N33");
+                if (creep.memory.role === CALIMER) {
+                    roleClaimer.run(creep, "W38N34");
                 }
-                if (creep.memory.role === 'transporter') {
+                if (creep.memory.role === TRANSPORTER) {
                     roleTransporter.run(creep);
                 }
-                if (creep.memory.role === 'miner') {
+                if (creep.memory.role === MINER) {
                     roleMiner.run(creep);
                 }
-                if (creep.memory.role === 'upgraderHelper') {
+                if (creep.memory.role === UPGRADER_HELPER) {
                     roleUpgraderHelper.run(creep, null, "W38N34");
                 }
-                if (creep.memory.role === 'defender') {
+                if (creep.memory.role === DEFENDER) {
                     roleDefender.run(creep);
                 }
-                if (creep.memory.role === 'BuilderHelper') {
+                if (creep.memory.role === BUILDER_HELPER) {
                     roleBuilderHelper.run(creep, null, "W38N34");
                 }if (creep.memory.role === 'mineralMiner') {
                     roleMineralMiner.run(creep);
