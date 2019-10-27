@@ -369,19 +369,13 @@ const populate = {
             creepArray = creepNumbers.claimer.body;
             spawn.spawnCreep(creepArray, newName,
               {memory: {role: 'claimer'}});
-        } else if (groupedCreeps && (groupedCreeps.get('BuilderHelper') === undefined || groupedCreeps.get('BuilderHelper').length < 1) && room.name === "W38N35") {
+        } else if (hostalCreep_W38N34.length === 0 && groupedCreeps && (groupedCreeps.get('BuilderHelper') === undefined || groupedCreeps.get('BuilderHelper').length < 1) && room.name === "W38N35") {
             newName = 'BuilderHelper' + Game.time;
             spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK,
-                  WORK, WORK, WORK, WORK, WORK,
                   CARRY, CARRY, CARRY, CARRY, CARRY,
-                  CARRY, CARRY, CARRY, CARRY, CARRY,
-                  CARRY, CARRY, CARRY, CARRY, CARRY,
-                  CARRY, CARRY, CARRY, CARRY, CARRY,
-                  MOVE, MOVE, MOVE, MOVE, MOVE,
-                  MOVE, MOVE, MOVE, MOVE, MOVE,
                   MOVE, MOVE, MOVE, MOVE, MOVE], newName,
               {memory: {role: 'BuilderHelper'}});
-        } else if (groupedCreeps && (groupedCreeps.get('upgraderHelper') === undefined || groupedCreeps.get('upgraderHelper').length < 2) && room.name === "W38N35") {
+        } else if (cgroupedCreeps && (groupedCreeps.get('upgraderHelper') === undefined || groupedCreeps.get('upgraderHelper').length < 2) && room.name === "W38N35") {
             newName = 'upgraderHelper' + Game.time;
             spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK,
                   WORK, WORK, WORK, WORK, WORK,
