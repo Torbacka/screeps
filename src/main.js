@@ -34,7 +34,7 @@ module.exports.loop = function () {
                     roleBuilder.run(creep, null, "W37N34");
                 }
                 if (creep.memory.role === 'attacker') {
-                    roleAttacker.run(creep, "W39N33");
+                    roleAttacker.run(creep, "W38N34");
                 }
                 if (creep.memory.role === 'claimer') {
                     roleClaimer.run(creep, "W39N33");

@@ -66,7 +66,7 @@ const upgrader = {
 };
 
 function getRepairObjects(creep) {
-    return creep.room.find(FIND_STRUCTURES, {
+    return creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax * 0.75) ||
               (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax);

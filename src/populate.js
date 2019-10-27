@@ -372,10 +372,16 @@ const populate = {
         } else if (hostalCreep_W38N34.length === 0 && groupedCreeps && (groupedCreeps.get('BuilderHelper') === undefined || groupedCreeps.get('BuilderHelper').length < 1) && room.name === "W38N35") {
             newName = 'BuilderHelper' + Game.time;
             spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK,
+                  WORK, WORK, WORK, WORK, WORK,
+                  WORK, WORK, WORK, WORK, WORK,
                   CARRY, CARRY, CARRY, CARRY, CARRY,
+                  CARRY, CARRY, CARRY, CARRY, CARRY,
+                  CARRY, CARRY, CARRY, CARRY, CARRY,
+                  MOVE, MOVE, MOVE, MOVE, MOVE,
+                  MOVE, MOVE, MOVE, MOVE, MOVE,
                   MOVE, MOVE, MOVE, MOVE, MOVE], newName,
               {memory: {role: 'BuilderHelper'}});
-        } else if (cgroupedCreeps && (groupedCreeps.get('upgraderHelper') === undefined || groupedCreeps.get('upgraderHelper').length < 2) && room.name === "W38N35") {
+        } else if (groupedCreeps && (groupedCreeps.get('upgraderHelper') === undefined || groupedCreeps.get('upgraderHelper').length < 2) && room.name === "W38N35") {
             newName = 'upgraderHelper' + Game.time;
             spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK,
                   WORK, WORK, WORK, WORK, WORK,
@@ -397,6 +403,10 @@ const populate = {
     }
 
 };
+
+function getCreepConfig(totalEnergy, role) {
+
+}
 
 function groupBy(list, keyGetter) {
     const map = new Map();
