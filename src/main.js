@@ -15,7 +15,7 @@ let market = require('market');
 let tower = require('tower');
 let gatherStatistics = require('gatherStatistics');
 const profiler = require('screeps-profiler');
-let constants = require('constants');
+require('constants');
 
 profiler.enable();
 module.exports.loop = function () {
@@ -49,7 +49,7 @@ module.exports.loop = function () {
                 if (creep.memory.role === UPGRADER_HELPER) {
                     roleUpgraderHelper.run(creep, null, "W38N34");
                 }
-                if (creep.memory.role === 'defender') {
+                if (creep.memory.role === DEFENDER) {
                     roleDefender.run(creep);
                 }
                 if (creep.memory.role === BUILDER_HELPER) {

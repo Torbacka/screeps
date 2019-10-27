@@ -1,18 +1,18 @@
 
-const UPGRADER = 'upgrader';
-const UPGRADER_HELPER = 'upgraderHelper';
-const TRANSPORTER = 'transporter';
-const MINERAL_MINER = 'mineralMiner';
-const MINER = 'miner';
-const HEALER = 'healer';
-module.export const HARVESTER = 'harvester';
-const DEFENDER = 'defender';
-const CALIMER = 'claim';
-const BUILDER_HELPER = 'builderHelper';
-const BUILDER = 'builder';
-const ATTACKER = 'attacker';
+global.UPGRADER = 'upgrader';
+global.UPGRADER_HELPER = 'upgraderHelper';
+global.TRANSPORTER = 'transporter';
+global.MINERAL_MINER = 'mineralMiner';
+global.MINER = 'miner';
+global.HEALER = 'healer';
+global.HARVESTER = 'harvester';
+global.DEFENDER = 'defender';
+global.CALIMER = 'claim';
+global.BUILDER_HELPER = 'builderHelper';
+global.BUILDER = 'builder';
+global.ATTACKER = 'attacker';
 
-const ROLES = [
+global.ROLES = [
     UPGRADER, UPGRADER_HELPER, TRANSPORTER, MINERAL_MINER, MINER, HEALER, HARVESTER, DEFENDER, CALIMER, BUILDER,
     BUILDER_HELPER, ATTACKER
 

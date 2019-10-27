@@ -6,7 +6,7 @@
  * var mod = require('populate');
  * mod.thing == 'a thing'; // true
  */
-let constants = require('constants');
+require('constants');
 
 const populate = {
     run: function (room) {
@@ -31,13 +31,13 @@ const populate = {
         Object.values(Game.rooms).forEach((room) => {
             hostileCreep += room.find(FIND_HOSTILE_CREEPS);
         });
-        //let groupedCreeps = groupBy(creeps, creep => creep.memory.role);
+        let groupedCreeps = groupBy(creeps, creep => creep.memory.role);
         ROLES.forEach(role => {
             if (!groupedCreeps.has(role)) {
                 groupedCreeps.set(role, []);
             }
         });
-        console.log(JSON.stringify(groupedCreeps.get('upgrader'), null, 2));
+        console.log(JSON.stringify(groupedCreeps.get(UPGRADER), null, 2));
         if (Memory.helpers === undefined) {
             Memory.helpers = {};
         }
