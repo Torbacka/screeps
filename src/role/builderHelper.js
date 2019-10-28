@@ -22,11 +22,12 @@ const upgrader = {
             }
 
             if (creep.memory.building) {
-                const repairObjects = getRepairObjects(creep);
+                const repairObject = getRepairObjects(creep);
                 const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-                if (repairObjects.length > 0) {
-                    if(creep.repair(repairObjects[0]) === ERR_NOT_IN_RANGE) {
-                        creep.moveTo(repairObjects[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                console.log("Something to repair: " + (repairObject !== null) )
+                if (repairObject !== null) {
+                    if(creep.repair(repairObject) === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(repairObject, {visualizePathStyle: {stroke: '#ffffff'}});
                         creep.say('repair');
                     }
                 } else if(targets.length) {
@@ -69,7 +70,8 @@ function getRepairObjects(creep) {
     return creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax * 0.75) ||
-              (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax);
+              (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax) ||
+              (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax);
         }
     });
 
