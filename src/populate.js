@@ -26,7 +26,7 @@ const populate = {
               {align: 'left', opacity: 0.8});
         }
         let newName;
-        let creeps = room.find(FIND_CREEPS);
+        let creeps = room.find(FIND_MY_CREEPS);
         let hostileCreep = 0;
         Object.values(Game.rooms).forEach((room) => {
             hostileCreep += room.find(FIND_HOSTILE_CREEPS);
@@ -44,27 +44,11 @@ const populate = {
             if (!groupedCreeps.has(role)) {
                 groupedCreeps.set(role, []);
             }
+            if (groupedCreepsAll && !groupedCreepsAll.has(role)) {
+                groupedCreepsAll.set(role, []);
+            }
         });
-        console.log(JSON.stringify(groupedCreeps.get(UPGRADER), null, 2));
-        if (Memory.helpers === undefined) {
-            Memory.helpers = {};
-        }
 
-        /*
-        const upgraderHelper = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'upgraderHelper'));
-        const builderHelper = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'builderHelper'));
-
-        const harvesters = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'harvester'));
-        const builders = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'builder'));
-        const upgraders = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'upgrader'));
-        const attacker = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'attacker'));
-        const claimer = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'claimer'));
-        const transporter = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'transporter'));
-        const miner = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'miner'));
-
-        const defender = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'defender'));
-        const mineralMiner = _.filter(creeps, (creep) => (_.has(creep.memory, 'role') && creep.memory.role === 'mineralMiner'));
-        */
         let extractors = room.find(FIND_STRUCTURES, {
             filter: (i) => {
                 return (i.structureType === STRUCTURE_EXTRACTOR)
@@ -405,7 +389,7 @@ const populate = {
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
-                    'number': 2
+                    'number': 0
                 },
                 'upgraders': {
                     'body': creepArray,
@@ -413,7 +397,7 @@ const populate = {
                 },
                 'transporter': {
                     'body': creepArray,
-                    'number': 0
+                    'number': 2
                 },
                 'miner': {
                     'body': creepArray,
@@ -428,7 +412,6 @@ const populate = {
 
         if ( groupedCreeps.get(HARVESTER).length < creepNumbers.harvester.number) {
             newName = 'Harvester' + Game.time;
-
             spawn.spawnCreep(creepNumbers.harvester.body, newName,
               {memory: {role: HARVESTER}});
         } else if (groupedCreeps.get(MINER).length < creepNumbers.miner.number) {
@@ -441,7 +424,6 @@ const populate = {
               {memory: {role: TRANSPORTER}});
         } else if (constructionSites.length > 0 && groupedCreeps.get(BUILDER).length < creepNumbers.builders.number) {
             newName = 'Builder' + Game.time;
-
             spawn.spawnCreep(creepNumbers.builders.body, newName,
               {memory: {role: BUILDER}});
         } else if (extractorExists && creepNumbers.mineralMiner && minerals.length > 0 && groupedCreeps.get(MINERAL_MINER).length < creepNumbers.mineralMiner.number) {
@@ -450,7 +432,6 @@ const populate = {
               {memory: {role: MINERAL_MINER}});
         } else if (groupedCreeps.get(UPGRADER).length < creepNumbers.upgraders.number) {
             newName = 'Upgrader' + Game.time;
-
             spawn.spawnCreep(creepNumbers.upgraders.body, newName,
               {memory: {role: UPGRADER}});
         } else if (groupedCreeps.get(ATTACKER).length < 0 && room.name === "W39N33") {
@@ -463,7 +444,7 @@ const populate = {
             creepArray = creepNumbers.claimer.body;
             spawn.spawnCreep(creepArray, newName,
               {memory: {role: CALIMER}});
-        } else if (groupedCreepsAll.get(BUILDER_HELPER).length < 0 && room.name === "W38N35") {
+        } else if (hostalCreep_W38N34 && hostalCreep_W38N34.length === 0 && groupedCreepsAll && (!groupedCreepsAll.get(BUILDER_HELPER) || groupedCreepsAll.get(BUILDER_HELPER).length < 1) && room.name === "W38N35") {
             newName = 'BuilderHelper' + Game.time;
             spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK,
                   WORK, WORK, WORK, WORK, WORK,
@@ -476,7 +457,7 @@ const populate = {
                   MOVE, MOVE, MOVE, MOVE, MOVE,
                   MOVE, MOVE, MOVE, MOVE, MOVE], newName,
               {memory: {role: BUILDER_HELPER}});
-        } else if (groupedCreepsAll.get(UPGRADER_HELPER).length < 0 && room.name === "W38N35") {
+        } else if (hostalCreep_W38N34 && hostalCreep_W38N34.length === 0 && groupedCreepsAll && (!groupedCreepsAll.get(UPGRADER_HELPER) || groupedCreepsAll.get(UPGRADER_HELPER).length < 2) && room.name === "W38N35") {
             newName = 'upgraderHelper' + Game.time;
             spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK,
                   WORK, WORK, WORK, WORK, WORK,
