@@ -89,7 +89,7 @@ const transporter = {
                 if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
                 }
-            } else if (_.sum(mineralContainer.store) > 1700) {
+            } else if (_.sum(mineralContainer.store) > 1500) {
                 if (creep.withdraw(mineralContainer, Object.keys(mineralContainer.store)[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(mineralContainer, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
