@@ -384,12 +384,12 @@ const populate = {
                 }
             };
         }
-        if (creeps.length < 2 ) {
-            creepArray = [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE];
+        if (creeps.length < 2 && energyAvailable <= 1000) {
+            creepArray = [WORK, CARRY, MOVE, MOVE];
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
-                    'number': 0
+                    'number': 2
                 },
                 'upgraders': {
                     'body': creepArray,
@@ -397,7 +397,7 @@ const populate = {
                 },
                 'transporter': {
                     'body': creepArray,
-                    'number': 2
+                    'number': 0
                 },
                 'miner': {
                     'body': creepArray,

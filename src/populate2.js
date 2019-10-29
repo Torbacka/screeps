@@ -57,8 +57,8 @@ const MINERAL_MINER_CONFIG = {
     }),
     'filter': (props) => {
         return props.groupedStructures.has(STRUCTURE_TERMINAL) &&
-               props.groupedStructures.has(STRUCTURE_CONTAINER) &&
-               props.groupedStructures.get(STRUCTURE_CONTAINER).length >= 3
+          props.groupedStructures.has(STRUCTURE_CONTAINER) &&
+          props.groupedStructures.get(STRUCTURE_CONTAINER).length >= 3
     }
 };
 
@@ -181,7 +181,8 @@ const POPULATE_CONFIG = new Map([
                 CARRY: 30,
                 MOVE: 15
             })
-        }, MINER: MINER_CONFIG,
+        },
+        MINER: MINER_CONFIG,
         MINERAL_MINER: {
             'numbers': 1,
             'body': createBody({
@@ -190,7 +191,7 @@ const POPULATE_CONFIG = new Map([
             })
         }
     }],
-    [5300,  {
+    [5300, {
         'default_body': createBody({
             WORK: 5,
             CARRY: 10,
@@ -217,7 +218,7 @@ const POPULATE_CONFIG = new Map([
         }, MINER: MINER_CONFIG,
         MINERAL_MINER: MINERAL_MINER_CONFIG
     }],
-    [12300,  {
+    [12300, {
         'default_body': createBody({
             WORK: 5,
             CARRY: 10,
