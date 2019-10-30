@@ -24,7 +24,6 @@ const upgrader = {
             if (creep.memory.building) {
                 const repairObject = getRepairObjects(creep);
                 const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-                console.log("Something to repair: " + (repairObject !== null) )
                 if (repairObject !== null) {
                     if(creep.repair(repairObject) === ERR_NOT_IN_RANGE) {
                         creep.moveTo(repairObject, {visualizePathStyle: {stroke: '#ffffff'}});

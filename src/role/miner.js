@@ -29,7 +29,7 @@ const miner = {
         let container = containers[creep.memory.container];
         let closestSource = sources[creep.memory.container];
         sources.forEach(source => {
-            if (Math.abs(source.pos.x - container.pos.x) <= 1 || Math.abs(source.pos.y - container.pos.y) <= 1) {
+            if (Math.abs(source.pos.x - container.pos.x) <= 1 && Math.abs(source.pos.y - container.pos.y) <= 1) {
                 closestSource = source;
             }
         });
@@ -37,7 +37,8 @@ const miner = {
 
             creep.moveTo(container.pos, {visualizePathStyle: {stroke: '#ffaa00'}});
         } else if (creep.harvest(closestSource) === ERR_NOT_IN_RANGE) {
-            console.log("Working!");
+
+            console.log("Working!" + Math.abs(closestSource.pos.x - container.pos.x) +"    closesetSource" + JSON.stringify(closestSource.pos));
         }
 
     }
