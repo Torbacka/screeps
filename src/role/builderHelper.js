@@ -70,7 +70,7 @@ function getRepairObjects(creep) {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax * 0.75) ||
               (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax) ||
-              (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.01);
+              (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.001);
         }
     });
 

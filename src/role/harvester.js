@@ -7,7 +7,11 @@ var harvester = {
     /** @param {Creep} creep **/
     run: function (creep) {
         const source = creep.room.find(FIND_SOURCES)[0];
-
+        let containers = creep.room.find(FIND_STRUCTURES, {
+            filter: (i) => {
+                return (i.structureType === STRUCTURE_CONTAINER)
+            }
+        });
         if (creep.memory.harvesting && creep.carry.energy === 0) {
             creep.memory.harvesting = false;
             creep.memory.upgrading = false;
@@ -67,7 +71,7 @@ var harvester = {
                         creep.moveTo(repairObjects[0], {visualizePathStyle: {stroke: '#ffffff'}});
                         creep.say('repair');
                     }
-                } else if (towers.length > 0 && towers[0].energy < 700) {
+                } else if (containers.length > 0 && towers.length > 0 && towers[0].energy < 700) {
                     roleTransporter.run(creep);
                 } else if (constructionSites.length) {
                     roleBuilder.run(creep, source);

@@ -54,6 +54,11 @@ const populate = {
                 return (i.structureType === STRUCTURE_EXTRACTOR)
             }
         });
+        let containers = room.find(FIND_STRUCTURES, {
+            filter: (i) => {
+                return (i.structureType === STRUCTURE_CONTAINER)
+            }
+        });
         const extractorExists = extractors.length > 0;
         const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
         let minerals = room.find(FIND_MINERALS, {
@@ -92,11 +97,11 @@ const populate = {
         };
 
         if (totalEnergy >= 3000) {
-            creepArray = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
+            creepArray = [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
-                    'number': 0
+                    'number': 2
                 },
                 'upgraders': {
                     'body': [WORK, WORK, WORK, WORK, WORK,
@@ -237,7 +242,7 @@ const populate = {
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
-                    'number': 0
+                    'number': 2
                 },
                 'upgraders': {
                     'body': creepArray,
@@ -266,7 +271,7 @@ const populate = {
                 }
             };
         } else if (totalEnergy >= 800) {
-            creepArray = [WORK, WORK, WORK, WORK, WORK,
+            creepArray = [WORK, WORK, WORK, WORK,
                 CARRY, CARRY, CARRY, CARRY,
                 MOVE, MOVE, MOVE, MOVE];
             creepNumbers = {
@@ -410,15 +415,16 @@ const populate = {
             };
         }
 
-        if ( groupedCreeps.get(HARVESTER).length < creepNumbers.harvester.number) {
+        if (containers.length === 0 && groupedCreeps.get(HARVESTER).length < creepNumbers.harvester.number) {
             newName = 'Harvester' + Game.time;
+
             spawn.spawnCreep(creepNumbers.harvester.body, newName,
               {memory: {role: HARVESTER}});
-        } else if (groupedCreeps.get(MINER).length < creepNumbers.miner.number) {
+        } else if (containers.length > 0 && groupedCreeps.get(MINER).length < creepNumbers.miner.number) {
             newName = 'Miner' + Game.time;
             spawn.spawnCreep(creepNumbers.miner.body, newName,
               {memory: {role: MINER}});
-        } else if (groupedCreeps.get(TRANSPORTER).length < creepNumbers.transporter.number) {
+        } else if (containers.length > 0 && groupedCreeps.get(TRANSPORTER).length < creepNumbers.transporter.number) {
             newName = 'Transporter' + Game.time;
             spawn.spawnCreep(creepNumbers.transporter.body, newName,
               {memory: {role: TRANSPORTER}});
@@ -426,7 +432,7 @@ const populate = {
             newName = 'Builder' + Game.time;
             spawn.spawnCreep(creepNumbers.builders.body, newName,
               {memory: {role: BUILDER}});
-        } else if (extractorExists && creepNumbers.mineralMiner && minerals.length > 0 && groupedCreeps.get(MINERAL_MINER).length < creepNumbers.mineralMiner.number) {
+        } else if (containers.length === 3 && extractorExists && creepNumbers.mineralMiner && minerals.length > 0 && groupedCreeps.get(MINERAL_MINER).length < creepNumbers.mineralMiner.number) {
             newName = 'MineralMiner' + Game.time;
             spawn.spawnCreep(creepNumbers.mineralMiner.body, newName,
               {memory: {role: MINERAL_MINER}});
