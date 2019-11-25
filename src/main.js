@@ -13,6 +13,8 @@ let garbagecollector = require('garbagecollector');
 let populate = require('populate');
 let market = require('market');
 let tower = require('tower');
+let factory = require('factory');
+let resourceManager = require('role_resourceManager');
 let gatherStatistics = require('gatherStatistics');
 const profiler = require('screeps-profiler');
 require('constants');
@@ -53,12 +55,14 @@ module.exports.loop = function () {
                     roleDefender.run(creep);
                 }
                 if (creep.memory.role === BUILDER_HELPER) {
-                    roleBuilderHelper.run(creep, null, "W37N35");
+                    roleBuilderHelper.run(creep, null, "W38N34");
                 }if (creep.memory.role === 'mineralMiner') {
                     roleMineralMiner.run(creep);
                 }
+                resourceManager.run(creep);
             });
             tower.guard(room);
+            factory.build(room);
             populate.run(room);
             market.trade(room);
             gatherStatistics(room);
