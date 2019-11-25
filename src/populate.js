@@ -97,7 +97,8 @@ const populate = {
         };
 
         if (totalEnergy >= 3000) {
-            creepArray = [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE];
+            creepArray = [WORK, WORK, WORK, WORK, WORK,WORK, WORK, WORK, WORK, WORK,WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY,CARRY, CARRY, CARRY,CARRY, CARRY, CARRY,CARRY, CARRY, CARRY,
+                MOVE, MOVE, MOVE, MOVE, MOVE,MOVE, MOVE, MOVE, MOVE, MOVE,MOVE];
             creepNumbers = {
                 'harvester': {
                     'body': creepArray,
@@ -415,7 +416,7 @@ const populate = {
             };
         }
 
-        if (containers.length === 0 && groupedCreeps.get(HARVESTER).length < creepNumbers.harvester.number) {
+        if ((containers.length === 0 || energyAvailable < 1500) && groupedCreeps.get(HARVESTER).length < creepNumbers.harvester.number) {
             newName = 'Harvester' + Game.time;
 
             spawn.spawnCreep(creepNumbers.harvester.body, newName,
@@ -450,7 +451,7 @@ const populate = {
             creepArray = creepNumbers.claimer.body;
             spawn.spawnCreep(creepArray, newName,
               {memory: {role: CALIMER}});
-        } else if (hostalCreep_W38N34 && hostalCreep_W38N34.length === 0 && groupedCreepsAll && (!groupedCreepsAll.get(BUILDER_HELPER) || groupedCreepsAll.get(BUILDER_HELPER).length < 0) && room.name === "W38N35") {
+        } else if (hostalCreep_W38N34 && hostalCreep_W38N34.length === 0 && groupedCreepsAll && (!groupedCreepsAll.get(BUILDER_HELPER) || groupedCreepsAll.get(BUILDER_HELPER).length < 2) && room.name === "W38N35") {
             newName = 'BuilderHelper' + Game.time;
             spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK,
                   WORK, WORK, WORK, WORK, WORK,
