@@ -20,10 +20,10 @@ const builder = {
         }
 
         if (creep.memory.building) {
-            const targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
-            if (targets.length) {
-                if (creep.build(targets[0]) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+            const target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+            if (target) {
+                if (creep.build(target) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             } else if (creep.memory.wall) {
                 if (creep.repair(creep.memory.wall) === ERR_NOT_IN_RANGE) {

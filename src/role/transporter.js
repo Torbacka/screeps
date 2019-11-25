@@ -22,9 +22,9 @@ const transporter = {
         }
         if (creep.memory.transfering && _.sum(creep.carry) === 0) {
             creep.memory.transfering = false;
-            if (creep.memory.container === 0) {
+            if (creep.memory.container === 0 && containers[creep.memory.container].store.getUsedCapacity() > 0) {
                 creep.memory.container = 1;
-            } else {
+            } else if (containers[creep.memory.container].store.getUsedCapacity() > 0) {
                 creep.memory.container = 0;
             }
         }
@@ -98,7 +98,7 @@ function extract(creep, mineralContainer, containers) {
         if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
             creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
         }
-    } else if (creep.room.storage.store.getFreeCapacity(RESOURCES_ALL) && _.sum(mineralContainer.store) > 1500) {
+    } else if (creep.room.storage.store.getFreeCapacity() && _.sum(mineralContainer.store) > 1500) {
         if (creep.withdraw(mineralContainer, Object.keys(mineralContainer.store)[0]) === ERR_NOT_IN_RANGE) {
             creep.moveTo(mineralContainer, {visualizePathStyle: {stroke: '#ffaa00'}});
         }

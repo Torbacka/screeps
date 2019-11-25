@@ -9,6 +9,7 @@ function findFactory(creep) {
 
 const resourceManager = {
     run: (creep) => {
+        /*
         let storageItems = creep.room.storage.store;
         let factory = findFactory(creep);
         let terminal = creep.room.terminal;
@@ -17,7 +18,7 @@ const resourceManager = {
 
 
 
-        }
+        }*/
     }
 };
 

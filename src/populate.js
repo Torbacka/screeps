@@ -451,7 +451,7 @@ const populate = {
             creepArray = creepNumbers.claimer.body;
             spawn.spawnCreep(creepArray, newName,
               {memory: {role: CALIMER}});
-        } else if (hostalCreep_W38N34 && hostalCreep_W38N34.length === 0 && groupedCreepsAll && (!groupedCreepsAll.get(BUILDER_HELPER) || groupedCreepsAll.get(BUILDER_HELPER).length < 2) && room.name === "W38N35") {
+        } else if (hostalCreep_W38N34 && hostalCreep_W38N34.length === 0 && groupedCreepsAll && (!groupedCreepsAll.get(BUILDER_HELPER) || groupedCreepsAll.get(BUILDER_HELPER).length < 1) && room.name === "W38N35") {
             newName = 'BuilderHelper' + Game.time;
             spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK,
                   WORK, WORK, WORK, WORK, WORK,
