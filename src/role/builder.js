@@ -9,20 +9,26 @@ const builder = {
         if (source == null) {
             source = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
         }
-        if (creep.memory.building && creep.carry.energy === 0) {
+        if (creep.memory.building && creep.store[RESOURCE_ENERGY] === 0) {
             creep.memory.building = false;
+            creep.memory.wall = getWallToRepair(creep);
             creep.say('🔄 harvest');
         }
-        if (!creep.memory.building && creep.carry.energy === creep.carryCapacity) {
+        if (!creep.memory.building && creep.store[RESOURCE_ENERGY] === creep.store.getCapacity()) {
             creep.memory.building = true;
             creep.say('🚧 build');
         }
 
         if (creep.memory.building) {
-            var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+            const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if (targets.length) {
                 if (creep.build(targets[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            } else if (creep.memory.wall) {
+                if (creep.repair(creep.memory.wall) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.memory.wall, {visualizePathStyle: {stroke: '#ffffff'}});
+                    creep.say('repair');
                 }
             }
         } else {
@@ -48,5 +54,20 @@ const builder = {
 
     }
 };
+
+function getWallToRepair(creep) {
+    let walls = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.003) ||
+              (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.001);
+        }
+    });
+    if (walls) {
+        walls.sort((wall1, wall2) => (wall1.hits > wall2.hits) ? 1 : -1);
+        return walls[0];
+    } else {
+        return null;
+    }
+}
 
 module.exports = builder;
