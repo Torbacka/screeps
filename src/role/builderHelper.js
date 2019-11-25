@@ -5,7 +5,6 @@ const upgrader = {
      * @param target
      */
     run: function (creep, source = null, target = "W38N34") {
-
         if (creep.room.name !== target) {
             creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(target)), {visualizePathStyle: {stroke: '#ffffff'}});
         } else {
@@ -73,12 +72,13 @@ const upgrader = {
 };
 
 function getWallToRepair(creep) {
-    let walls = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+    let walls = creep.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.003) ||
               (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.001);
         }
     });
+    console.log("Walls to repair: " + walls.length);
     if (walls) {
         walls.sort((wall1, wall2) => (wall1.hits > wall2.hits) ? 1 : -1);
         return walls[0];
@@ -92,7 +92,7 @@ function getRepairObjects(creep) {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax * 0.75) ||
               (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax) ||
-              (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.001);
+              (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.00005);
         }
     });
 

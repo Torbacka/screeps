@@ -56,12 +56,13 @@ const builder = {
 };
 
 function getWallToRepair(creep) {
-    let walls = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+    let walls = creep.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.003) ||
               (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.001);
         }
     });
+    console.log()
     if (walls) {
         walls.sort((wall1, wall2) => (wall1.hits > wall2.hits) ? 1 : -1);
         return walls[0];
