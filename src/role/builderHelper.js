@@ -26,6 +26,7 @@ const upgrader = {
                 const repairObject = null;//getRepairObjects(creep);
                 const target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
                 const wall = Game.getObjectById(creep.memory.wall);
+
                 if (repairObject !== null) {
                     if (creep.repair(repairObject) === ERR_NOT_IN_RANGE) {
                         creep.moveTo(repairObject, {visualizePathStyle: {stroke: '#ffffff'}});
