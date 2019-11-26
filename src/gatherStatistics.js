@@ -10,6 +10,8 @@ module.exports = (room) => {
         if (roomStat.controller === undefined) {
             roomStat.controller =  {};
         }
-        roomStat.controller.progress = room.controller.progress.valueOf();
+        if (room.controller.progress) {
+            roomStat.controller.progress = room.controller.progress.valueOf();
+        }
     }
 };
