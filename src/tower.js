@@ -48,10 +48,10 @@ const tower = {
                             tower.repair(targets[i])
                         }
                     } else if (tower.energy > tower.energyCapacity * 0.1) {
-                        let walls = getWalls(towers[0]);
-                        walls.sort((wall1, wall2) => (wall1.hits > wall2.hits) ? 1 : -1);
-                        if (i < walls.length) {
-                            tower.repair(walls[i]);
+                        let rampparts = getRamppart(towers[0]);
+                        rampparts.sort((ramp1, ramp2) => (ramp1.hits > ramp2.hits) ? 1 : -1);
+                        if (i < rampparts.length) {
+                            tower.repair(rampparts[i]);
                         }
                     }
                 }
@@ -61,11 +61,10 @@ const tower = {
 };
 
 
-function getWalls(tower) {
+function getRamppart(tower) {
     return tower.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.0033)
-              || (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.01);
+            return (structure.structureType === STRUCTURE_RAMPART && structure.hits > structure.hitsMax * 0.009999 && structure.hits < structure.hitsMax * 0.01);
         }
     });
 }
