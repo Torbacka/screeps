@@ -18,6 +18,7 @@ const upgrader = {
             }
             if (!creep.memory.building && creep.store[RESOURCE_ENERGY] === creep.store.getCapacity()) {
                 creep.memory.building = true;
+                creep.memory.wall = getWallToRepair(creep).id;
                 creep.say('🚧 build');
             }
 
