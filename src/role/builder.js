@@ -11,7 +11,7 @@ const builder = {
         }
         if (creep.memory.building && creep.store[RESOURCE_ENERGY] === 0) {
             creep.memory.building = false;
-            creep.memory.wall = getWallToRepair(creep);
+            creep.memory.wall = getWallToRepair(creep).id;
             creep.say('🔄 harvest');
         }
         if (!creep.memory.building && creep.store[RESOURCE_ENERGY] === creep.store.getCapacity()) {
@@ -21,13 +21,14 @@ const builder = {
 
         if (creep.memory.building) {
             const target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+            const wall = Game.getObjectById(creep.memory.wall);
             if (target) {
                 if (creep.build(target) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
-            } else if (creep.memory.wall) {
-                if (creep.repair(creep.memory.wall) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(creep.memory.wall, {visualizePathStyle: {stroke: '#ffffff'}});
+            } else if (wall) {
+                if (creep.repair(wall) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(wall, {visualizePathStyle: {stroke: '#ffffff'}});
                     creep.say('repair');
                 }
             }
