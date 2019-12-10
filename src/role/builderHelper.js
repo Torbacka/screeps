@@ -25,6 +25,9 @@ const upgrader = {
             if (creep.memory.building) {
                 const repairObject = null;//getRepairObjects(creep);
                 const target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+                if (!creep.memory.wall) {
+                    creep.memory.wall = getWallToRepair(creep).id;
+                }
                 const wall = Game.getObjectById(creep.memory.wall);
 
                 if (repairObject !== null) {
@@ -76,8 +79,8 @@ const upgrader = {
 function getWallToRepair(creep) {
     let walls = creep.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.003) ||
-              (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.001);
+            return (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.03) ||
+              (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.01);
         }
     });
     console.log("Walls to repair: " + walls.length);

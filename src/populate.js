@@ -416,7 +416,7 @@ const populate = {
             };
         }
 
-        if ((containers.length === 0 || energyAvailable < 1500) && groupedCreeps.get(HARVESTER).length < creepNumbers.harvester.number) {
+        if ((containers.length === 0 ) && groupedCreeps.get(HARVESTER).length < creepNumbers.harvester.number) {
             newName = 'Harvester' + Game.time;
 
             spawn.spawnCreep(creepNumbers.harvester.body, newName,
