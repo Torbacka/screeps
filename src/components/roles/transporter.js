@@ -54,19 +54,20 @@ const transporter = {
             else {
                 target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                     filter: (structure) => {
-                        return (structure.structureType === STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity) ||
-                          (structure.structureType === STRUCTURE_SPAWN && structure.energy < structure.energyCapacity)
+                        return (structure.structureType === STRUCTURE_EXTENSION && structure.store[RESOURCE_ENERGY] < structure.store.getCapacity()) ||
+                          (structure.structureType === STRUCTURE_SPAWN &&  structure.store[RESOURCE_ENERGY] < structure.store.getCapacity())
                     },
                 });
 
-
+                
                 if (target === null) {
                     target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                         filter: (structure) => {
-                            return (structure.structureType === STRUCTURE_TOWER && structure.energy < structure.energyCapacity * 0.7)
+                            return (structure.structureType === STRUCTURE_TOWER && structure.store[RESOURCE_ENERGY] < structure.store.getCapacity(RESOURCE_ENERGY))
                         },
                     });
                 }
+                console.log("Target2 " + target);
                 if (target === null) {
                     target = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
                         filter: (structure) => {

@@ -39,7 +39,7 @@ const tower = {
             });
             towers.forEach(tower => tower.attack(hostiles[0]));
         } else {
-            const targets = getRepairObjects(towers[0]);
+            /*const targets = getRepairObjects(towers[0]);
 
             towers.forEach((tower, i) => {
                 if (tower.energy >= tower.energyCapacity * 0.5) {
@@ -57,7 +57,7 @@ const tower = {
                         }
                     }
                 }
-            });
+            });*/
         }
     }
 };

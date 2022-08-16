@@ -78,8 +78,10 @@ module.exports.loop = function () {
 var roleHarvester = require('components/roles/harvester.js');
 var roleUpgrader = require('components/roles/upgrader.js');
 var roleBuilder = require('components/roles/builder.js');
+var tower = require('components/static/tower.js');
 let garbagecollector = require('lib/garbagecollector.js');
 let gatherStatistics = require('lib/gatherStatistics.js');
+let market = require('lib/market.js');
 
 module.exports.loop = function () {
     
@@ -97,22 +99,22 @@ module.exports.loop = function () {
             spawn.spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
                 {memory: {role: 'harvester'}});
         }
-        else if(harvesters.length < 4) {
+        else if(harvesters.length < 2) {
             var newName = 'Harvester' + Game.time;
             console.log('Spawning new harvester: ' + newName);
-            spawn.spawnCreep([WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
+            spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
                 {memory: {role: 'harvester'}});
-        } else if (upgraders.length < 4) {
+        } else if (upgraders.length < 2) {
             var newName = 'Upgrader' + Game.time;
             console.log('Spawning new upgrader: ' + newName);
-            spawn.spawnCreep([WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE], newName, 
+            spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE], newName, 
                 {memory: {role: 'upgrader'}});
-        } else if (builders.length < 0) {
+        } /*else if (builders.length < 0) {
             var newName = 'Builder' + Game.time;
             console.log('Spawning new builder: ' + newName);
             spawn.spawnCreep([WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
                 {memory: {role: 'builder'}});
-        }
+        }*/
         
         if(spawn.spawning) { 
             var spawningCreep = Game.creeps[spawn.spawning.name];
@@ -137,6 +139,7 @@ module.exports.loop = function () {
         }
         gatherStatistics(room);
         garbagecollector();
+        tower.guard(room);
     });
 }
 >>>>>>> 579254a (First commit on version 2)

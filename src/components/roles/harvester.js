@@ -12,7 +12,6 @@ var harvester = {
                 return (i.structureType === STRUCTURE_CONTAINER)
             }
         });
-        console.log("Creep harvesting: " + creep.memory.harvesting);
         if (creep.memory.harvesting && creep.store.getUsedCapacity() === 0) {
             creep.memory.harvesting = false;
             creep.memory.upgrading = false;
@@ -29,7 +28,7 @@ var harvester = {
               FIND_DROPPED_RESOURCES,
               6
             );
-            if (energy.length) {
+            if (energy.amount) {
 
                 if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
@@ -42,14 +41,14 @@ var harvester = {
             const extension = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_EXTENSION) &&
-                      structure.energy < structure.energyCapacity;
+                      structure.store[RESOURCE_ENERGY] < structure.store.getCapacity(RESOURCE_ENERGY);
                 }
             });
 
             const spawn = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_SPAWN) &&
-                      structure.energy < structure.energyCapacity;
+                      structure.store[RESOURCE_ENERGY] < structure.store.getCapacity(RESOURCE_ENERGY);
                 }
             });
             if (extension.length > 0) {
@@ -66,12 +65,14 @@ var harvester = {
                 const repairObjects = getRepairObjects(creep);
                 const towers = creep.room.find(
                   FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+                console.log("Kommer jag hit!!" + towers[0].store.getCapacity(RESOURCE_ENERGY));
                 if (repairObjects.length > 0) {
                     if(creep.repair(repairObjects[0]) === ERR_NOT_IN_RANGE) {
                         creep.moveTo(repairObjects[0], {visualizePathStyle: {stroke: '#ffffff'}});
                         creep.say('repair');
                     }
-                } else if (containers.length > 0 && towers.length > 0 && towers[0].energy < 700) {
+                } else if (towers.length > 0 && towers[0].store[RESOURCE_ENERGY] < towers[0].store.getCapacity(RESOURCE_ENERGY)) {
+                    creep.say('🚢 Transfering');
                     roleTransporter.run(creep);
                 } else if (constructionSites.length) {
                     creep.say('🚧 Building');
@@ -88,8 +89,9 @@ var harvester = {
 function getRepairObjects(creep) {
     return creep.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax * 0.75) ||
-              (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax);
+            return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax*0.94) ||
+              (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax*0.94) ||
+              (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.1);
         }
     });
 

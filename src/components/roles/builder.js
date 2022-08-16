@@ -11,28 +11,28 @@ const builder = {
         }
         if (creep.memory.building && creep.store[RESOURCE_ENERGY] === 0) {
             creep.memory.building = false;
-            creep.memory.wall = getWallToRepair(creep).id;
+            creep.memory.wall = getWallToRepair(creep);
             creep.say('🔄 harvest');
         }
         if (!creep.memory.building && creep.store[RESOURCE_ENERGY] === creep.store.getCapacity()) {
             creep.memory.building = true;
-            creep.memory.wall = getWallToRepair(creep).id;
+            creep.memory.wall = getWallToRepair(creep);
             creep.say('🚧 build');
         }
 
         if (creep.memory.building) {
-            const target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
             const wall = Game.getObjectById(creep.memory.wall);
-            if (target) {
-                if (creep.build(target) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
-                }
-            } else if (wall) {
+            const target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+            if (wall) {
                 if (creep.repair(wall) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(wall, {visualizePathStyle: {stroke: '#ffffff'}});
                     creep.say('repair');
                 }
-            }
+            }else if (target) {
+                if (creep.build(target) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            } 
         } else {
             const energy = creep.pos.findInRange(
               FIND_DROPPED_RESOURCES,
@@ -64,10 +64,10 @@ function getWallToRepair(creep) {
               (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax * 0.001);
         }
     });
-    console.log()
-    if (walls) {
+    console.log("Walls: " + JSON.stringify(walls));
+    if (walls.length > 0) {
         walls.sort((wall1, wall2) => (wall1.hits > wall2.hits) ? 1 : -1);
-        return walls[0];
+        return walls[0].id;
     } else {
         return null;
     }
