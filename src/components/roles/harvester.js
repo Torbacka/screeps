@@ -28,7 +28,7 @@ var harvester = {
               FIND_DROPPED_RESOURCES,
               6
             );
-            if (energy.amount) {
+            if (energy.length) {
 
                 if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
