@@ -28,7 +28,7 @@ const builder = {
                     creep.moveTo(wall, {visualizePathStyle: {stroke: '#ffffff'}});
                     creep.say('repair');
                 }
-            }else if (target) {
+            } else if (target) {
                 if (creep.build(target) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
