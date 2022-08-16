@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-.idea/
-*.iml
-test.js
-test.json
-screeps.json
-node_modules/
-dist/
-=======
+
 # yarn lock file
 /yarn.lock
 
@@ -99,4 +91,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
->>>>>>> 579254a (First commit on version 2)
+
