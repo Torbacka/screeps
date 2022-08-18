@@ -26,9 +26,9 @@ var harvester = {
         if (!creep.memory.harvesting) {
             const energy = creep.pos.findInRange(
               FIND_DROPPED_RESOURCES,
-              6
+              3
             );
-            if (energy.length) {
+            if (energy !== null && energy.length > 0 && energy[0].amount > 20) {
 
                 if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
@@ -38,42 +38,41 @@ var harvester = {
             }
         }
         else {
-            const extension = creep.room.find(FIND_STRUCTURES, {
+            const extension = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_EXTENSION) &&
                       structure.store[RESOURCE_ENERGY] < structure.store.getCapacity(RESOURCE_ENERGY);
                 }
             });
-
-            const spawn = creep.room.find(FIND_STRUCTURES, {
+            const spawn = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_SPAWN) &&
                       structure.store[RESOURCE_ENERGY] < structure.store.getCapacity(RESOURCE_ENERGY);
                 }
             });
-            if (extension.length > 0) {
-                if (creep.transfer(extension[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(extension[0], {visualizePathStyle: {stroke: '#ffffff'}});
+            if (extension != null) {
+                if (creep.transfer(extension, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(extension, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
-            } else if (spawn.length > 0) {
-                if (creep.transfer(spawn[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(spawn[0], {visualizePathStyle: {stroke: '#ffffff'}});
+            } else if (spawn != null) {
+                if (creep.transfer(spawn, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(spawn, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
 
             } else {
                 const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
-                const repairObjects = getRepairObjects(creep);
+                const repairObject = getRepairObjects(creep);
                 const towers = creep.room.find(
-                  FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                console.log("Kommer jag hit!!" + towers[0].store.getCapacity(RESOURCE_ENERGY));
-                if (repairObjects.length > 0) {
-                    if(creep.repair(repairObjects[0]) === ERR_NOT_IN_RANGE) {
-                        creep.moveTo(repairObjects[0], {visualizePathStyle: {stroke: '#ffffff'}});
-                        creep.say('repair');
-                    }
-                } else if (towers.length > 0 && towers[0].store[RESOURCE_ENERGY] < towers[0].store.getCapacity(RESOURCE_ENERGY)) {
+                FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+                console.log("Repair object" + JSON.stringify(towers));
+                if (towers.length > 0 && towers[0].store[RESOURCE_ENERGY] < towers[0].store.getCapacity(RESOURCE_ENERGY)) {    
                     creep.say('🚢 Transfering');
                     roleTransporter.run(creep);
+                } else if (repairObject !== null) {
+                    if(creep.repair(repairObject) === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(repairObject, {visualizePathStyle: {stroke: '#ffffff'}});
+                        creep.say('repair');
+                    }
                 } else if (constructionSites.length) {
                     creep.say('🚧 Building');
                     roleBuilder.run(creep, source);
@@ -86,12 +85,13 @@ var harvester = {
     }
 };
 
+/** @param {Creep} creep **/
 function getRepairObjects(creep) {
-    return creep.room.find(FIND_STRUCTURES, {
+    return creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax*0.94) ||
               (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax*0.94) ||
-              (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.1);
+              (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax * 0.04);
         }
     });
 

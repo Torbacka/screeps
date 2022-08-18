@@ -12,11 +12,10 @@ const tower = {
     guard: function (room) {
         const hostiles = room.find(FIND_HOSTILE_CREEPS);
         const towers = room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-
         if (towers.length === 0) {
             return;
         }
-
+        
         if (hostiles.length > 0) {
             const username = hostiles[0].owner.username;
             Game.notify(`User ${username} spotted in room ${room.name}`);
