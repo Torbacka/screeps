@@ -11,6 +11,7 @@ let tower = require('./components/static/tower.js');
 module.exports.loop = function () {
     Object.values(Game.rooms).forEach((room) => {
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
+        var harvesters2 = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester2');
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
         var remoteHarvester = _.filter(Game.creeps, (creep) => creep.memory.role == 'remoteHarvester');
@@ -20,17 +21,22 @@ module.exports.loop = function () {
             return spawn.room.name === room.name
         })[0];
         if (spawn) {
-            if (harvesters.length == 0) {
+            if (harvesters.length == -1) {
                 var newName = 'Harvester' + Game.time;
                 console.log('Spawning new harvester: ' + newName);
                 spawn.spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
                     {memory: {role: 'harvester'}});
             }
-            else if(harvesters.length < 3) {
+            else if(harvesters.length < 2) {
                 var newName = 'Harvester' + Game.time;
                 console.log('Spawning new harvester: ' + newName);
-                spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
+                spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
                     {memory: {role: 'harvester'}});
+            } else if(harvesters2.length < 1) {
+                var newName = 'Harvester2' + Game.time;
+                console.log('Spawning new harvester2: ' + newName);
+                spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE], newName, 
+                    {memory: {role: 'harvester2'}});
             } else if (upgraders.length < 2) {
                 var newName = 'Upgrader' + Game.time;
                 console.log('Spawning new upgrader: ' + newName);
@@ -46,10 +52,10 @@ module.exports.loop = function () {
                 console.log('Spawning new RemoteBuilder: ' + newName);
                 spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
                     {memory: {role: 'remoteBuilder'}});
-            } else if (remoteHarvester.length < 1) {
+            } else if (remoteHarvester.length < 0) {
                 var newName = 'remoteHarvester' + Game.time;
                 console.log('Spawning new remoteHarvester: ' + newName);
-                spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
+                spawn.spawnCreep([WORK,WORK,WORK,WORK,MOVE,MOVE], newName, 
                     {memory: {role: 'remoteHarvester'}});
             } /*else if (builders.length < 0) {
                 var newName = 'Builder' + Game.time;
@@ -86,6 +92,9 @@ module.exports.loop = function () {
             }
             if(creep.memory.role == 'remoteHarvester') {
                 roleRemoteHarvester.run(creep, "W58S59");
+            }
+            if(creep.memory.role === 'harvester2') {
+                roleRemoteHarvester.run(creep);
             }
         }
         gatherStatistics(room);

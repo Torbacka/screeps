@@ -8,7 +8,6 @@ var roleRemoteDefender = {
         if (creep.room.name !== toRoom) {
             creep.moveTo(exit, { visualizePathStyle: { stroke: '#ffaa00' } });
         } else {
-            console.log("Kommer jag hit!");
             defend(creep);
         }
 	}

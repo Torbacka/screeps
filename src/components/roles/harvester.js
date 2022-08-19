@@ -28,10 +28,22 @@ var harvester = {
               FIND_DROPPED_RESOURCES,
               3
             );
+            let container = creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: (structure) => { 
+                if (structure.structureType === STRUCTURE_CONTAINER) {
+                    return structure.store[RESOURCE_ENERGY] > 100;
+                } 
+                return false;
+            } });
+            console.log("Container" + JSON.stringify(container));
             if (energy !== null && energy.length > 0 && energy[0].amount > 20) {
-
+                console.log("Pick up dropped energy!");
                 if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
+                }
+            } else if (container !== null) {
+                console.log("Pick up energy from container!");
+                if (creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(container, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             } else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
@@ -60,11 +72,11 @@ var harvester = {
                 }
 
             } else {
+                
                 const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
                 const repairObject = getRepairObjects(creep);
-                const towers = creep.room.find(
-                FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                console.log("Repair object" + JSON.stringify(towers));
+                const towers = creep.room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}})
+                    .sort((tower1, tower2) => tower1.store[RESOURCE_ENERGY] > tower2.store[RESOURCE_ENERGY]);
                 if (towers.length > 0 && towers[0].store[RESOURCE_ENERGY] < towers[0].store.getCapacity(RESOURCE_ENERGY)) {    
                     creep.say('🚢 Transfering');
                     roleTransporter.run(creep);
