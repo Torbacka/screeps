@@ -31,7 +31,7 @@ module.exports.loop = function () {
                 spawn.spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
                     {memory: {role: 'harvester'}});
             }
-            else if(harvesters.length < 2) {
+            else if(harvesters.length < 4) {
                 var newName = 'Harvester' + Game.time;
                 console.log('Spawning new harvester: ' + newName);
                 spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
@@ -61,7 +61,7 @@ module.exports.loop = function () {
                 console.log('Spawning new remoteHarvester: ' + newName);
                 spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE], newName, 
                     {memory: {role: 'remoteHarvester'}});
-            } else if (remoteTransporter.length < 2) {
+            } else if (remoteTransporter.length < 3) {
                 var newName = 'remoteTransporter' + Game.time;
                 var bodyArray = [];
                 for (let i = 0; i< room.energyCapacityAvailable; i=i+150) {

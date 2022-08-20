@@ -78,7 +78,7 @@ function build(creep, source = null) {
 function getContainerToRepair(creep) {
    return creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax * 0.95) || 
+            return (structure.structureType === STRUCTURE_CONTAINER && structure.hits < (structure.hitsMax - 900)) || 
             (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax*0.94);
         }
     });
