@@ -47,10 +47,20 @@ function build(creep, source = null) {
           FIND_DROPPED_RESOURCES,
           6
         );
+        let container = creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: (structure) => { 
+            if (structure.structureType === STRUCTURE_CONTAINER) {
+                return structure.store[RESOURCE_ENERGY] > 100;
+            } 
+            return false;
+        }});
         if (energy.length) {
-
+        
             if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
+            }
+        } else if (container !== null) {
+            if (creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(container, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
         } else if(storage && storage.store[RESOURCE_ENERGY] > 150000) {
             if (creep.withdraw(storage, RESOURCE_ENERGY) === OK) {
@@ -58,7 +68,7 @@ function build(creep, source = null) {
             } else if (storage.store[RESOURCE_ENERGY] > 150000 && creep.withdraw(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
-        }else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+        } else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
             creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
         }
     }

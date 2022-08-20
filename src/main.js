@@ -1,12 +1,14 @@
-var roleHarvester = require('components/roles/harvester.js');
-var roleUpgrader = require('components/roles/upgrader.js');
-var roleBuilder = require('components/roles/builder.js');
+var roleHarvester = require('./components/roles/harvester.js');
+var roleUpgrader = require('./components/roles/upgrader.js');
+var roleBuilder = require('./components/roles/builder.js');
+var roleClaim = require('./components/roles/claimCreep.js');
 var roleRemoteBuilder = require('./components/roles/remote/remoteBuilder.js');
 var roleRemoteDefender = require('./components/roles/remote/remoteDefender.js');
 var roleRemoteHarvester = require('./components/roles/remote/remoteHarvester.js');
 let garbagecollector = require('lib/garbagecollector.js');
 let gatherStatistics = require('lib/gatherStatistics.js');
 let tower = require('./components/static/tower.js');
+const roleRemoteTransporter = require('./components/roles/remote/remoteTransporter.js');
 
 module.exports.loop = function () {
     Object.values(Game.rooms).forEach((room) => {
@@ -14,8 +16,10 @@ module.exports.loop = function () {
         var harvesters2 = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester2');
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
+        var claimCreep = _.filter(Game.creeps, (creep) => creep.memory.role == 'claim');
         var remoteHarvester = _.filter(Game.creeps, (creep) => creep.memory.role == 'remoteHarvester');
         var remoteDefender = _.filter(Game.creeps, (creep) => creep.memory.role == 'remoteDefender');
+        var remoteTransporter = _.filter(Game.creeps, (creep) => creep.memory.role == 'remoteTransporter');
         var remoteBuilder = _.filter(Game.creeps, (creep) => creep.memory.role == 'remoteBuilder');
         let spawn = Object.values(Game.spawns).filter((spawn) => {
             return spawn.room.name === room.name
@@ -52,12 +56,26 @@ module.exports.loop = function () {
                 console.log('Spawning new RemoteBuilder: ' + newName);
                 spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
                     {memory: {role: 'remoteBuilder'}});
-            } else if (remoteHarvester.length < 0) {
+            } else if (remoteHarvester.length < 2) {
                 var newName = 'remoteHarvester' + Game.time;
                 console.log('Spawning new remoteHarvester: ' + newName);
-                spawn.spawnCreep([WORK,WORK,WORK,WORK,MOVE,MOVE], newName, 
+                spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE], newName, 
                     {memory: {role: 'remoteHarvester'}});
-            } /*else if (builders.length < 0) {
+            } else if (remoteTransporter.length < 2) {
+                var newName = 'remoteTransporter' + Game.time;
+                var bodyArray = [];
+                for (let i = 0; i< room.energyCapacityAvailable; i=i+150) {
+                    bodyArray = bodyArray.concat([CARRY,CARRY,MOVE]);
+                }
+                console.log('Spawning new remoteTransporter2: ' + newName + "   " + JSON.stringify(bodyArray));
+                spawn.spawnCreep(bodyArray, newName, 
+                    {memory: {role: 'remoteTransporter', collect: true}});
+            } else if (claimCreep.length < 1) {
+                var newName = 'Claim' + Game.time;
+                console.log('Spawning new claim creep: ' + newName);
+                spawn.spawnCreep([CLAIM,CLAIM,MOVE], newName, 
+                    {memory: {role: 'claim'}});
+            }/*else if (builders.length < 0) {
                 var newName = 'Builder' + Game.time;
                 console.log('Spawning new builder: ' + newName);
                 spawn.spawnCreep([WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
@@ -95,6 +113,12 @@ module.exports.loop = function () {
             }
             if(creep.memory.role === 'harvester2') {
                 roleRemoteHarvester.run(creep);
+            }
+            if(creep.memory.role === 'remoteTransporter') {
+                roleRemoteTransporter.run(creep, "W59S59", "W58S59");
+            }
+            if(creep.memory.role === 'claim') {
+                roleClaim.run(creep, "W58S59");
             }
         }
         gatherStatistics(room);

@@ -34,14 +34,11 @@ var harvester = {
                 } 
                 return false;
             } });
-            console.log("Container" + JSON.stringify(container));
             if (energy !== null && energy.length > 0 && energy[0].amount > 20) {
-                console.log("Pick up dropped energy!");
                 if (creep.pickup(energy[0]) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(energy[0], {visualizePathStyle: {stroke: '#ff671a'}});
                 }
             } else if (container !== null) {
-                console.log("Pick up energy from container!");
                 if (creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(container, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
