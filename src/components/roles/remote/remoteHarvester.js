@@ -26,6 +26,7 @@ function harvest(creep) {
         moveToContainer(creep);
     } else {
         if (creep.memory.harvesting || creep.body.filter((part) => part.type === CARRY) === 0) {
+            console.log("Kommer jag hit");
             creep.harvest(Game.getObjectById(creep.memory.source));
         } else {
             const repairObjects = getRepairObjects(creep);
@@ -54,7 +55,7 @@ function moveToContainer(creep) {
     } else {
         creep.memory.arrived = true;
         creep.memory.container = containers[0].id;
-        creep.memory.source = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE).id;
+        creep.memory.source = creep.pos.findClosestByRange(FIND_SOURCES).id;
     }
 };
 
