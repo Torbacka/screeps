@@ -26,7 +26,7 @@ var harvester = {
         if (!creep.memory.harvesting) {
             const energy = creep.pos.findInRange(
               FIND_DROPPED_RESOURCES,
-              3
+              3, { filter: (resource) => { return resource.amount > 40 }}
             );
             let container = creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: (structure) => { 
                 if (structure.structureType === STRUCTURE_CONTAINER) {
