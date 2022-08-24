@@ -3,8 +3,8 @@ let moveUtil = require('../../util/moveUtil.js');
 var roleRemoteHarvester = {
 
     /** @param {Creep} creep  @param {Boolean} claim  @param {Room} toRoom**/
-    run: function(creep, toRoom = null, claim = false) {
-        moveUtil.moveToRoom(creep, toRoom, claiming, claim);
+    run: function(creep, claim = false) {
+        moveUtil.moveToRoom(creep, creep.memory.room, claiming, claim);
 	}
 };
 
@@ -18,7 +18,7 @@ function claiming(creep, claim) {
             }
         } else {
             if(creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.getPositionAt(15,14), {visualizePathStyle: {stroke: '#ffffff'}});
+                creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         }
     }

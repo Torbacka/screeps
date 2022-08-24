@@ -2,10 +2,11 @@
 let moveUtil = require('../../../util/moveUtil.js');
 var roleRemoteTransporter = {
 
-    /** @param {Creep} creep @param {Room} mainRoom @param {Room} toRoom **/
-    run: function(creep, mainRoom, toRoom) {
+    /** @param {Creep} creep @param {Room} mainRoom **/
+    run: function(creep, mainRoom) {
+        
         if (creep.memory.collect) {
-            moveUtil.moveToRoom(creep, toRoom, withdraw, toRoom);
+            moveUtil.moveToRoom(creep, creep.memory.room, withdraw, creep.memory.room);
         } else {
             moveUtil.moveToRoom(creep, mainRoom, transfer, mainRoom);
         }

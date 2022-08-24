@@ -42,6 +42,10 @@ var harvester = {
                 if (creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(container, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
+            } else if (creep.room.storage && creep.room.storage.store[RESOURCE_ENERGY] > 0 ) {
+                if (creep.withdraw(creep.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.storage, {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
             } else if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }

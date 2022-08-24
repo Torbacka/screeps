@@ -1,8 +1,8 @@
 var roleRemoteBuilder = {
 
     /** @param {Creep} creep **/
-    run: function(creep, toRoom) {
-        let exitDir = creep.room.findExitTo(toRoom);
+    run: function(creep) {
+        let exitDir = creep.room.findExitTo(creep.memory.room);
         let exit = creep.pos.findClosestByPath(exitDir);
         if (exit != null) {
             creep.moveTo(exit, { visualizePathStyle: { stroke: '#ffaa00' } });
