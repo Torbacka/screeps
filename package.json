@@ -1,18 +1,22 @@
 {
-  "name": "second-screep",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "private": true,
-  "devDependencies": {
-    "grunt-contrib-clean": "^2.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-screeps": "^1.5.0"
-  },
-  "dependencies": {
-    "lodash": "^3.10.1"
-  }
+    "name": "second-screep",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "rollup -c"
+    },
+    "private": true,
+    "dependencies": {
+        "lodash": "^3.10.1"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^28.0.2",
+        "@rollup/plugin-node-resolve": "^16.0.0",
+        "rollup": "^4.28.1",
+        "rollup-plugin-clear": "^2.0.7",
+        "rollup-plugin-screeps": "^1.0.1"
+    }
 }

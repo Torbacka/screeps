@@ -1,6 +1,3 @@
-const _ = require("lodash");
-
-
 const roleAttacker = {
 
     /** @param {Creep} creep **/
