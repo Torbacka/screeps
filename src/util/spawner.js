@@ -1,6 +1,10 @@
-module.exports = function () {
+/**
+ *
+ * @param {String} romName
+ */
+module.exports = function (romName) {
     const creeps = _.groupBy(Game.creeps, (creep) => creep.memory.role);
-    if (creeps['harvester'] === undefined) {
+    if (creeps['harvester'] === undefined && Game.rooms[romName].energyAvailable >= 300) {
         let newName = 'Harvester' + Game.time;
         console.log('Spawning new harvester: ' + newName);
         Game.spawns['home'].spawnCreep([WORK, CARRY, MOVE], newName,
@@ -20,7 +24,7 @@ module.exports = function () {
     } else if (!('upgrader' in creeps) || creeps['upgrader'].length < 2) {
         let newName = 'Upgrader' + Game.time;
         console.log('Spawning new upgrader: ' + newName);
-        Game.spawns['home'].spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK,WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], newName,
+        Game.spawns['home'].spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], newName,
             {memory: {role: 'upgrader'}});
     } else if (!('Transporter' in creeps) || creeps['Transporter'].length < 2) {
         let newName = 'Transporter' + Game.time;
