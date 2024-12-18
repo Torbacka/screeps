@@ -12,7 +12,13 @@ const roleRemoteTransporter = {
         if (creep.memory.collect) {
             moveUtil.moveToRoom(creep, toRoom, withdraw);
         } else {
-            moveUtil.moveToRoom(creep, mainRoom, transfer);
+            if (!creep.memory.collect && creep.store[RESOURCE_ENERGY] === 0) {
+                creep.memory.collect = true;
+            } else {
+                if (creep.transfer(Game.rooms[mainRoom].storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(Game.rooms[mainRoom].storage);
+                }
+            }
         }
     }
 };
@@ -45,10 +51,24 @@ function withdraw(creep, roomName) {
  * **/
 function transfer(creep, mainRoom) {
     if (!creep.memory.collect && creep.store[RESOURCE_ENERGY] === 0) {
-        creep.memory.collect = false;
+        creep.memory.collect = true;
     } else {
-        if (creep.room.name === mainRoom && creep.transfer(creep.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-            creep.moveTo(creep.room.storage, {visualizePathStyle: {stroke: '#ffffff'}});
+        if (creep.transfer(creep.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+            const answer = creep.moveTo(creep.room.storage, {visualizePathStyle: {stroke: '#ffffff'}}, {
+                maxRooms: 1,
+                costCallback: (roomName, costMatrix) => {
+                    const room = Game.rooms[roomName];
+                    if (!room) {
+                        console.log("NO room");
+                        return;
+                    }
+
+                    // Mark exits as higher cost to discourage bouncing
+                    room.find(FIND_EXIT).forEach(exit => {
+                        costMatrix.set(exit.x, exit.y, 255);
+                    });
+                }
+            });
         }
     }
 }

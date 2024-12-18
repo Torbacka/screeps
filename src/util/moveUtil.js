@@ -2,7 +2,6 @@
  * @param {Creep} creep
  * @param {Room} room - The room to move to
  * @param {Function} callback
- * @param {Object} extraVar
  * **/
 export function moveToRoom(creep, room, callback) {
     let exitDir = creep.room.findExitTo(room);

@@ -11,11 +11,16 @@ const tower = {
 
     guard: function (room) {
         const hostiles = room.find(FIND_HOSTILE_CREEPS);
+        const friendly = room.find(FIND_MY_CREEPS, {
+            filter: (creep) => {
+                return creep.hits < creep.hitsMax;
+            }
+        });
         const towers = room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
         if (towers.length === 0) {
             return;
         }
-        
+
         if (hostiles.length > 0) {
             const username = hostiles[0].owner.username;
             Game.notify(`User ${username} spotted in room ${room.name}`);
@@ -37,6 +42,10 @@ const tower = {
                 return (healingPars2.length - healingPars1.length) || (attackPart2.length - attackPart1.length);
             });
             towers.forEach(tower => tower.attack(hostiles[0]));
+        } else if (friendly.length > 0) {
+            friendly.forEach(creep => {
+                towers.forEach(tower => tower.heal(creep));
+            });
         } else {
             const targets = getRepairObjects(towers[0]);
 
@@ -66,7 +75,7 @@ function getRepairObjects(tower) {
     return tower.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax * 0.75) ||
-              (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax*0.99);
+                (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax * 0.99);
         }
     });
 

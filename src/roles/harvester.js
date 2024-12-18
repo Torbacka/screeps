@@ -30,7 +30,6 @@ const roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
-        console.log(creep.memory.source);
         if (creep.memory.source === undefined) {
             assignSource(creep);
         }
