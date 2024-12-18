@@ -31,6 +31,13 @@ module.exports = function (romName) {
         console.log('Spawning new transporter: ' + newName);
         Game.spawns['home'].spawnCreep([CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE], newName,
             {memory: {role: 'Transporter'}});
+    } else if (!('remoteTransporter' in creeps) || creeps['Transporter'].length < 2) {
+        let newName = 'remoteTransporter' + Game.time;
+        console.log('Spawning new remoteTransporter: ' + newName);
+        const maxPairs = Math.floor(Game.spawns['home'].room.energyAvailable / 100);
+        const body = Array(maxPairs).fill(CARRY).concat(Array(maxPairs).fill(MOVE));
+        Game.spawns['home'].spawnCreep(body, newName,
+            {memory: {role: 'remoteTransporter'}});
     }
 
 };

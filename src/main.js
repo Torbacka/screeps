@@ -4,6 +4,7 @@ const roleUpgrader = require('./roles/upgrader.js');
 const roleTransporter = require('./roles/transporter.js');
 const roleDestroyer = require('./roles/destroyer.js');
 const roleAttacker = require('./roles/attacker.js');
+const roleRemoteTransporter = require('./roles/remote/remoteTransporter.js');
 const garbageCollector = require('./util/garbageCollector.js');
 const spawner = require('./util/spawner.js');
 const stats = require('./util/stats.js');
@@ -37,6 +38,9 @@ module.exports.loop = function () {
                     break;
                 case 'attacker':
                     roleAttacker.run(creep);
+                    break;
+                case 'remoteTransporter':
+                    roleRemoteTransporter.run(creep, 'E58S34', 'E57S35');
                     break;
             }
         }

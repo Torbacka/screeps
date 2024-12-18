@@ -4,15 +4,12 @@
  * @param {Function} callback
  * @param {Object} extraVar
  * **/
-export function moveToRoom(creep, room, callback, extraVar = null,) {
+export function moveToRoom(creep, room, callback) {
     let exitDir = creep.room.findExitTo(room);
     let exit = creep.pos.findClosestByPath(exitDir);
     if (exit != null) {
         creep.moveTo(exit, {visualizePathStyle: {stroke: '#ffaa00'}});
     } else {
-        if (extraVar !== null) {
-            callback(creep, extraVar);
-        }
-        callback(creep);
+        callback(creep, room);
     }
 }
