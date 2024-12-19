@@ -13,11 +13,11 @@ function assignContainer(creep) {
 
 function getFreeEnergy() {
     const droppedEnergy = Game.rooms['E58S34'].find(FIND_DROPPED_RESOURCES, {
-        filter: resource => resource.resourceType === RESOURCE_ENERGY && resource.amount > 100
+        filter: resource => resource.resourceType === RESOURCE_ENERGY && resource.amount > 400
     });
 
     const tombstonesWithEnergy = Game.rooms['E58S34'].find(FIND_TOMBSTONES, {
-        filter: tombstone => tombstone.store[RESOURCE_ENERGY] > 100
+        filter: tombstone => tombstone.store[RESOURCE_ENERGY] > 400
     });
     return {droppedEnergy, tombstonesWithEnergy};
 }

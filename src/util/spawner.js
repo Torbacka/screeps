@@ -1,16 +1,15 @@
 /**
  *
- * @param {String} romName
+er * @param {String} roomName
  */
-module.exports = function (romName) {
+module.exports = function (roomName) {
     const creeps = _.groupBy(Game.creeps, (creep) => creep.memory.role);
-    if (creeps['harvester'] === undefined && Game.rooms[romName].energyAvailable >= 300) {
+    let minerals = Game.rooms[roomName].find(FIND_MINERALS);
+    if (creeps['harvester'] === undefined && Game.rooms[roomName].energyAvailable < 600) {
         let newName = 'Harvester' + Game.time;
         Game.spawns['home'].spawnCreep([WORK, CARRY, MOVE], newName,
             {memory: {role: 'harvester'}});
-    }
-
-    if (creeps['harvester'].length < 2) {
+    } else if (!('harvester' in creeps) || creeps['harvester'].length < 2) {
         let newName = 'Harvester' + Game.time;
         Game.spawns['home'].spawnCreep([WORK, WORK, WORK, WORK, WORK, MOVE, MOVE], newName,
             {memory: {role: 'harvester'}});
@@ -26,6 +25,17 @@ module.exports = function (romName) {
         let newName = 'Upgrader' + Game.time;
         Game.spawns['home'].spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], newName,
             {memory: {role: 'upgrader'}});
+    } else if (!('remoteTransporter' in creeps) || creeps['remoteTransporter'].length < 1) {
+        let newName = 'RemoteTransporter' + Game.time;
+        const maxSets = Math.floor(Game.rooms[roomName].energyCapacityAvailable / 100);
+        const body = Array(maxSets).fill(CARRY).concat(Array(maxSets).fill(MOVE));
+        Game.spawns['home'].spawnCreep(body, newName,
+            {memory: {role: 'remoteTransporter'}});
+    } else if (('mineralHarvester' in creeps) && minerals.length > 1 && minerals[0].mineralAmount > 0) {
+        let newName = 'mineralHarvester' + Game.time;
+        let body = Array(10).fill(WORK).concat(Array(3).fill(MOVE));
+        Game.spawns['home'].spawnCreep(body, newName,
+            {memory: {role: 'mineralHarvester'}});
     }
 
 };

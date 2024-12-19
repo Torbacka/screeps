@@ -13,6 +13,9 @@ const tower = require('./static/tower.js');
 const safeModeActivator = require('./static/safeModeActivator.js');
 
 module.exports.loop = function () {
+    if (Game.cpu.bucket === 10000) {
+        Game.cpu.generatePixel();
+    }
     for (const roomName in Game.rooms) {
         spawner(roomName);
 
