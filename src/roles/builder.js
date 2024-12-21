@@ -1,13 +1,26 @@
 function getTargets(creep) {
-    const target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+    // Find terminal construction sites
+    const terminalConstructionTarget = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, {
+        filter: site => site.structureType === STRUCTURE_TERMINAL
+    });
+
+    // If no terminal construction site is found, fall back to other construction sites
+    const generalConstructionTarget = terminalConstructionTarget
+        ? terminalConstructionTarget
+        : creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+
+    // Find low-energy towers
     const lowEnergyTowers = Game.rooms['E58S34'].find(FIND_MY_STRUCTURES, {
         filter: structure =>
             structure.structureType === STRUCTURE_TOWER &&
             structure.store.getCapacity(RESOURCE_ENERGY) - structure.store[RESOURCE_ENERGY] >= 200
     });
-    return {constructionTarget: target, lowEnergyTowers};
-}
 
+    return {
+        constructionTarget: generalConstructionTarget,
+        lowEnergyTowers
+    };
+}
 const roleBuilder = {
 
     /** @param {Creep} creep **/
@@ -46,10 +59,15 @@ const roleBuilder = {
             }
         } else {
             const storage = creep.room.storage;
-
-            const result = creep.withdraw(storage, RESOURCE_ENERGY);
-            if (result === ERR_NOT_IN_RANGE) {
-                creep.moveTo(storage); // Move to the ruin if it's not in range
+            if (creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) === 0) {
+                const terminal = creep.room.terminal;
+                if (creep.withdraw(terminal, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(terminal);
+                }
+            } else {
+                if (creep.withdraw(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(storage); // Move to the ruin if it's not in range
+                }
             }
         }
     }

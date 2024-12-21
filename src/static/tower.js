@@ -22,10 +22,7 @@ const tower = {
         }
 
         if (hostiles.length > 0) {
-            const username = hostiles[0].owner.username;
-            Game.notify(`User ${username} spotted in room ${room.name}`);
-            if (room.controller.safeMode === undefined) {
-            }
+
             hostiles.sort((enemy1, enemy2) => {
                 let healingPars1 = enemy1.body.filter((part) => {
                     return part.type === HEAL
@@ -41,7 +38,12 @@ const tower = {
                 });
                 return (healingPars2.length - healingPars1.length) || (attackPart2.length - attackPart1.length);
             });
-            towers.forEach(tower => tower.attack(hostiles[0]));
+            towers.forEach((tower, index) => {
+                const targetHostile = hostiles[index] || hostiles[hostiles.length - 1];
+                if (targetHostile) {
+                    tower.attack(targetHostile);
+                }
+            });
         } else if (friendly.length > 0) {
             friendly.forEach(creep => {
                 towers.forEach(tower => tower.heal(creep));

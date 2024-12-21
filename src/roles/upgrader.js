@@ -18,10 +18,15 @@ const roleUpgrader = {
             }
         } else {
             const storage = creep.room.storage;
-
-            const result = creep.withdraw(storage, RESOURCE_ENERGY);
-            if (result === ERR_NOT_IN_RANGE) {
-                creep.moveTo(storage); // Move to the ruin if it's not in range
+            if (creep.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) === 0) {
+                const terminal = creep.room.terminal;
+                if (creep.withdraw(terminal, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(terminal);
+                }
+            } else {
+                if (creep.withdraw(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(storage); // Move to the ruin if it's not in range
+                }
             }
         }
     }

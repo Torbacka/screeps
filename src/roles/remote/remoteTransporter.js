@@ -3,13 +3,25 @@ const roleRemoteTransporter = {
 
     /**
      * @param {Creep} creep
-     * @param {Room} mainRoom
-     * @param {Room} toRoom **/
+     * @param {String} mainRoom
+     * @param {String} toRoom **/
     run: function (creep, mainRoom, toRoom) {
         if (creep.memory.collect === undefined) {
             creep.memory.collect = true;
         }
         if (creep.memory.collect) {
+            let tombstone = creep.room.find(FIND_TOMBSTONES, {
+                filter: tombstone => {
+                    return tombstone.store.getUsedCapacity() > 200;
+                }
+            });
+            if (tombstone.length > 0) {
+                Object.keys(tombstone.store).forEach(resourceType => {
+                    if (creep.withdraw(tombstone[0], resourceType) === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(tombstone[0]);
+                    }
+                });
+            }
             moveUtil.moveToRoom(creep, toRoom, withdraw);
         } else {
             if (!creep.memory.collect && creep.store.getUsedCapacity() === 0) {
@@ -52,36 +64,6 @@ function withdraw(creep, roomName) {
             if (creep.room.name === roomName && creep.withdraw(storage, mineralType) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffffff'}});
             }
-        }
-    }
-}
-
-/**
- * Transfer all collected energy to the main room storage
- *
- * @param {Creep} creep
- * @param {String} mainRoom
- * **/
-function transfer(creep, mainRoom) {
-    if (!creep.memory.collect && creep.store[RESOURCE_ENERGY] === 0) {
-        creep.memory.collect = true;
-    } else {
-        if (creep.transfer(creep.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-            const answer = creep.moveTo(creep.room.storage, {visualizePathStyle: {stroke: '#ffffff'}}, {
-                maxRooms: 1,
-                costCallback: (roomName, costMatrix) => {
-                    const room = Game.rooms[roomName];
-                    if (!room) {
-                        console.log("NO room");
-                        return;
-                    }
-
-                    // Mark exits as higher cost to discourage bouncing
-                    room.find(FIND_EXIT).forEach(exit => {
-                        costMatrix.set(exit.x, exit.y, 255);
-                    });
-                }
-            });
         }
     }
 }

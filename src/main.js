@@ -4,9 +4,12 @@ const roleUpgrader = require('./roles/upgrader.js');
 const roleTransporter = require('./roles/transporter.js');
 const roleDestroyer = require('./roles/destroyer.js');
 const roleAttacker = require('./roles/attacker.js');
+const roleGeneralist = require('./roles/generalist.js');
 const roleRemoteTransporter = require('./roles/remote/remoteTransporter.js');
+const roleRemoteHarvester = require('./roles/remote/remoteHarvester.js');
+const roleRemoteAttacker = require('./roles/remote/remoteAttacker.js');
 const garbageCollector = require('./util/garbageCollector.js');
-const spawner = require('./util/spawner.js');
+const spawner = require('./util/spanwer/mainSpawner.js');
 const stats = require('./util/stats.js');
 const drawing = require('./util/drawing.js');
 const tower = require('./static/tower.js');
@@ -18,10 +21,8 @@ module.exports.loop = function () {
     }
     for (const roomName in Game.rooms) {
         spawner(roomName);
-
-
-        for (let name in Game.creeps) {
-            let creep = Game.creeps[name];
+        const creepsInRoom = _.filter(Game.creeps, creep => creep.room.name === roomName);
+        creepsInRoom.forEach(creep => {
 
             switch (creep.memory.role) {
                 case 'harvester':
@@ -42,15 +43,25 @@ module.exports.loop = function () {
                 case 'attacker':
                     roleAttacker.run(creep);
                     break;
+                case 'generalist':
+                    roleGeneralist.run(creep);
+                    break;
                 case 'remoteTransporter':
                     roleRemoteTransporter.run(creep, 'E58S34', 'E57S35');
                     break;
+                case 'remoteHarvester':
+                    roleRemoteHarvester.run(creep, 'E58S34', 'E59S34');
+                    break;
+                case 'remoteAttacker':
+                    roleRemoteAttacker.run(creep, 'E58S34', 'E57S35');
+                    break;
+
             }
-        }
+        });
 
         tower.guard(Game.rooms['E58S34']);
         garbageCollector();
-        stats();
+        stats.roomStats();
         drawing();
         safeModeActivator();
     }

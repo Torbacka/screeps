@@ -1,6 +1,6 @@
 /**
  * @param {Creep} creep
- * @param {Room} room - The room to move to
+ * @param {String} room - The room to move to
  * @param {Function} callback
  * **/
 export function moveToRoom(creep, room, callback) {
