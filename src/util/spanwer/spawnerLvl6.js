@@ -9,7 +9,6 @@ module.exports = function (roomName) {
     let minerals = Game.rooms[roomName].find(FIND_MINERALS);
 
     let energyAvailable = Game.rooms[roomName].energyCapacityAvailable;
-    console.log("Energy available: " + energyAvailable + " in room " + roomName);
     if (!('Transporter' in creeps) && Game.rooms[roomName].energyAvailable < 800) {
         let newName = 'Transporter' + Game.time;
         spawner.spawnCreep([CARRY, MOVE], newName,
