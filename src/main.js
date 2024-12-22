@@ -8,12 +8,15 @@ const roleGeneralist = require('./roles/generalist.js');
 const roleRemoteTransporter = require('./roles/remote/remoteTransporter.js');
 const roleRemoteHarvester = require('./roles/remote/remoteHarvester.js');
 const roleRemoteAttacker = require('./roles/remote/remoteAttacker.js');
+const roleRemoteClaimer = require('./roles/remote/remoteClaimer.js');
+const roleRemoteBuilder = require('./roles/remote/remoteBuilder.js');
 const garbageCollector = require('./util/garbageCollector.js');
 const spawner = require('./util/spanwer/mainSpawner.js');
 const stats = require('./util/stats.js');
 const drawing = require('./util/drawing.js');
 const tower = require('./static/tower.js');
 const safeModeActivator = require('./static/safeModeActivator.js');
+const market = require('./static/market/mainMarket.js');
 
 module.exports.loop = function () {
     if (Game.cpu.bucket === 10000) {
@@ -53,17 +56,23 @@ module.exports.loop = function () {
                     roleRemoteHarvester.run(creep, 'E58S34', 'E59S34');
                     break;
                 case 'remoteAttacker':
-                    roleRemoteAttacker.run(creep, 'E58S34', 'E57S35');
+                    roleRemoteAttacker.run(creep, 'E58S34', 'E51S33');
                     break;
-
+                case 'remoteClaimer':
+                    roleRemoteClaimer.run(creep, 'E58S34', 'E51S33');
+                    break;
+                case 'remoteBuilder':
+                    roleRemoteBuilder.run(creep, 'E58S34', 'E51S33');
+                    break;
             }
         });
 
-        tower.guard(Game.rooms['E58S34']);
-        garbageCollector();
-        stats.roomStats();
-        drawing();
-        safeModeActivator();
+        tower.guard(Game.rooms[roomName]);
     }
+    garbageCollector();
+    stats.roomStats();
+    drawing();
+    safeModeActivator();
+    market();
 
 }

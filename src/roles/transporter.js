@@ -1,14 +1,15 @@
 function assignContainer(creep) {
-    const container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+    const container = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return structure.structureType === STRUCTURE_CONTAINER &&
-                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                structure.store[RESOURCE_ENERGY] > 0;
         }
     });
+    console.log("Container: " + JSON.stringify(container));
     if (container !== null) {
         creep.memory.container = container.id;
     }
-    //console.log('Assigned container ' + container.id + ' to ' + creep.name);
+    console.log('Assigned container ' + container.id + ' to ' + creep.name);
 }
 
 function getFreeEnergy() {
@@ -41,6 +42,7 @@ const roleTransporter = {
     /** @param {Creep} creep **/
     run: function (creep) {
         if (creep.memory.container === undefined) {
+            console.log('Assigning container for ' + creep.name);
             assignContainer(creep);
         }
         if (creep.memory.storing && creep.store[RESOURCE_ENERGY] === 0) {

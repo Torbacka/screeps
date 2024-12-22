@@ -10,15 +10,15 @@ const roleRemoteTransporter = {
             creep.memory.collect = true;
         }
         if (creep.memory.collect) {
-            let tombstone = creep.room.find(FIND_TOMBSTONES, {
+            let tombstones = creep.room.find(FIND_TOMBSTONES, {
                 filter: tombstone => {
                     return tombstone.store.getUsedCapacity() > 200;
                 }
             });
-            if (tombstone.length > 0) {
-                Object.keys(tombstone.store).forEach(resourceType => {
-                    if (creep.withdraw(tombstone[0], resourceType) === ERR_NOT_IN_RANGE) {
-                        creep.moveTo(tombstone[0]);
+            if (tombstones.length > 0) {
+                Object.keys(tombstones[0].store).forEach(resourceType => {
+                    if (creep.withdraw(tombstones[0], resourceType) === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(tombstones[0]);
                     }
                 });
             }
@@ -56,14 +56,19 @@ function withdraw(creep, roomName) {
                 creep.moveTo(structuresWithEnergy, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         } else {
-            let storage = creep.room.storage;
-            const mineralType = Object.keys(storage.store).find(
-                resourceType => resourceType !== RESOURCE_ENERGY && storage.store[resourceType] > 0
-            );
+            let storages = [creep.room.storage, creep.room.terminal, creep.room.factory]
+                .filter(structure => structure !== undefined && structure.store.getUsedCapacity() > 0);
+            console.log("storages: " + JSON.stringify(storages));
+            if (storages.length > 0) {
+                const mineralType = Object.keys(storages[0].store).find(
+                    resourceType => resourceType !== RESOURCE_ENERGY && storages[0].store[resourceType] > 0
+                );
 
-            if (creep.room.name === roomName && creep.withdraw(storage, mineralType) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffffff'}});
+                if (creep.room.name === roomName && creep.withdraw(storages[0], mineralType) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(storages[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                }
             }
+
         }
     }
 }

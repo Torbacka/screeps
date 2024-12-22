@@ -21,7 +21,7 @@ const roleRemoteTransporter = {
                     creep.moveTo(Game.rooms[mainRoom].storage,{visualizePathStyle: {stroke: '#ffffff'}});
                 } else if (transferResult === OK) {
                     console.log(Game.time + " - " + creep.name + " transferred " + RESOURCE_ENERGY + " to storage");
-                    stats.remoteHarvesterStats(creep, mainRoom);
+                    //stats.remoteHarvesterStats(creep, mainRoom);
                 } else {
                     console.log("Transfer result: " + transferResult);
                 }

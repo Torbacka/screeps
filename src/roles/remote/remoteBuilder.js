@@ -14,10 +14,36 @@ const roleRemoteTransporter = {
         if (creep.memory.claim) {
 
             if (toRoom === creep.room.name) {
-                const controller = creep.room.controller
-                if (controller) {
-                    if (creep.claimController(controller) === ERR_NOT_IN_RANGE) {
-                        creep.moveTo(controller, {visualizePathStyle: {stroke: '#1aa131'}});
+                if (creep.memory.building === undefined) {
+                    creep.memory.building = false;
+                }
+                if (creep.memory.building) {
+                    if (creep.store.getUsedCapacity() === 0) {
+                        creep.memory.building = false;
+                    }
+                    let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+                    if (targets.length) {
+                        if (creep.build(targets[0]) === ERR_NOT_IN_RANGE) {
+                            creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#1aa131'}});
+                        }
+                    }
+                } else {
+                    if (creep.store.getFreeCapacity() === 0) {
+                        creep.memory.building = true;
+                    }
+                    const source = creep.room.find(FIND_SOURCES)[0];
+                    let droppedResources = creep.room.find(FIND_DROPPED_RESOURCES, {
+                        filter: resource => {
+                            return resource.resourceType === RESOURCE_ENERGY;
+                        }
+                    });
+                    if (droppedResources.length > 0) {
+                        if (creep.pickup(droppedResources[0]) === ERR_NOT_IN_RANGE) {
+                            creep.moveTo(droppedResources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                        }
+                    }
+                    if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
                     }
                 }
             } else {
@@ -26,7 +52,7 @@ const roleRemoteTransporter = {
 
                 if (exit != null) {
                     const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
-                    const avoidRange = 4;
+                    const avoidRange = 15;
                     if (creep.room.name === "E55S34") {
                         exit = creep.room.getPositionAt(0, 21)
                     }
@@ -36,7 +62,7 @@ const roleRemoteTransporter = {
                     if (creep.room.name === "E53S33") {
                         exit = creep.room.getPositionAt(0, 34);
                     }
-                    creep.moveTo(exit, {visualizePathStyle: {stroke: '#ffaa00'}}, {
+                    const result = creep.moveTo(exit, {visualizePathStyle: {stroke: '#ffaa00'}}, {
                         costCallback: function (roomName, costMatrix) {
                             console.log("Room name: " + roomName);
                             hostiles.forEach(hostile => {
@@ -45,13 +71,14 @@ const roleRemoteTransporter = {
                                         const x = hostile.pos.x + dx;
                                         const y = hostile.pos.y + dy;
                                         console.log("x: " + x + " y: " + y);
-                                        costMatrix.set(x, y, 255); // Impassable
+                                        costMatrix.set(x, y, 300); // Impassable
                                     }
                                 }
                             });
                             return costMatrix;
                         }
                     });
+                    console.log("Move result: " + result);
                 }
             }
         }

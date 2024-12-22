@@ -6,12 +6,18 @@ const spawnerLvl6 = require('./spawnerLvl6');
  * @param {String} roomName
  */
 module.exports = function (roomName) {
+    if (!Game.rooms[roomName].controller) {
+        return;
+    }
     switch (Game.rooms[roomName].controller.level) {
         case 1:
-            return spawnerLvl1(roomName);
+            spawnerLvl1(roomName);
+            break;
         case 6:
-            return spawnerLvl6(roomName);
+             spawnerLvl6(roomName);
+             break;
         default:
-            return spawnerLvl1(roomName);
+            spawnerLvl1(roomName);
+            break;
     }
 };
