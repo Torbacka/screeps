@@ -4,7 +4,8 @@ er * @param {String} roomName
  */
 module.exports = function (roomName) {
 
-    const creeps = _.groupBy(Game.creeps, (creep) => creep.memory.role);
+    const creeps = _.groupBy(_.filter(Game.creeps, creep => creep.room.name === roomName || creep.memory.role.includes("remote")), (creep) => creep.memory.role);
+    console.log("Creeps: " + JSON.stringify(creeps));
     const spawner = Game.rooms[roomName].find(FIND_MY_SPAWNS)[0];
     let minerals = Game.rooms[roomName].find(FIND_MINERALS);
 
@@ -31,7 +32,7 @@ module.exports = function (roomName) {
             {memory: {role: 'builder'}});
     } else if (!('upgrader' in creeps) || creeps['upgrader'].length < 2) {
         let newName = 'Upgrader' + Game.time;
-        spawner.spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], newName,
+        spawner.spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], newName,
             {memory: {role: 'upgrader'}});
     } else if (false) {
         console.log("Remote attacker");

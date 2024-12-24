@@ -1,46 +1,7 @@
-function assignSource(creep) {
-    const generalists = _.filter(Game.creeps, creep => creep.memory.role === 'generalist');
-    const assignedCounts = _.countBy(generalists, creep => creep.memory.source);
-    const sources = {};
-    for (const source of creep.room.find(FIND_SOURCES)) {
-        sources[source.id] = countFreeSpots(creep.room, source);
-    }
-    for (const [key, value] of Object.entries(sources)) {
-        if (assignedCounts[key] === undefined || assignedCounts[key] < value) {
-            console.log("Assigning source " + key + " to " + creep.name);
-            creep.memory.source = key;
-            break;
-        }
-    }
-}
-
-function countFreeSpots(room, source) {
-    if (!source) return 0;
-
-    const terrain = room.getTerrain();
-    let freeSpots = 0;
-    for (let dx = -1; dx <= 1; dx++) {
-        for (let dy = -1; dy <= 1; dy++) {
-            if (dx === 0 && dy === 0) continue;
-
-            const x = source.pos.x + dx;
-            const y = source.pos.y + dy;
-
-            if (terrain.get(x, y) !== TERRAIN_MASK_WALL) {
-                freeSpots++;
-            }
-        }
-    }
-    return freeSpots;
-}
-
 const roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
-        if (creep.memory.source === undefined) {
-            assignSource(creep);
-        }
         if (creep.store.getUsedCapacity() === 0) {
             creep.memory.harvesting = true;
         }
@@ -55,6 +16,11 @@ const roleBuilder = {
                         structure.structureType === STRUCTURE_SPAWN) &&
                     structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
             });
+            const towers = creep.room.find(FIND_STRUCTURES, {
+                filter: structure =>
+                    structure.structureType === STRUCTURE_TOWER &&
+                    structure.store.getFreeCapacity(RESOURCE_ENERGY) - 200 > 0
+            });
             const buildingTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
 
             if (creep.memory.road === undefined) {
@@ -66,13 +32,13 @@ const roleBuilder = {
                 const roadsToRepair = creep.room.find(FIND_STRUCTURES, {
                     filter: structure => {
                         return structure.structureType === STRUCTURE_ROAD &&
-                            structure.hits  < structure.hitsMax* 0.9
+                            structure.hits < structure.hitsMax * 0.9
                             && !roadIds.includes(structure.id);
                     }
                 })
                 creep.memory.road = roadsToRepair.length > 0 ? roadsToRepair[0].id : undefined;
             }
-            if (creep.memory.road !== undefined) {
+            /*if (creep.memory.road !== undefined) {
                 const road = Game.getObjectById(creep.memory.road);
                 if (road.hits < road.hitsMax) {
                     if (creep.repair(road) === ERR_NOT_IN_RANGE) {
@@ -81,10 +47,16 @@ const roleBuilder = {
                 } else {
                     creep.memory.road = undefined;
                 }
-            } else if (targets.length > 0 && creep.memory.source !== "5bbcb0169099fc012e63b93b") {
-
+            } else */
+            console.log("Targets: " + JSON.stringify(targets));
+            if (targets.length > 0) {
+                console.log("kommer jag hit");
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
+                }
+            } else if (towers.length > 0 && creep.memory.source !== "5bbcb0169099fc012e63b93b") {
+                if (creep.transfer(towers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(towers[0]);
                 }
             } else if (buildingTargets.length > 0 && creep.memory.source !== "5bbcb0169099fc012e63b93b") {
                 if (creep.build(buildingTargets[0]) === ERR_NOT_IN_RANGE) {
@@ -98,8 +70,26 @@ const roleBuilder = {
                 }
             }
         } else {
-            if (creep.harvest(Game.getObjectById(creep.memory.source)) === ERR_NOT_IN_RANGE) {
-                const result = creep.moveTo(Game.getObjectById(creep.memory.source), {visualizePathStyle: {stroke: '#ffaa00'}});
+            const droppedEnergy = creep.room.find(FIND_DROPPED_RESOURCES, {
+                filter: resource => resource.resourceType === RESOURCE_ENERGY && resource.amount > 100
+            });
+            const containers = creep.room.find(FIND_STRUCTURES, {
+                filter: structure =>
+                    structure.structureType === STRUCTURE_CONTAINER && structure.store && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 0
+            })
+            if (droppedEnergy.length > 0) {
+                if (creep.pickup(droppedEnergy[0]) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(droppedEnergy[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+            } else if (containers.length > 0) {
+                console.log("kommer jag hit");
+                if (creep.withdraw(containers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(containers[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+            } else {
+                if (creep.harvest(Game.getObjectById(creep.memory.source)) === ERR_NOT_IN_RANGE) {
+                    const result = creep.moveTo(Game.getObjectById(creep.memory.source), {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
             }
         }
     }

@@ -10,7 +10,7 @@ function getTargets(creep) {
         : creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
 
     // Find low-energy towers
-    const lowEnergyTowers = Game.rooms['E58S34'].find(FIND_MY_STRUCTURES, {
+    const lowEnergyTowers = creep.room.find(FIND_MY_STRUCTURES, {
         filter: structure =>
             structure.structureType === STRUCTURE_TOWER &&
             structure.store.getCapacity(RESOURCE_ENERGY) - structure.store[RESOURCE_ENERGY] >= 200

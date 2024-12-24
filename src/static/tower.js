@@ -77,7 +77,8 @@ function getRepairObjects(tower) {
     return tower.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType === STRUCTURE_ROAD && structure.hits < structure.hitsMax * 0.75) ||
-                (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax * 0.99);
+                (structure.structureType === STRUCTURE_CONTAINER && structure.hits < structure.hitsMax * 0.99) ||
+                (structure.structureType === STRUCTURE_RAMPART && structure.hits < 1000);
         }
     });
 

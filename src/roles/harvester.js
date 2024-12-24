@@ -42,6 +42,7 @@ const roleHarvester = {
             creep.say('⚡ Storing');
         }
         if (!creep.memory.storing) {
+            console.log("Harvesting energy" + creep.name + " " + creep.memory.source + " " + creep.room.name);
             harvestEnergy(creep);
         } else {
             const container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
