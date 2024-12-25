@@ -27,7 +27,7 @@ function switchContainer(creep) {
             return (structure.structureType === STRUCTURE_CONTAINER) &&
                 structure.store.getUsedCapacity() > 0 && structure.id !== creep.memory.container;
         }
-    }).sort((a, b) =>  b.store.getUsedCapacity()- a.store.getUsedCapacity());
+    }).sort((a, b) => b.store.getUsedCapacity() - a.store.getUsedCapacity());
 
     if (containers.length > 0) {
         creep.memory.container = containers[0].id;
@@ -85,7 +85,7 @@ const roleTransporter = {
                 } else if (creep.withdraw(terminal, RESOURCE_CATALYZED_GHODIUM_ACID) === ERR_NOT_ENOUGH_RESOURCES) {
                     creep.memory.storing = true;
                 }
-            }else {
+            } else {
                 const container = Game.getObjectById(creep.memory.container);
                 Object.keys(container.store).forEach(resourceType => {
                     if (creep.withdraw(container, resourceType) === ERR_NOT_IN_RANGE) {
@@ -100,10 +100,20 @@ const roleTransporter = {
                         creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
                 }
             });
+            const towers = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType === STRUCTURE_TOWER) &&
+                        creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 400;
+                }
+            });
             const labs = creep.room.find(FIND_STRUCTURES, {filter: structure => structure.structureType === STRUCTURE_LAB});
             if (targets) {
                 if (creep.transfer(targets, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets, {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            } else if (towers.length > 0) {
+                if (creep.transfer(towers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(towers[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             } else if (labs.length > 0 && labs[0].store[RESOURCE_ENERGY] < 2000) {
                 if (creep.transfer(labs[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
