@@ -4,7 +4,7 @@ module.exports = function (roomName) {
 
     if (room.spawning) {
         const spawningCreep = Game.creeps[room.spawning.name];
-        room.room.visual.text(
+        room.visual.text(
             '🛠️' + spawningCreep.memory.role,
             room.pos.x + 1,
             room.pos.y,

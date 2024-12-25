@@ -21,6 +21,7 @@ function getTargets(creep) {
         lowEnergyTowers
     };
 }
+
 const roleBuilder = {
 
     /** @param {Creep} creep **/
@@ -42,8 +43,31 @@ const roleBuilder = {
 
         if (creep.memory.building) {
             const {constructionTarget, lowEnergyTowers} = getTargets(creep);
-
-            if (lowEnergyTowers.length > 0) {
+            if (creep.memory.road === undefined) {
+                const roadIds = _.chain(Game.creeps)
+                    .filter(c => c.memory.role === "builder" && c.memory.road && c.room.name === creep.room.name) // Filter creeps
+                    .map(creep => creep.memory.road) // Map to road IDs
+                    .uniq() // Remove duplicates
+                    .value();
+                const roadsToRepair = creep.room.find(FIND_STRUCTURES, {
+                    filter: structure => {
+                        return structure.structureType === STRUCTURE_ROAD &&
+                            structure.hits < structure.hitsMax * 0.9
+                            && !roadIds.includes(structure.id);
+                    }
+                })
+                creep.memory.road = roadsToRepair.length > 0 ? roadsToRepair[0].id : undefined;
+            }
+            if (creep.memory.road !== undefined) {
+                const road = Game.getObjectById(creep.memory.road);
+                if (road.hits < road.hitsMax-400) {
+                    if (creep.repair(road) === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(road);
+                    }
+                } else {
+                    creep.memory.road = undefined;
+                }
+            } else if (lowEnergyTowers.length > 0) {
                 if (creep.transfer(lowEnergyTowers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(lowEnergyTowers[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }

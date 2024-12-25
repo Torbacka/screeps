@@ -5,6 +5,7 @@ const roleTransporter = require('./roles/transporter.js');
 const roleDestroyer = require('./roles/destroyer.js');
 const roleAttacker = require('./roles/attacker.js');
 const roleGeneralist = require('./roles/generalist.js');
+const roleMineralHarvester = require('./roles/mineralHarvester.js');
 const roleRemoteTransporter = require('./roles/remote/remoteTransporter.js');
 const roleRemoteHarvester = require('./roles/remote/remoteHarvester.js');
 const roleRemoteAttacker = require('./roles/remote/remoteAttacker.js');
@@ -49,6 +50,9 @@ module.exports.loop = function () {
                 case 'generalist':
                     roleGeneralist.run(creep);
                     break;
+                case 'mineralHarvester':
+                    roleMineralHarvester.run(creep);
+                    break;
                 case 'remoteTransporter':
                     roleRemoteTransporter.run(creep, 'E58S34', 'E57S35');
                     break;
@@ -73,6 +77,7 @@ module.exports.loop = function () {
     stats.roomStats();
     drawing();
     safeModeActivator();
+
     market();
 
 }

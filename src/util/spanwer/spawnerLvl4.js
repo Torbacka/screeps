@@ -12,7 +12,7 @@ module.exports = function (roomName) {
     if (!spawner) return;
     let energyAvailable = room.energyCapacityAvailable;
     let newName = Game.time.toString();
-
+    let harvesters = _.filter(creeps['harvester'] || [], harvester => harvester.ticksToLive  - harvester.memory.distanceToSource - 30 - harvester.memory.spawnTime > 0);
     if (!('harvester' in creeps) && !('Transporter' in creeps)) {
         const key = assignSource(room);
         spawner.spawnCreep([WORK, MOVE, CARRY, MOVE, CARRY], newName, {
@@ -21,11 +21,12 @@ module.exports = function (roomName) {
                 source: key
             }
         });
-    } else if (!('harvester' in creeps) || creeps["harvester"].length < 2) {
-        console.log("kommer jag hit");
-        spawner.spawnCreep([WORK, WORK, WORK, WORK, WORK, MOVE], newName, {
+    } else if (harvesters.length < 2) {
+        const body = [WORK, WORK, WORK, WORK, WORK, MOVE];
+        spawner.spawnCreep(body, newName, {
             memory: {
-                role: 'harvester'
+                role: 'harvester',
+                spawnTime: body.length*3
             }
         });
     } else if (!('Transporter' in creeps) || creeps["Transporter"].length < 1) {

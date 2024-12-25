@@ -1,5 +1,4 @@
 module.exports = function () {
-    console.log(Game.time % 16)
     if (false) {
         let energySellOrders = Game.market.getAllOrders({
             type: ORDER_SELL,

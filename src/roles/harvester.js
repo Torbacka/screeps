@@ -1,15 +1,41 @@
 
 
 function assignSource(creep) {
+    let harvesters = _.filter(Game.creeps, creep => creep.memory.role === 'harvester');
     const sourceAssignments = _.countBy(
-        _.filter(Game.creeps, creep => creep.memory.role === 'harvester'),
-        creep => creep.memory.source
+        harvesters, creep => creep.memory.source
     );
     creep.room.find(FIND_SOURCES).forEach(source => {
         if (!sourceAssignments[source.id]) {
             creep.memory.source = source.id;
         }
     });
+    if (creep.memory.source === undefined) {
+        const uniqueCreeps = Object.values(
+            harvesters.reduce((acc, creep) => {
+                const source = creep.memory.source;
+                if (!acc[source] || creep.ticksToLive > acc[source].ticksToLive) {
+                    acc[source] = creep;
+                }
+                return acc;
+            }, {})
+        ).sort((a, b) => a.ticksToLive - b.ticksToLive);
+        creep.memory.source = uniqueCreeps[0].memory.source;
+    }
+}
+
+function calculatingSourceCost(creep) {
+    const source = Game.getObjectById(creep.memory.source);
+    const spawn = creep.room.find(FIND_MY_SPAWNS)[0]; // Assume there's at least one spawn in the room
+
+    if (source && spawn) {
+        // Calculate the path distance
+        const {path, opts, cost, incomplete} = PathFinder.search(spawn.pos, { pos: source.pos, range: 1 });
+        if (!incomplete) {
+            console.log('Path found: ' + JSON.stringify(path), ' Options: ' + JSON.stringify(opts) + ' Cost: ' + cost + ' for ' + creep.name + ' ' + incomplete);
+            return cost; // Store the cost of the path
+        }
+    }
 }
 
 function harvestEnergy(creep) {
@@ -20,7 +46,6 @@ function harvestEnergy(creep) {
     });
 
     // Attempt to withdraw or pick up energy
-
     if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
         creep.moveTo(container, {visualizePathStyle: {stroke: '#ffaa00'}});
     }
@@ -30,8 +55,12 @@ const roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
+        creep.memory.spawnTime =  creep.body.length*3;
         if (creep.memory.source === undefined) {
             assignSource(creep);
+        }
+        if (creep.memory.source && creep.memory.distanceToSource === undefined) {
+            creep.memory.distanceToSource = calculatingSourceCost(creep)
         }
         if (creep.memory.storing && creep.store[RESOURCE_ENERGY] === 0) {
             creep.memory.storing = false;
@@ -42,7 +71,6 @@ const roleHarvester = {
             creep.say('⚡ Storing');
         }
         if (!creep.memory.storing) {
-            console.log("Harvesting energy" + creep.name + " " + creep.memory.source + " " + creep.room.name);
             harvestEnergy(creep);
         } else {
             const container = creep.pos.findClosestByPath(FIND_STRUCTURES, {

@@ -15,6 +15,7 @@ module.exports = function (roomName) {
             spawnerLvl1(roomName);
             break;
         case 4:
+        case 5:
             spawnerLvl4(roomName);
             break;
         case 6:
