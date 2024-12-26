@@ -100,20 +100,22 @@ const roleTransporter = {
                         creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
                 }
             });
-            const towers = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            const tower = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_TOWER) &&
-                        creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 400;
+                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 400;
                 }
             });
+            console.log("Tower: " + JSON.stringify(tower));
             const labs = creep.room.find(FIND_STRUCTURES, {filter: structure => structure.structureType === STRUCTURE_LAB});
             if (targets) {
                 if (creep.transfer(targets, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
-            } else if (towers.length > 0) {
-                if (creep.transfer(towers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(towers[0], {visualizePathStyle: {stroke: '#ffffff'}});
+            } else if (tower) {
+                console.log("Kommer jag hit");
+                if (creep.transfer(tower, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(tower, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             } else if (labs.length > 0 && labs[0].store[RESOURCE_ENERGY] < 2000) {
                 if (creep.transfer(labs[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {

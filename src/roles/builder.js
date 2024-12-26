@@ -49,20 +49,20 @@ const roleBuilder = {
                     .map(creep => creep.memory.road) // Map to road IDs
                     .uniq() // Remove duplicates
                     .value();
-                const roadsToRepair = creep.room.find(FIND_STRUCTURES, {
+                const roadsToRepair = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                     filter: structure => {
                         return structure.structureType === STRUCTURE_ROAD &&
-                            structure.hits < structure.hitsMax * 0.9
+                            structure.hits < structure.hitsMax -2800
                             && !roadIds.includes(structure.id);
                     }
                 })
-                creep.memory.road = roadsToRepair.length > 0 ? roadsToRepair[0].id : undefined;
+                creep.memory.road = roadsToRepair ? roadsToRepair.id : undefined;
             }
             if (creep.memory.road !== undefined) {
                 const road = Game.getObjectById(creep.memory.road);
                 if (road.hits < road.hitsMax-400) {
                     if (creep.repair(road) === ERR_NOT_IN_RANGE) {
-                        creep.moveTo(road);
+                        creep.moveTo(road, {visualizePathStyle: {stroke: '#cda24f'}});
                     }
                 } else {
                     creep.memory.road = undefined;

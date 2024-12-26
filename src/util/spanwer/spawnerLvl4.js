@@ -13,7 +13,7 @@ module.exports = function (roomName) {
     let energyAvailable = room.energyCapacityAvailable;
     let newName = Game.time.toString();
     let harvesters = _.filter(creeps['harvester'] || [], harvester => harvester.ticksToLive  - harvester.memory.distanceToSource - 30 - harvester.memory.spawnTime > 0);
-    if (!('harvester' in creeps) && !('Transporter' in creeps)) {
+    if (!('harvester' in creeps) && !('Transporter' in creeps) && !('generalist' in creeps) ) {
         const key = assignSource(room);
         spawner.spawnCreep([WORK, MOVE, CARRY, MOVE, CARRY], newName, {
             memory: {
@@ -38,7 +38,7 @@ module.exports = function (roomName) {
                 role: 'Transporter'
             }
         });
-    } else if (!('upgrader' in creeps) || creeps['upgrader'].length < 2) {
+    } else if (!('upgrader' in creeps) || creeps['upgrader'].length < 3) {
         const baseCost = 200;
         const extraCost = 100;
         const maxSets = Math.floor(energyAvailable / baseCost);
