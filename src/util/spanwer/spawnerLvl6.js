@@ -55,7 +55,7 @@ module.exports = function (roomName) {
         const body = [].concat(...Array(maxSets).fill([ATTACK, MOVE]));
         spawner.spawnCreep(body, newName,
             {memory: {role: 'remoteAttacker'}});
-    } else if (/*!('remoteBuilder' in creeps)*/ false) {
+    } else if (!('remoteBuilder' in creeps)) {
         let newName = 'remoteBuilder' + Game.time;
         const maxSets = Math.floor(energyAvailable / 200);
         const body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE]));
@@ -68,13 +68,13 @@ module.exports = function (roomName) {
         spawner.spawnCreep(body, newName,
             {memory: {role: 'remoteHarvester'}});
     } else if (false) {
-        let newName = 'RemoteTransporter' + Game.time;
+        const newName = 'RemoteTransporter' + Game.time;
         const maxSets = Math.floor(energyAvailable / 100);
         const body = Array(maxSets).fill(CARRY).concat(Array(maxSets).fill(MOVE));
         spawner.spawnCreep(body, newName,
             {memory: {role: 'remoteTransporter'}});
     } else if (false) {
-        let newName = 'remoteClaimer' + Game.time;
+        const newName = 'remoteClaimer' + Game.time;
         spawner.spawnCreep([CLAIM, MOVE], newName,
             {memory: {role: 'remoteClaimer'}});
     } else if (('mineralHarvester' in creeps) && minerals.length > 1 && minerals[0].mineralAmount > 0) {

@@ -21,8 +21,17 @@ const roleRemoteTransporter = {
                     if (creep.store.getUsedCapacity() === 0) {
                         creep.memory.building = false;
                     }
-                    let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-                    if (targets.length) {
+                    let spawns = creep.room.find(FIND_CONSTRUCTION_SITES, {
+                        filter: structure => {
+                            return structure.structureType === STRUCTURE_SPAWN
+                        }
+                    });
+                    const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+                    if (spawns.length) {
+                        if (creep.build(spawns[0]) === ERR_NOT_IN_RANGE) {
+                            creep.moveTo(spawns[0], {visualizePathStyle: {stroke: '#1aa131'}});
+                        }
+                    } else if (targets.length > 0) {
                         if (creep.build(targets[0]) === ERR_NOT_IN_RANGE) {
                             creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#1aa131'}});
                         }

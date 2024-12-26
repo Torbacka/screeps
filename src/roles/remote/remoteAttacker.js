@@ -56,7 +56,7 @@ const roleRemoteTransporter = {
  * @param {String} roomName
  * **/
 function attack(creep, roomName) {
-    const invaderCore = creep.room.find(FIND_HOSTILE_STRUCTURES);
+    const invaderCore = creep.room.find(FIND_HOSTILE_STRUCTURES );
     if (invaderCore.length > 0) {
         const disResult = creep.attack(invaderCore[0]);
         if (creep.attack(invaderCore[0]) === ERR_NOT_IN_RANGE) {

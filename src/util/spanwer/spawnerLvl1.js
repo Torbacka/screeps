@@ -16,22 +16,26 @@ module.exports = function (roomName) {
         return;
     }
 
-    if (!('generalist' in creeps) || creeps['generalist'].length < 4) {
+    if (!('generalist' in creeps)){
+        console.log("Spawning generalist: " + roomName);
+        const key = assignSource(room);
+        spawner.spawnCreep([WORK, CARRY, MOVE, CARRY, MOVE], Game.time.toString(), {
+            memory: {
+                role: 'generalist',
+                source: key
+            }
+        });
+    }else if (creeps['generalist'].length < 10) {
         const key = assignSource(room);
         let newName = 'Generalist' + Game.time;
         let body
-        if (key === "5bbcb0169099fc012e63b93b") {
-            const maxSets = Math.floor((energyAvailable - 100) / 100);
-            body = [].concat(...Array(maxSets).fill([WORK]));
+
+        const baseCost = 200; // Cost of one set [WORK, CARRY, MOVE]
+        const extraCost = 100; // Cost of [CARRY, MOVE]
+        const maxSets = Math.floor((energyAvailable) / baseCost);
+        body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE]));
+        if (energyAvailable - maxSets * baseCost >= extraCost) {
             body.push(CARRY, MOVE);
-        } else {
-            const baseCost = 200; // Cost of one set [WORK, CARRY, MOVE]
-            const extraCost = 100; // Cost of [CARRY, MOVE]
-            const maxSets = Math.floor((energyAvailable) / baseCost);
-            body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE]));
-            if (energyAvailable - maxSets * baseCost >= extraCost) {
-                body.push(CARRY, MOVE);
-            }
         }
 
         spawner.spawnCreep(body, newName, {

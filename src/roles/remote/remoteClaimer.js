@@ -27,8 +27,8 @@ const roleRemoteTransporter = {
                 if (exit != null) {
                     const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
                     const avoidRange = 4;
-                    if (creep.room.name === "E55S34") {
-                        exit = creep.room.getPositionAt(0, 21)
+                    if (creep.room.name === "E56S35") {
+                        exit = creep.room.getPositionAt(0, 10)
                     }
                     if (creep.room.name === "E54S34") {
                         exit = creep.room.getPositionAt(19, 0);

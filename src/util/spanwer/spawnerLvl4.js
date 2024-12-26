@@ -38,7 +38,7 @@ module.exports = function (roomName) {
                 role: 'Transporter'
             }
         });
-    } else if (!('upgrader' in creeps) || creeps['upgrader'].length < 3) {
+    } else if (!('upgrader' in creeps) || creeps['upgrader'].length < 2) {
         const baseCost = 200;
         const extraCost = 100;
         const maxSets = Math.floor(energyAvailable / baseCost);

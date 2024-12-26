@@ -60,13 +60,13 @@ module.exports.loop = function () {
                     roleRemoteHarvester.run(creep, 'E58S34', 'E59S34');
                     break;
                 case 'remoteAttacker':
-                    roleRemoteAttacker.run(creep, 'E58S34', 'E51S33');
+                    roleRemoteAttacker.run(creep, 'E58S34', 'E57S35');
                     break;
                 case 'remoteClaimer':
-                    roleRemoteClaimer.run(creep, 'E58S34', 'E51S33');
+                    roleRemoteClaimer.run(creep, 'E58S34', 'E47S31');
                     break;
                 case 'remoteBuilder':
-                    roleRemoteBuilder.run(creep, 'E58S34', 'E51S33');
+                    roleRemoteBuilder.run(creep, 'E58S34', 'E57S35');
                     break;
             }
         });

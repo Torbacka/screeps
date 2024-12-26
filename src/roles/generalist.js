@@ -21,7 +21,7 @@ const roleBuilder = {
                     structure.structureType === STRUCTURE_TOWER &&
                     structure.store.getFreeCapacity(RESOURCE_ENERGY) - 200 > 0
             });
-            const buildingTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
+            const buildingTargets = [];
 
             if (creep.memory.road === undefined) {
                 const roadIds = _.chain(Game.creeps)
