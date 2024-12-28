@@ -1,5 +1,5 @@
 let moveUtil = require('../../util/moveUtil.js');
-let stats = require('../../util/stats.js');
+let remoteUtil = require('./remoteUtil.js');
 const roleRemoteTransporter = {
 
     /**
@@ -10,61 +10,37 @@ const roleRemoteTransporter = {
         if (creep.memory.attack === undefined) {
             creep.memory.attack = true;
         }
-        if (creep.memory.attack) {
-            if (toRoom === creep.room.name) {
-                attack(creep, toRoom);
-            } else {
-                let exitDir = creep.room.findExitTo(toRoom);
-                let exit = creep.pos.findClosestByPath(exitDir);
+        moveUtil.moveToRoom(creep, toRoom, attack);
 
-                if (exit != null) {
-                    const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
-                    const avoidRange = 4;
-                    //if (creep.room.name === "E55S34") {
-                    //    exit = creep.room.getPositionAt(0, 21)
-                    //}
-                    if (creep.room.name === "E56S35") {
-                        exit = creep.room.getPositionAt(0, 13);
-                    }
-
-
-
-                    creep.moveTo(exit, {visualizePathStyle: {stroke: '#ffaa00'}}, {
-                        costCallback: function (roomName, costMatrix) {
-                            console.log("Room name: " + roomName);
-                            hostiles.forEach(hostile => {
-                                for (let dx = -avoidRange; dx <= avoidRange; dx++) {
-                                    for (let dy = -avoidRange; dy <= avoidRange; dy++) {
-                                        const x = hostile.pos.x + dx;
-                                        const y = hostile.pos.y + dy;
-                                        console.log("x: " + x + " y: " + y);
-                                        costMatrix.set(x, y, 255); // Impassable
-                                    }
-                                }
-                            });
-                            return costMatrix;
-                        }
-                    });
-                }
-            }
-        }
     }
 };
 
 /**
+ * Start clearing minerals and later go for other hostile creeps
+ *
  * @param {Creep} creep
  * @param {String} roomName
  * **/
 function attack(creep, roomName) {
-    const invaderCore = creep.room.find(FIND_HOSTILE_STRUCTURES );
-    if (invaderCore.length > 0) {
-        const disResult = creep.attack(invaderCore[0]);
-        if (creep.attack(invaderCore[0]) === ERR_NOT_IN_RANGE) {
-            creep.moveTo(invaderCore[0], { visualizePathStyle: { stroke: '#ff0000' } });
-        } else {
-            console.log("Attack result: " + disResult);
+
+    const closestHostile = remoteUtil.findClosestHostile(creep);
+    if (!creep.memory.ready) {
+        remoteUtil.checkIfReady(creep, Game.rooms[roomName]);
+    }
+    const healer = creep.pos.findClosestByRange(FIND_MY_CREEPS, {
+        filter: (creep) => creep.memory.role === 'remoteHealer'
+    });
+    if (creep.memory.ready && closestHostile) {
+        const rangeToTarget = creep.pos.getRangeTo(closestHostile);
+        if (rangeToTarget > 3 && creep.pos.getRangeTo(healer)  < 2) {
+            creep.moveTo(closestHostile, {visualizePathStyle: {stroke: '#ff0000'}});
+        } else if (rangeToTarget < 3 || (creep.hitsMax - creep.hits > 1000)) {
+            const fleePath = remoteUtil.calculateFleePath(creep, closestHostile, roomName);
+            creep.moveByPath(fleePath);
         }
+        creep.rangedAttack(closestHostile);
     }
 }
 
 module.exports = roleRemoteTransporter;
+

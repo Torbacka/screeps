@@ -9,6 +9,7 @@ const roleMineralHarvester = require('./roles/mineralHarvester.js');
 const roleRemoteTransporter = require('./roles/remote/remoteTransporter.js');
 const roleRemoteHarvester = require('./roles/remote/remoteHarvester.js');
 const roleRemoteAttacker = require('./roles/remote/remoteAttacker.js');
+const roleRemoteHealer = require('./roles/remote/remoteHealer.js');
 const roleRemoteClaimer = require('./roles/remote/remoteClaimer.js');
 const roleRemoteBuilder = require('./roles/remote/remoteBuilder.js');
 const garbageCollector = require('./util/garbageCollector.js');
@@ -54,13 +55,13 @@ module.exports.loop = function () {
                     roleMineralHarvester.run(creep);
                     break;
                 case 'remoteTransporter':
-                    roleRemoteTransporter.run(creep, 'E58S34', 'E57S35');
+                    roleRemoteTransporter.run(creep, 'E51S33', 'E51S32');
                     break;
                 case 'remoteHarvester':
                     roleRemoteHarvester.run(creep, 'E58S34', 'E59S34');
                     break;
                 case 'remoteAttacker':
-                    roleRemoteAttacker.run(creep, 'E58S34', 'E57S35');
+                    roleRemoteAttacker.run(creep, 'E58S34', 'E56S34');
                     break;
                 case 'remoteClaimer':
                     roleRemoteClaimer.run(creep, 'E58S34', 'E47S31');
@@ -68,16 +69,23 @@ module.exports.loop = function () {
                 case 'remoteBuilder':
                     roleRemoteBuilder.run(creep, 'E58S34', 'E57S35');
                     break;
+                case 'remoteHealer':
+                    roleRemoteHealer.run(creep, 'E58S34', 'E56S34');
+                    break;
             }
         });
 
-        tower.guard(Game.rooms[roomName]);
+        let room = Game.rooms[roomName];
+        tower.guard(room);
+        if (room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TERMINAL}}).length > 0) {
+            market();
+        }
+
     }
     garbageCollector();
     stats.roomStats();
     drawing();
     safeModeActivator();
 
-    market();
 
 }

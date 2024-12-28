@@ -10,12 +10,12 @@ function assignContainer(creep) {
     }
 }
 
-function getFreeEnergy(room) {
-    const droppedEnergy = room.find(FIND_DROPPED_RESOURCES, {
+function getFreeEnergy(creep) {
+    const droppedEnergy = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
         filter: resource => resource.resourceType === RESOURCE_ENERGY && resource.amount > 400
     });
 
-    const tombstonesWithEnergy = room.find(FIND_TOMBSTONES, {
+    const tombstonesWithEnergy = creep.room.find(FIND_TOMBSTONES, {
         filter: tombstone => tombstone.store[RESOURCE_ENERGY] > 400
     });
     return {droppedEnergy, tombstonesWithEnergy};
@@ -64,12 +64,12 @@ const roleTransporter = {
             creep.memory.storing = true;
         }
         if (!creep.memory.storing) {
-            const {droppedEnergy, tombstonesWithEnergy} = getFreeEnergy(creep.room);
+            const {droppedEnergy, tombstonesWithEnergy} = getFreeEnergy(creep);
             const terminal = creep.room.terminal;
             // Attempt to withdraw or pick up energy
-            if (droppedEnergy.length > 0) { // Dropped energy
-                if (creep.pickup(droppedEnergy[0]) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(droppedEnergy[0], {visualizePathStyle: {stroke: '#ff671a'}});
+            if (droppedEnergy) { // Dropped energy
+                if (creep.pickup(droppedEnergy) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(droppedEnergy, {visualizePathStyle: {stroke: '#ff671a'}});
                 }
             } else if (tombstonesWithEnergy.length > 0) { // Tombstone energy
                 if (creep.withdraw(tombstonesWithEnergy[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
@@ -103,17 +103,15 @@ const roleTransporter = {
             const tower = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_TOWER) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 400;
+                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 400 && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0;
                 }
             });
-            console.log("Tower: " + JSON.stringify(tower));
             const labs = creep.room.find(FIND_STRUCTURES, {filter: structure => structure.structureType === STRUCTURE_LAB});
             if (targets) {
                 if (creep.transfer(targets, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             } else if (tower) {
-                console.log("Kommer jag hit");
                 if (creep.transfer(tower, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(tower, {visualizePathStyle: {stroke: '#ffffff'}});
                 }

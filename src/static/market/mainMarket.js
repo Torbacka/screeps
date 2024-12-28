@@ -48,31 +48,34 @@ module.exports = function () {
                 Game.notify(`Failed to create buy order. Error code: ${result}`);
             }
         }
-    }/*
-    const terminal = Game.rooms["E58S34"].find(FIND_MY_STRUCTURES, {
-        filter: structure => structure.structureType === STRUCTURE_TERMINAL
-    })[0];
+    }
+    if (Game.time %5 ===0) {
+        const terminal = Game.rooms["E58S34"].find(FIND_MY_STRUCTURES, {
+            filter: structure => structure.structureType === STRUCTURE_TERMINAL
+        })[0];
 
-    const sellOrders = _.filter(Game.market.orders, order =>
-        order.type === ORDER_SELL &&
-        order.resourceType === RESOURCE_ENERGY &&
-        order.active &&
-        order.remainingAmount > 0
-    );
-    if (terminal.store[RESOURCE_ENERGY] > 100000 && sellOrders.length === 0) {
-        const result = Game.market.createOrder({
-            type: ORDER_SELL,
-            resourceType: RESOURCE_ENERGY,
-            price: 35,
-            totalAmount: 5000,
-            roomName: "E58S34"
-        });
-        console.log("Result" + result)
-    }*/
-    if (Game.resources["pixel"] >= 57) {
-        sellAllPixels();
+        const sellOrders = _.filter(Game.market.orders, order =>
+            order.type === ORDER_SELL &&
+            order.resourceType === RESOURCE_ENERGY &&
+            order.active &&
+            order.remainingAmount > 0
+        );
+        if (terminal.store[RESOURCE_ENERGY] > 100000 && sellOrders.length === 0) {
+            const result = Game.market.createOrder({
+                type: ORDER_SELL,
+                resourceType: RESOURCE_ENERGY,
+                price: 35,
+                totalAmount: 50000,
+                roomName: "E58S34"
+            });
+            console.log("Result" + result)
+        }
+        if (Game.resources["pixel"] >= 57) {
+            sellAllPixels();
+        }
     }
 }
+
 
 function sellAllPixels() {
     const allOrders = Game.market.getAllOrders();

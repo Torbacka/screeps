@@ -1,6 +1,5 @@
 function mineralsToMine(room) {
     const minerals = room.find(FIND_MINERALS);
-console.log("Minerals: " + JSON.stringify(minerals) + " " + minerals.length + " " + minerals[0].mineralAmount);
     if (minerals.length === 0) return false;
 
     return minerals[0].mineralAmount !== 0;
@@ -18,70 +17,67 @@ module.exports = function (roomName) {
     let minerals = room.find(FIND_MINERALS);
     let harvesters = _.filter(creeps['harvester'] || [], harvester => harvester.ticksToLive - harvester.memory.distanceToSource - 10 - harvester.memory.spawnTime > 0);
     let energyAvailable = room.energyCapacityAvailable;
+    let body;
+    let role;
     if (!('Transporter' in creeps) && room.energyAvailable < 800) {
-        let newName = 'Transporter' + Game.time;
-        spawner.spawnCreep([CARRY, MOVE], newName,
-            {memory: {role: 'Transporter'}});
-    } else if (creeps['harvester'] === undefined && room.energyAvailable < 600) {
-        let newName = 'Harvester' + Game.time;
-        spawner.spawnCreep([WORK, CARRY, MOVE], newName,
-            {memory: {role: 'harvester'}});
+        role = 'Transporter';
+        body = [].concat(...Array(4).fill([CARRY, MOVE]));
+    } else if (!('harvester' in creeps)  && room.energyAvailable < 600) {
+        role = 'harvester';
+        body = [WORK, CARRY, MOVE];
     } else if (harvesters.length < 2) {
-        let newName = 'Harvester' + Game.time;
-        spawner.spawnCreep([WORK, WORK, WORK, WORK, WORK, MOVE, MOVE], newName,
-            {memory: {role: 'harvester'}});
+        role = 'harvester';
+        body = [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE];
     } else if (!('Transporter' in creeps) || creeps['Transporter'].length < 2) {
-        let newName = 'Transporter' + Game.time;
-        spawner.spawnCreep([CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE], newName,
-            {memory: {role: 'Transporter'}});
-    } else if ((!('builder' in creeps) || creeps['builder'].length < 1)) {
-        let newName = 'Builder' + Game.time;
-        spawner.spawnCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], newName,
-            {memory: {role: 'builder'}});
-    } else if (!('upgrader' in creeps) || creeps['upgrader'].length <3) {
-        let newName = 'Upgrader' + Game.time;
-        spawner.spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], newName,
-            {memory: {role: 'upgrader'}});
+        role = 'Transporter';
+        body = [].concat(...Array(6).fill([CARRY,CARRY, MOVE]));
+    } else if ((!('builder' in creeps))) {
+        role = 'builder';
+        body = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
+    } else if (!('upgrader' in creeps) || creeps['upgrader'].length < 3) {
+        role = 'upgrader';
+        body = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
     } else if (!('mineralHarvester' in creeps) && mineralsToMine(room)) {
         const maxSets = Math.floor(energyAvailable / 550);
-        const body = [].concat(...Array(maxSets).fill([WORK, WORK, WORK, WORK, WORK, MOVE]));
-        let newName = 'MineralHarvester' + Game.time;
-        spawner.spawnCreep(body, newName,
-            {memory: {role: 'mineralHarvester'}});
-    } else if (false) {
-
-        let newName = 'remoteAttacker' + Game.time;
-        const maxSets = Math.floor(1300 / 130);
-        const body = [].concat(...Array(maxSets).fill([ATTACK, MOVE]));
-        spawner.spawnCreep(body, newName,
-            {memory: {role: 'remoteAttacker'}});
-    } else if (!('remoteBuilder' in creeps)) {
-        let newName = 'remoteBuilder' + Game.time;
+        body = [].concat(...Array(maxSets).fill([WORK, WORK, WORK, WORK, WORK, MOVE]));
+        role = 'mineralHarvester';
+    } else if (!('remoteAttacker' in creeps) && false) {
+        role = 'remoteAttacker';
+        const maxSets = Math.floor(energyAvailable / 260);
+        const remainingEnergy = energyAvailable - maxSets * 260;
+        const toughSets = Math.floor(remainingEnergy / 60);
+        body = [].concat(...Array(maxSets + toughSets).fill([TOUGH]));
+        body = body.concat(...Array(maxSets).fill([RANGED_ATTACK, MOVE, MOVE]));
+        body = body.concat(...Array(toughSets).fill([MOVE]));
+    } else if (!('remoteHealer' in creeps) && false) {
+        role = 'remoteHealer';
+        const maxSets = Math.floor(energyAvailable / 300);
+        body = [].concat(...Array(maxSets).fill([HEAL, MOVE]));
+    } else if (!('remoteBuilder' in creeps) && false) {
+        role = 'remoteBuilder';
         const maxSets = Math.floor(energyAvailable / 200);
-        const body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE]));
-        spawner.spawnCreep(body, newName,
-            {memory: {role: 'remoteBuilder'}});
+        body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE]));
     } else if (!('remoteHarvester' in creeps) || creeps['remoteHarvester'].length < 2) {
-        let newName = 'remoteHarvester' + Game.time;
+        role = 'remoteHarvester';
         const maxSets = Math.floor(energyAvailable / 200);
-        const body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE]));
-        spawner.spawnCreep(body, newName,
-            {memory: {role: 'remoteHarvester'}});
-    } else if (false) {
-        const newName = 'RemoteTransporter' + Game.time;
+        body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE]));
+    } else if (!('RemoteTransporter' in creeps) && false) {
+        console.log("Spawning remoteTransporter");
+        role = 'remoteTransporter';
         const maxSets = Math.floor(energyAvailable / 100);
-        const body = Array(maxSets).fill(CARRY).concat(Array(maxSets).fill(MOVE));
-        spawner.spawnCreep(body, newName,
-            {memory: {role: 'remoteTransporter'}});
-    } else if (false) {
-        const newName = 'remoteClaimer' + Game.time;
-        spawner.spawnCreep([CLAIM, MOVE], newName,
-            {memory: {role: 'remoteClaimer'}});
+        body = Array(maxSets).fill(CARRY).concat(Array(maxSets).fill(MOVE));
+    } else if (!('remoteClaimer' in creeps) && false) {
+        role = 'remoteClaimer';
+        body =[CLAIM, MOVE];
     } else if (('mineralHarvester' in creeps) && minerals.length > 1 && minerals[0].mineralAmount > 0) {
-        let newName = 'mineralHarvester' + Game.time;
-        let body = Array(10).fill(WORK).concat(Array(3).fill(MOVE));
-        spawner.spawnCreep(body, newName,
-            {memory: {role: 'mineralHarvester'}});
+        role = 'mineralHarvester';
+        body = Array(10).fill(WORK).concat(Array(3).fill(MOVE));
     }
+
+    if (body && role) {
+        spawner.spawnCreep(body, `${role}${Game.time}`,
+            {memory: {role: role, room: roomName}});
+    }
+
 
 };

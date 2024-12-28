@@ -21,7 +21,7 @@ const roleBuilder = {
                     structure.structureType === STRUCTURE_TOWER &&
                     structure.store.getFreeCapacity(RESOURCE_ENERGY) - 200 > 0
             });
-            const buildingTargets = [];
+            const buildingTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
 
             if (creep.memory.road === undefined) {
                 const roadIds = _.chain(Game.creeps)
@@ -38,7 +38,7 @@ const roleBuilder = {
                 })
                 creep.memory.road = roadsToRepair.length > 0 ? roadsToRepair[0].id : undefined;
             }
-            /*if (creep.memory.road !== undefined) {
+            if (creep.memory.road !== undefined) {
                 const road = Game.getObjectById(creep.memory.road);
                 if (road.hits < road.hitsMax) {
                     if (creep.repair(road) === ERR_NOT_IN_RANGE) {
@@ -47,10 +47,7 @@ const roleBuilder = {
                 } else {
                     creep.memory.road = undefined;
                 }
-            } else */
-            console.log("Targets: " + JSON.stringify(targets));
-            if (targets.length > 0) {
-                console.log("kommer jag hit");
+            } else if (targets.length > 0) {
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
                 }
@@ -82,7 +79,6 @@ const roleBuilder = {
                     creep.moveTo(droppedEnergy[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             } else if (containers.length > 0) {
-                console.log("kommer jag hit");
                 if (creep.withdraw(containers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(containers[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 }

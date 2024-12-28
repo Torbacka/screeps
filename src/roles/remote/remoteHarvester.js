@@ -38,10 +38,30 @@ function withdraw(creep, roomName) {
     if (creep.memory.collect && creep.store.getFreeCapacity() === 0) {
         creep.memory.collect = false;
     } else {
-        const sources = creep.room.find(FIND_SOURCES);
-        if (sources.length) {
-            if (creep.harvest(sources[0]) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffffff'}});
+        const extractors = creep.room.find(FIND_STRUCTURES, {
+            filter: structure => { return structure.structureType === STRUCTURE_EXTRACTOR }
+        });
+        let target;
+        if (extractors.length > 0) {
+            target = creep.room.find(FIND_MINERALS);
+        } else {
+            target = creep.room.find(FIND_SOURCES);
+        }
+        const tombstones = creep.room.find(FIND_TOMBSTONES, {
+            filter: tombstone => {
+                return tombstone.store.getUsedCapacity() > 200;
+            }
+        });
+        if (tombstones.length > 0) {
+            Object.keys(tombstones[0].store).forEach(resourceType => {
+                if (creep.withdraw(tombstones[0], resourceType) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(tombstones[0]);
+                }
+            });
+        } else
+        if (target.length) {
+            if (creep.harvest(target[0]) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(target[0], {visualizePathStyle: {stroke: '#ffffff'}});
             }
         }
     }

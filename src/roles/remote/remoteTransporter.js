@@ -46,13 +46,13 @@ function withdraw(creep, roomName) {
     if (creep.memory.collect && creep.store.getFreeCapacity() === 0) {
         creep.memory.collect = false;
     } else {
-        const structuresWithEnergy = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        const structuresWithEnergy = creep.pos.findClosestByRange(123, {
             filter: structure => {
                 return structure.store && structure.store[RESOURCE_ENERGY] > 0;
             }
         });
         if (structuresWithEnergy) {
-            if (creep.room.name === roomName && creep.withdraw(structuresWithEnergy, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+            if (creep.withdraw(structuresWithEnergy, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(structuresWithEnergy, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         } else {

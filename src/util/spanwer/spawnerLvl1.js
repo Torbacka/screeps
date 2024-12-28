@@ -25,7 +25,7 @@ module.exports = function (roomName) {
                 source: key
             }
         });
-    }else if (creeps['generalist'].length < 10) {
+    }else if (creeps['generalist'].length < 7) {
         const key = assignSource(room);
         let newName = 'Generalist' + Game.time;
         let body

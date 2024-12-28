@@ -4,13 +4,11 @@ import clear from 'rollup-plugin-clear';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import screeps from 'rollup-plugin-screeps';
-import file from "./.screeps.json" with { type: "json" };
+import file from "./.screeps.json" with {type: "json"};
 
-const dest = process.env.DEST;
-if (!dest) {
-    console.log("No destination specified - code will be compiled but not uploaded");
-} else if ((file[dest]) == null) {
-    throw new Error("Invalid upload destination");
+const dryRun = process.env.DRY_RUN;
+if (dryRun) {
+    console.log("DRY_RUN specified - code will be compiled but not uploaded");
 }
 
 export default {
@@ -22,9 +20,9 @@ export default {
     },
 
     plugins: [
-        clear({ targets: ["dist"] }),
-        resolve({ rootDir: "src" }),
+        clear({targets: ["dist"]}),
+        resolve({rootDir: "src"}),
         commonjs(),
-        screeps({config: file["main"], dryRun: file["main"] == null})
+        screeps({config: file, dryRun: dryRun})
     ]
 }

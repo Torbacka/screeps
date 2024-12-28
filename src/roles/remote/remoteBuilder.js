@@ -87,7 +87,6 @@ const roleRemoteTransporter = {
                             return costMatrix;
                         }
                     });
-                    console.log("Move result: " + result);
                 }
             }
         }
