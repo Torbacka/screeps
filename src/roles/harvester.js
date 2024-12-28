@@ -46,7 +46,6 @@ function harvestEnergy(creep) {
     });
 
     // Attempt to withdraw or pick up energy
-    console.log('Harvesting energy from ' + source.id + ' for ' + creep.pos + ' ' + container.pos + ' ' + (creep.pos.x === container.pos.x && creep.pos.y === container.pos.y));
     if (!(creep.pos.x === container.pos.x && creep.pos.y === container.pos.y) || creep.harvest(source) === ERR_NOT_IN_RANGE) {
         creep.moveTo(container, {visualizePathStyle: {stroke: '#ffaa00'}});
     }
@@ -56,12 +55,12 @@ const roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
-        creep.memory.spawnTime =  creep.body.length*3;
         if (creep.memory.source === undefined) {
             assignSource(creep);
         }
         if (creep.memory.source && creep.memory.distanceToSource === undefined) {
             creep.memory.distanceToSource = calculatingSourceCost(creep)
+            creep.memory.spawnTime =  creep.body.length*3;
         }
         if (creep.memory.storing && creep.store[RESOURCE_ENERGY] === 0) {
             creep.memory.storing = false;

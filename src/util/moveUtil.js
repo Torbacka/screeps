@@ -5,7 +5,7 @@
  * **/
 export function moveToRoom(creep, room, callback) {
     let exitDir = creep.room.findExitTo(room);
-    let exit = creep.pos.findClosestByPath(exitDir);
+    let exit = creep.pos.findClosestByRange(exitDir);
     if (exit != null) {
         creep.moveTo(exit, {visualizePathStyle: {stroke: '#ffaa00'}});
     } else {

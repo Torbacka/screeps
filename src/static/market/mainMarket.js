@@ -1,55 +1,6 @@
 module.exports = function () {
-    if (false) {
-        let energySellOrders = Game.market.getAllOrders({
-            type: ORDER_SELL,
-            resourceType: RESOURCE_CATALYZED_GHODIUM_ACID
-        });
 
-        const roomName = 'E58S34'; // Replace with your room name
-        const price = 1400; // Desired price per unit
-        const amount = 1000; // Desired amount to buy
-
-        energySellOrders = energySellOrders.map(order => {
-            const transferCost = Game.market.calcTransactionCost(order.amount, order.roomName, "E58S34");
-            order.totalCostPerUnit = (order.price) + ((transferCost + 14) / order.amount);
-            order.transferCost = transferCost;
-            return order;
-        }).sort((a, b) => a.totalCostPerUnit - b.totalCostPerUnit);
-
-        if (energySellOrders[0].totalCostPerUnit <= price) {
-            const result = Game.market.deal(energySellOrders[0].id, Math.min(amount, energySellOrders[0].amount), roomName);
-            if (result === OK) {
-                console.log(`Sell order deal for ${Math.min(amount, energySellOrders[0], amount)} ${RESOURCE_ENERGY} at ${energySellOrders[0].totalCostPerUnit} in ${roomName}`);
-            } else {
-                console.log(`Failed to close a deal. Error code: ${result}`);
-            }
-        }
-
-        console.log(JSON.stringify(energySellOrders));
-
-        //const existingBuyOrders = Game.market.get(order =>
-        //    order.type === ORDER_BUY &&
-        //    order.resourceType === RESOURCE_ENERGY &&
-        //    order.roomName === roomName
-        //);
-
-        if (false) {
-            const result = Game.market.createOrder({
-                type: ORDER_BUY,
-                resourceType: RESOURCE_ENERGY,
-                price: price,
-                totalAmount: amount,
-                roomName: roomName
-            });
-
-            if (result === OK) {
-                console.log(`Buy order created for ${amount} ${RESOURCE_ENERGY} at ${price} in ${roomName}`);
-            } else {
-                Game.notify(`Failed to create buy order. Error code: ${result}`);
-            }
-        }
-    }
-    if (Game.time %5 ===0) {
+    if (Game.time %100 ===0) {
         const terminal = Game.rooms["E58S34"].find(FIND_MY_STRUCTURES, {
             filter: structure => structure.structureType === STRUCTURE_TERMINAL
         })[0];

@@ -5,7 +5,7 @@ const roleAttacker = {
         const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
         if (hostiles.length > 0) {
             // Select the first hostile creep as the target
-            const target = creep.pos.findClosestByPath(hostiles);
+            const target = creep.pos.findClosestByRange(hostiles);
 
             if (target) {
                 // Check if the creep is in range to attack
