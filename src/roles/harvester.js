@@ -46,7 +46,8 @@ function harvestEnergy(creep) {
     });
 
     // Attempt to withdraw or pick up energy
-    if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+    console.log('Harvesting energy from ' + source.id + ' for ' + creep.pos + ' ' + container.pos + ' ' + (creep.pos.x === container.pos.x && creep.pos.y === container.pos.y));
+    if (!(creep.pos.x === container.pos.x && creep.pos.y === container.pos.y) || creep.harvest(source) === ERR_NOT_IN_RANGE) {
         creep.moveTo(container, {visualizePathStyle: {stroke: '#ffaa00'}});
     }
 }

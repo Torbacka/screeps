@@ -41,7 +41,7 @@ module.exports = function (roomName) {
         const maxSets = Math.floor(energyAvailable / 550);
         body = [].concat(...Array(maxSets).fill([WORK, WORK, WORK, WORK, WORK, MOVE]));
         role = 'mineralHarvester';
-    } else if (!('remoteAttacker' in creeps) && false) {
+    } else if (!('remoteAttacker' in creeps)) {
         role = 'remoteAttacker';
         const maxSets = Math.floor(energyAvailable / 260);
         const remainingEnergy = energyAvailable - maxSets * 260;
@@ -49,7 +49,7 @@ module.exports = function (roomName) {
         body = [].concat(...Array(maxSets + toughSets).fill([TOUGH]));
         body = body.concat(...Array(maxSets).fill([RANGED_ATTACK, MOVE, MOVE]));
         body = body.concat(...Array(toughSets).fill([MOVE]));
-    } else if (!('remoteHealer' in creeps) && false) {
+    } else if (!('remoteHealer' in creeps)) {
         role = 'remoteHealer';
         const maxSets = Math.floor(energyAvailable / 300);
         body = [].concat(...Array(maxSets).fill([HEAL, MOVE]));
