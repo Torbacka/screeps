@@ -1,22 +1,30 @@
  function findClosestHostile(creep) {
     const minerals = creep.room.find(FIND_MINERALS);
     if (minerals.length > 0) {
-        return minerals[0].pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        const closestHostile  = minerals[0].pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        if (minerals[0].pos.getRangeTo(closestHostile) < 8) {
+            return closestHostile;
+        }
     }
-    return creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+    return null;
 }
  function calculateFleePath(creep, closestHostile, roomName) {
-     return PathFinder.search(creep.pos, {pos: closestHostile.pos, range: 3}, {
-         flee: true,
-         roomCallback: function (room) {
-             if (room !== roomName) return;
-             let costs = new PathFinder.CostMatrix;
-             room.find(FIND_HOSTILE_CREEPS).forEach(function (creep) {
-                 costs.set(creep.pos.x, creep.pos.y, 0xff);
-             });
-             return costs;
-         }
+     return PathFinder.search(creep.pos, {pos: closestHostile.pos, range: 5}, {
+         flee: true
      });
+ }
+
+ function calculatingSourceCost(creep) {
+    console.log("Kommer jag hit!");
+     const spawn = Game.rooms[creep.memory.room].find(FIND_MY_SPAWNS)[0]; // Assume there's at least one spawn in the room
+     if (spawn) {
+         // Calculate the path distance
+         const {path, opts, cost, incomplete} = PathFinder.search(spawn.pos, { pos: creep.pos, range: 1 });
+         if (!incomplete) {
+             console.log('Path found: ' + JSON.stringify(path), ' Options: ' + JSON.stringify(opts) + ' Cost: ' + cost + ' for ' + creep.name + ' ' + incomplete);
+             return cost; // Store the cost of the path
+         }
+     }
  }
 
  function checkIfReady(creep, room) {
@@ -47,5 +55,6 @@
  module.exports = {
      findClosestHostile,
      calculateFleePath,
-     checkIfReady
+     checkIfReady,
+     calculatingSourceCost
  };

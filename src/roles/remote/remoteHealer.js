@@ -30,8 +30,11 @@ function heal(creep, roomName) {
     const closestAttacker = findClosestAttacker(creep);
     const closestHostile = remoteUtil.findClosestHostile(creep);
     const rangeToHostile = creep.pos.getRangeTo(closestHostile);
+    //if (creep.ticksToLive < 500 && !creep.memory.distanceToSpawn) {
+    //    creep.memory.distanceToSpawn = remoteUtil.calculatingSourceCost(creep);
+    //    creep.memory.spawnTime =  creep.body.length*3;
+    //}
     if (closestAttacker) {
-
         const rangeToTarget = creep.pos.getRangeTo(closestAttacker);
         if (rangeToTarget > 1) {
             creep.moveTo(closestAttacker, {visualizePathStyle: {stroke: '#ff0000'}});
@@ -43,7 +46,7 @@ function heal(creep, roomName) {
             creep.moveByPath(fleePath);
         }
         if (closestAttacker.hits < closestAttacker.hitsMax) {
-
+            creep.heal(closestAttacker);
         }
     }
 }
