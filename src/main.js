@@ -32,52 +32,51 @@ module.exports.loop = function () {
             spawner(roomName);
             const creepsInRoom = _.filter(Game.creeps, creep => creep.room.name === roomName);
             creepsInRoom.forEach(creep => {
-
-                switch (creep.memory.role) {
-                    case 'harvester':
-                        roleHarvester.run(creep);
-                        break;
-                    case 'builder':
-                        roleBuilder.run(creep);
-                        break;
-                    case 'upgrader':
-                        roleUpgrader.run(creep);
-                        break;
-                    case 'Transporter':
-                        roleTransporter.run(creep);
-                        break;
-                    case 'destroyer':
-                        roleDestroyer.run(creep);
-                        break;
-                    case 'attacker':
-                        roleAttacker.run(creep);
-                        break;
-                    case 'generalist':
-                        roleGeneralist.run(creep);
-                        break;
-                    case 'mineralHarvester':
-                        roleMineralHarvester.run(creep);
-                        break;
-                    case 'remoteTransporter':
-                        roleRemoteTransporter.run(creep, 'E51S33', 'E51S32');
-                        break;
-                    case 'remoteHarvester':
-                        roleRemoteHarvester.run(creep, 'E58S34', 'E59S34');
-                        break;
-                    case 'remoteAttacker':
-                        roleRemoteAttacker.run(creep, 'E58S34', 'E56S34');
-                        break;
-                    case 'remoteClaimer':
-                        roleRemoteClaimer.run(creep, 'E58S34', 'E47S31');
-                        break;
-                    case 'remoteBuilder':
-                        roleRemoteBuilder.run(creep, 'E58S34', 'E57S35');
-                        break;
-                    case 'remoteHealer':
-                        roleRemoteHealer.run(creep, 'E58S34', 'E56S34');
-                        break;
-                }
-            });
+            switch (creep.memory.role) {
+                case 'harvester':
+                    roleHarvester.run(creep);
+                    break;
+                case 'builder':
+                    roleBuilder.run(creep);
+                    break;
+                case 'upgrader':
+                    roleUpgrader.run(creep);
+                    break;
+                case 'Transporter':
+                    roleTransporter.run(creep);
+                    break;
+                case 'destroyer':
+                    roleDestroyer.run(creep);
+                    break;
+                case 'attacker':
+                    roleAttacker.run(creep);
+                    break;
+                case 'generalist':
+                    roleGeneralist.run(creep);
+                    break;
+                case 'mineralHarvester':
+                    roleMineralHarvester.run(creep);
+                    break;
+                case 'remoteTransporter':
+                    roleRemoteTransporter.run(creep, 'E51S33', 'E51S32');
+                    break;
+                case 'remoteHarvester':
+                    roleRemoteHarvester.run(creep, 'E58S34', 'E59S34');
+                    break;
+                case 'remoteAttacker':
+                    roleRemoteAttacker.run(creep, 'E58S34', 'E56S34');
+                    break;
+                case 'remoteClaimer':
+                    roleRemoteClaimer.run(creep, 'E58S34', 'E47S31');
+                    break;
+                case 'remoteBuilder':
+                    roleRemoteBuilder.run(creep, 'E58S34', 'E57S35');
+                    break;
+                case 'remoteHealer':
+                    roleRemoteHealer.run(creep, 'E58S34', 'E56S34');
+                    break;
+            }
+        });
 
             let room = Game.rooms[roomName];
             tower.guard(room);

@@ -13,6 +13,23 @@ module.exports = function (roomName) {
     let energyAvailable = room.energyCapacityAvailable;
     let newName = Game.time.toString();
     let harvesters = _.filter(creeps['harvester'] || [], harvester => harvester.ticksToLive - harvester.memory.distanceToSource - 30 - harvester.memory.spawnTime > 0);
+    let storage = room.storage;
+    let sources = room.find(FIND_SOURCES);
+    if (!Memory[roomName]) Memory[roomName] = {};
+    if (!Memory[roomName].sourceDistanceToStorage) {
+        Memory[roomName].sourceDistanceToStorage = sources
+            .map(source => {
+                if (storage) {
+                    return source.pos.getRangeTo(storage)
+                }
+                return 0xff;
+            }).reduce((a, b) => a + b);
+        console.log("Room: " + room.name + " Source distance to storage: " + Memory[roomName].sourceDistanceToStorage);
+    }
+    let numberOfTransporters = 1;
+    if (Memory[roomName].sourceDistanceToStorage > 15) {
+        numberOfTransporters = 2;
+    }
     if (!('harvester' in creeps) && !('Transporter' in creeps) && !('generalist' in creeps)) {
         const key = assignSource(room);
         spawner.spawnCreep([WORK, MOVE, CARRY, MOVE, CARRY], newName, {
@@ -29,7 +46,7 @@ module.exports = function (roomName) {
                 spawnTime: body.length * 3
             }
         });
-    } else if (!('Transporter' in creeps) || creeps["Transporter"].length < 1) {
+    } else if (!('Transporter' in creeps) || creeps["Transporter"].length < numberOfTransporters) {
 
         const maxSets = Math.floor((room.energyAvailable) / 100);
         const body = [].concat(...Array(maxSets).fill([CARRY, MOVE]));
@@ -55,11 +72,6 @@ module.exports = function (roomName) {
         let newName = 'Builder' + Game.time;
         spawner.spawnCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], newName,
             {memory: {role: 'builder'}});
-    } else if (!('remoteTransporter' in creeps) || creeps['remoteTransporter'].length < 3) {
-        const maxSets = Math.floor(energyAvailable / 100);
-        let body = [].concat(...Array(maxSets).fill([CARRY, MOVE]));
-        spawner.spawnCreep(body, Game.time.toString(),
-            {memory: {role: 'remoteTransporter'}});
     }
 
 }

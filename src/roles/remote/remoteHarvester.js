@@ -16,15 +16,17 @@ const roleRemoteTransporter = {
             if (!creep.memory.collect && creep.store.getUsedCapacity() === 0) {
                 creep.memory.collect = true;
             } else {
-                let transferResult = creep.transfer(Game.rooms[mainRoom].storage, RESOURCE_ENERGY);
-                if (transferResult === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(Game.rooms[mainRoom].storage,{visualizePathStyle: {stroke: '#ffffff'}});
-                } else if (transferResult === OK) {
-                    console.log(Game.time + " - " + creep.name + " transferred " + RESOURCE_ENERGY + " to storage");
-                    //stats.remoteHarvesterStats(creep, mainRoom);
-                } else {
-                    console.log("Transfer result: " + transferResult);
-                }
+                Object.keys(creep.store).forEach(resourceType => {
+                    let transferResult = creep.transfer(Game.rooms[mainRoom].storage, resourceType);
+                    if (transferResult === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(Game.rooms[mainRoom].storage, {visualizePathStyle: {stroke: '#ffffff'}});
+                    } else if (transferResult === OK) {
+                        console.log(Game.time + " - " + creep.name + " transferred " + resourceType + " to storage");
+                        //stats.remoteHarvesterStats(creep, mainRoom);
+                    } else {
+                        console.log("Transfer result: " + transferResult);
+                    }
+                });
             }
         }
     }
@@ -35,7 +37,8 @@ const roleRemoteTransporter = {
  * @param {String} roomName
  * **/
 function withdraw(creep, roomName) {
-    if (creep.memory.collect && creep.store.getFreeCapacity() === 0) {
+    creep.memory.collect = false;
+    if (creep.memory.collect ) {
         creep.memory.collect = false;
     } else {
         const extractors = creep.room.find(FIND_STRUCTURES, {
@@ -47,11 +50,7 @@ function withdraw(creep, roomName) {
         } else {
             target = creep.room.find(FIND_SOURCES);
         }
-        const tombstones = creep.room.find(FIND_TOMBSTONES, {
-            filter: tombstone => {
-                return tombstone.store.getUsedCapacity() > 200;
-            }
-        });
+        const tombstones = [];
         if (tombstones.length > 0) {
             Object.keys(tombstones[0].store).forEach(resourceType => {
                 if (creep.withdraw(tombstones[0], resourceType) === ERR_NOT_IN_RANGE) {
