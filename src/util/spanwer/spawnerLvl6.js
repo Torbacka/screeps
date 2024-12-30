@@ -1,3 +1,5 @@
+const roomUtil = require("./roomUtil.js");
+
 function mineralsToMine(room) {
     const minerals = room.find(FIND_MINERALS);
     if (minerals.length === 0) return false;
@@ -21,16 +23,21 @@ module.exports = function (roomName) {
     let energyAvailable = room.energyCapacityAvailable;
     let body;
     let role;
+    roomUtil.setupRoomMemory( room.find(FIND_SOURCES), room.storage, roomName);
+    let numberOfTransporters = 2;
+    if (Memory[roomName].sourceDistanceToStorage > 15) {
+        numberOfTransporters = 2;
+    }
     if (!('Transporter' in creeps) && room.energyAvailable < 800) {
         role = 'Transporter';
-        body = [].concat(...Array(4).fill([CARRY, MOVE]));
+        body = [].concat(...Array(3).fill([CARRY, MOVE]));
     } else if (!('harvester' in creeps) && room.energyAvailable < 600) {
         role = 'harvester';
         body = [WORK, CARRY, MOVE];
     } else if (harvesters.length < 2) {
         role = 'harvester';
         body = [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE];
-    } else if (!('Transporter' in creeps) || creeps['Transporter'].length < 2) {
+    } else if (!('Transporter' in creeps) || creeps['Transporter'].length < numberOfTransporters) {
         role = 'Transporter';
         body = [].concat(...Array(6).fill([CARRY, CARRY, MOVE]));
     } else if ((!('builder' in creeps)) ) {

@@ -1,4 +1,9 @@
 module.exports = function () {
+    const terminal = Game.rooms["E51S33"].terminal
+    if (terminal.store[RESOURCE_BIOMASS] > 3000) {
+        console.log(`Sending biomass to E58S34 ${terminal.send(RESOURCE_BIOMASS, 3000, "E58S34")}`);
+    }
+
 
     if (Game.time %100 ===0 && false) {
         const terminal = Game.rooms["E58S34"].find(FIND_MY_STRUCTURES, {

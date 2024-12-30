@@ -1,4 +1,4 @@
-const assignSource = require('./assignSource.js');
+const roomUtil = require('./roomUtil.js');
 
 /**
  *
@@ -15,23 +15,13 @@ module.exports = function (roomName) {
     let harvesters = _.filter(creeps['harvester'] || [], harvester => harvester.ticksToLive - harvester.memory.distanceToSource - 30 - harvester.memory.spawnTime > 0);
     let storage = room.storage;
     let sources = room.find(FIND_SOURCES);
-    if (!Memory[roomName]) Memory[roomName] = {};
-    if (!Memory[roomName].sourceDistanceToStorage) {
-        Memory[roomName].sourceDistanceToStorage = sources
-            .map(source => {
-                if (storage) {
-                    return source.pos.getRangeTo(storage)
-                }
-                return 0xff;
-            }).reduce((a, b) => a + b);
-        console.log("Room: " + room.name + " Source distance to storage: " + Memory[roomName].sourceDistanceToStorage);
-    }
+    roomUtil.setupRoomMemory(sources, storage, roomName);
     let numberOfTransporters = 1;
     if (Memory[roomName].sourceDistanceToStorage > 15) {
         numberOfTransporters = 2;
     }
     if (!('harvester' in creeps) && !('Transporter' in creeps) && !('generalist' in creeps)) {
-        const key = assignSource(room);
+        const key = roomUtil.assignSource(room);
         spawner.spawnCreep([WORK, MOVE, CARRY, MOVE, CARRY], newName, {
             memory: {
                 role: 'generalist',

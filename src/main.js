@@ -20,6 +20,7 @@ const drawing = require('./util/drawing.js');
 const tower = require('./static/tower.js');
 const safeModeActivator = require('./static/safeModeActivator.js');
 const market = require('./static/market/mainMarket.js');
+const factory = require('./static/factory.js');
 const profiler = require('./screeps-profiler.js');
 
 
@@ -87,12 +88,16 @@ module.exports.loop = function () {
             if (room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TERMINAL}}).length > 0) {
                 market();
             }
+            if (Memory[roomName] && Memory[roomName].factory)   {
+                factory.produce(Game.getObjectById(Memory[roomName].factory));
+            }
 
         }
         garbageCollector();
         stats.roomStats();
         drawing();
         safeModeActivator();
+
 
     });
 }

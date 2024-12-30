@@ -1,9 +1,29 @@
+function setupRoomMemory(sources, storage, roomName) {
+    if (!Memory[roomName]) Memory[roomName] = {};
+    if (!Memory[roomName].sourceDistanceToStorage) {
+        Memory[roomName].sourceDistanceToStorage = sources
+            .map(source => {
+                if (storage) {
+                    return source.pos.getRangeTo(storage)
+                }
+                return 0xff;
+            }).reduce((a, b) => a + b);
+        console.log("Room: " + roomName + " Source distance to storage: " + Memory[roomName].sourceDistanceToStorage);
+    }
+    if (!Memory[roomName].factory) {
+        const factories = Game.rooms[roomName].find(FIND_MY_STRUCTURES, {  filter: { structureType: STRUCTURE_FACTORY } });
+        if (factories.length > 0) {
+            Memory[roomName].factory = factories[0].id;
+        }
+    }
+}
+
 /**
- *
+ * Assigns a source to a generalist creep
  * @param {Room} room
  * @returns {string}
  */
-module.exports = function (room) {
+function assignSource (room) {
     const generalists = _.filter(Game.creeps, creep => creep.memory.role === 'generalist');
     const assignedCounts = _.countBy(generalists, creep => creep.memory.source);
     const sources = {};
@@ -36,3 +56,9 @@ function countFreeSpots(room, source) {
     }
     return freeSpots;
 }
+
+
+module.exports = {
+    assignSource,
+    setupRoomMemory
+};

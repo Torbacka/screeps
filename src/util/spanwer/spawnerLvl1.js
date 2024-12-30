@@ -1,4 +1,4 @@
-const assignSource = require('./assignSource.js');
+const roomUtil = require('./roomUtil.js');
 /**
  *
  er * @param {String} roomName
@@ -18,7 +18,7 @@ module.exports = function (roomName) {
 
     if (!('generalist' in creeps)){
         console.log("Spawning generalist: " + roomName);
-        const key = assignSource(room);
+        const key = roomUtil.assignSource(room);
         spawner.spawnCreep([WORK, CARRY, MOVE, CARRY, MOVE], Game.time.toString(), {
             memory: {
                 role: 'generalist',
@@ -26,7 +26,7 @@ module.exports = function (roomName) {
             }
         });
     }else if (creeps['generalist'].length < 7) {
-        const key = assignSource(room);
+        const key = roomUtil.assignSource(room);
         let newName = 'Generalist' + Game.time;
         let body
 
