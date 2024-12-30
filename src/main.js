@@ -12,6 +12,7 @@ const roleRemoteAttacker = require('./roles/remote/remoteAttacker.js');
 const roleRemoteHealer = require('./roles/remote/remoteHealer.js');
 const roleRemoteClaimer = require('./roles/remote/remoteClaimer.js');
 const roleRemoteBuilder = require('./roles/remote/remoteBuilder.js');
+const roleRemoteBioHarvester = require('./roles/remote/remoteBioHarvester.js');
 const garbageCollector = require('./util/garbageCollector.js');
 const spawner = require('./util/spanwer/mainSpawner.js');
 const stats = require('./util/stats.js');
@@ -58,7 +59,7 @@ module.exports.loop = function () {
                     roleMineralHarvester.run(creep);
                     break;
                 case 'remoteTransporter':
-                    roleRemoteTransporter.run(creep, 'E51S33', 'E51S32');
+                    roleRemoteTransporter.run(creep, 'E51S33', 'E51S34');
                     break;
                 case 'remoteHarvester':
                     roleRemoteHarvester.run(creep, 'E58S34', 'E59S34');
@@ -74,6 +75,9 @@ module.exports.loop = function () {
                     break;
                 case 'remoteHealer':
                     roleRemoteHealer.run(creep, 'E58S34', 'E56S34');
+                    break;
+                case 'remoteBioHarvester':
+                    roleRemoteBioHarvester.run(creep, 'E50S35');
                     break;
             }
         });

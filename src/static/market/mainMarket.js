@@ -1,6 +1,6 @@
 module.exports = function () {
 
-    if (Game.time %100 ===0) {
+    if (Game.time %100 ===0 && false) {
         const terminal = Game.rooms["E58S34"].find(FIND_MY_STRUCTURES, {
             filter: structure => structure.structureType === STRUCTURE_TERMINAL
         })[0];

@@ -1,7 +1,7 @@
 
 
 function assignSource(creep) {
-    let harvesters = _.filter(Game.creeps, creep => creep.memory.role === 'harvester');
+    let harvesters = _.filter(Game.creeps, c => c.memory.role === 'harvester' && creep.room.name === c.room.name);
     const sourceAssignments = _.countBy(
         harvesters, creep => creep.memory.source
     );

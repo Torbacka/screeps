@@ -15,10 +15,16 @@ function getFreeEnergy(creep) {
         filter: resource => resource.resourceType === RESOURCE_ENERGY && resource.amount > 400
     });
 
-    const tombstonesWithEnergy = creep.room.find(FIND_TOMBSTONES, {
-        filter: tombstone => tombstone.store[RESOURCE_ENERGY] > 400
+    const tombstonesWithResources = creep.room.find(FIND_TOMBSTONES, {
+        filter: tombstone => {
+            const hasEnergy = tombstone.store[RESOURCE_ENERGY] > 400;
+            const hasMinerals = Object.keys(tombstone.store).some(resource =>
+                resource !== RESOURCE_ENERGY && tombstone.store[resource] > 0
+            );
+            return hasEnergy || hasMinerals;
+        }
     });
-    return {droppedEnergy, tombstonesWithEnergy};
+    return {droppedEnergy, tombstonesWithResources};
 }
 
 function switchContainer(creep) {
@@ -64,17 +70,19 @@ const roleTransporter = {
             creep.memory.storing = true;
         }
         if (!creep.memory.storing) {
-            const {droppedEnergy, tombstonesWithEnergy} = getFreeEnergy(creep);
+            const {droppedEnergy, tombstonesWithResources} = getFreeEnergy(creep);
             const terminal = creep.room.terminal;
             // Attempt to withdraw or pick up energy
             if (droppedEnergy) { // Dropped energy
                 if (creep.pickup(droppedEnergy) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(droppedEnergy, {visualizePathStyle: {stroke: '#ff671a'}});
                 }
-            } else if (tombstonesWithEnergy.length > 0) { // Tombstone energy
-                if (creep.withdraw(tombstonesWithEnergy[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(tombstonesWithEnergy[0], {visualizePathStyle: {stroke: '#ff671a'}});
-                }
+            } else if( tombstonesWithResources.length > 0) { // Tombstone energy
+                Object.keys(tombstonesWithResources[0].store).forEach(resourceType => {
+                    if (creep.withdraw(tombstonesWithResources[0], resourceType) === ERR_NOT_IN_RANGE) {
+                        creep.moveTo(tombstonesWithResources[0], {visualizePathStyle: {stroke: '#ff671a'}});
+                    }
+                });
             } else if (terminal !== undefined && terminal.store[RESOURCE_ENERGY] > (terminal.store.getCapacity() * 0.8)) { // Terminal energy
                 if (creep.withdraw(terminal, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(terminal, {visualizePathStyle: {stroke: '#ff671a'}});
