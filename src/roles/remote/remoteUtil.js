@@ -14,8 +14,7 @@
      });
  }
 
- function calculatingSourceCost(creep) {
-    console.log("Kommer jag hit!");
+ function calculatingSpawnDistance(creep) {
      const spawn = Game.rooms[creep.memory.room].find(FIND_MY_SPAWNS)[0]; // Assume there's at least one spawn in the room
      if (spawn) {
          // Calculate the path distance
@@ -56,5 +55,5 @@
      findClosestHostile,
      calculateFleePath,
      checkIfReady,
-     calculatingSourceCost
+     calculatingSpawnDistance
  };

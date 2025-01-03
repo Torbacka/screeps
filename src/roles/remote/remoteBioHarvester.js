@@ -47,7 +47,7 @@ function withdraw(creep, roomName) {
     if (creep.memory.collect && creep.store.getFreeCapacity() === 0 || creep.ticksToLive < creep.memory.termintalDistance + 40) {
         creep.memory.collect = false;
     } else {
-        const deposits = creep.room.find(122)
+        const deposits = creep.room.find(122).sort((a, b) => a.cooldown - b.cooldown);
         if (deposits.length > 0) {
             if (creep.harvest(deposits[0]) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(deposits[0], {visualizePathStyle: {stroke: '#ffaa00'}});

@@ -19,12 +19,19 @@ module.exports = function (roomName) {
     let minerals = room.find(FIND_MINERALS);
     let extractor = room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_EXTRACTOR}}) || [];
     let harvesters = _.filter(creeps['harvester'] || [], harvester => harvester.ticksToLive - harvester.memory.distanceToSource - 10 - harvester.memory.spawnTime > 0);
+    let remoteAttackers = _.filter(creeps['remoteAttacker'] || [], remoteAttacker => {
+        if (remoteAttacker.memory.distanceToSpawn !== undefined) {
+            return remoteAttacker.ticksToLive - remoteAttacker.memory.distanceToSpawn - 55 > 0;
+        } else {
+            return remoteAttacker.ticksToLive > 0;
+        }
+    });
     let healers = []/*_.filter(creeps['healers'] || [], harvester => harvester.ticksToLive - harvester.memory.distanceToSpawn - 10 - harvester.memory.spawnTime > 0);*/
     let energyAvailable = room.energyCapacityAvailable;
     let body;
     let role;
     roomUtil.setupRoomMemory( room.find(FIND_SOURCES), room.storage, roomName);
-    let numberOfTransporters = 2;
+    let numberOfTransporters = 1;
     if (Memory[roomName].sourceDistanceToStorage > 15) {
         numberOfTransporters = 2;
     }
@@ -37,9 +44,10 @@ module.exports = function (roomName) {
     } else if (harvesters.length < 2) {
         role = 'harvester';
         body = [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE];
-    } else if (!('Transporter' in creeps) || creeps['Transporter'].length < numberOfTransporters) {
+    } else if (!('Transporter' in creeps) || creeps['Transporter'].length < 2) {
         role = 'Transporter';
-        body = [].concat(...Array(6).fill([CARRY, CARRY, MOVE]));
+        console.log("Spawning transporter in room " + roomName);
+        body = [].concat(...Array(7).fill([CARRY, CARRY, MOVE]));
     } else if ((!('builder' in creeps)) ) {
         role = 'builder';
         body = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
@@ -48,21 +56,16 @@ module.exports = function (roomName) {
         body = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
     } else if (!('mineralHarvester' in creeps) && mineralsToMine(room) && extractor.length > 0) {
         const maxSets = Math.floor(energyAvailable / 550);
-        body = [].concat(...Array(maxSets).fill([WORK, WORK, WORK, WORK, WORK, MOVE]));
+        body = [].concat(...Array(maxSets).fill([WORK, WORK, WORK, WORK, WORK, MOVE])).splice(0, 50);
         role = 'mineralHarvester';
-    }  else if (!('remoteBioHarvester' in creeps) && roomName === 'E51S33' || (roomName === 'E51S33' && creeps['remoteBioHarvester'].length < 2)) {
+    }  else if (!('remoteBioHarvester' in creeps) && roomName === 'E51S33' ) {
         console.log("Spawning remoteBioHarvester");
         role = 'remoteBioHarvester';
         const maxSets = Math.floor(energyAvailable / 250);
         body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE, MOVE]));
-    }else if (!('remoteAttacker' in creeps) && false) {
+    }else if (remoteAttackers.length < 1 && roomName === 'E51S33' ) {
         role = 'remoteAttacker';
-        const maxSets = Math.floor(energyAvailable / 260);
-        const remainingEnergy = energyAvailable - maxSets * 260;
-        const toughSets = Math.floor(remainingEnergy / 60);
-        body = [].concat(...Array(maxSets + toughSets).fill([TOUGH]));
-        body = body.concat(...Array(maxSets).fill([RANGED_ATTACK, MOVE, MOVE]));
-        body = body.concat(...Array(toughSets).fill([MOVE]));
+        body = [RANGED_ATTACK, RANGED_ATTACK, MOVE, MOVE];
     } else if (healers.length < 1 && false) {
         role = 'remoteHealer';
         const maxSets = Math.floor(energyAvailable / 300);
@@ -72,9 +75,10 @@ module.exports = function (roomName) {
         const maxSets = Math.floor(energyAvailable / 200);
         body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE]));
     } else if (!('remoteHarvester' in creeps)  && roomName === 'E58S34' || (roomName === 'E58S34' && creeps['remoteHarvester'].length < 2)) {
+        console.log("Spawning remoteHarvester");
         role = 'remoteHarvester';
-        const maxSets = Math.floor(energyAvailable / 200);
-        body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE]));
+        const maxSets = Math.floor(2300 / 200);
+        body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE])).slice(0, 50);
     } else if (!('remoteTransporter' in creeps) && roomName === 'E51S33' && false) {
         console.log("Spawning remoteTransporter");
         role = 'remoteTransporter';

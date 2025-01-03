@@ -7,11 +7,13 @@ const roleRemoteTransporter = {
      * @param {String} mainRoom
      * @param {String} toRoom **/
     run: function (creep, mainRoom, toRoom) {
+        if( creep.room.find(FIND_HOSTILE_CREEPS)){
+            attack(creep, toRoom);
+        }
         if (creep.memory.attack === undefined) {
             creep.memory.attack = true;
         }
         moveUtil.moveToRoom(creep, toRoom, attack);
-
     }
 };
 
@@ -22,32 +24,24 @@ const roleRemoteTransporter = {
  * @param {String} roomName
  * **/
 function attack(creep, roomName) {
-
-    const closestHostile = remoteUtil.findClosestHostile(creep);
-    let sourceKeeper;
-    if (!closestHostile) {
-        sourceKeeper = Game.getObjectById('5bbcb06f9099fc012e63c2d1')
+    if (creep.memory.distanceToSpawn === undefined && creep.room.name === roomName) {
+        creep.memory.distanceToSpawn = remoteUtil.calculatingSpawnDistance(creep);
     }
-    if (!creep.memory.ready) {
-        remoteUtil.checkIfReady(creep, Game.rooms[roomName]);
-    }
-    const healer = creep.pos.findClosestByRange(FIND_MY_CREEPS, {
-        filter: (creep) => creep.memory.role === 'remoteHealer'
-    });
-    if (creep.memory.ready && closestHostile) {
-        const rangeToTarget = creep.pos.getRangeTo(closestHostile);
-        const sourceKeeperRange = creep.pos.getRangeTo(sourceKeeper);
-        if (rangeToTarget > 3 && creep.pos.getRangeTo(healer)  < 2 && healer.fatigue <= healer.body.length) {
-            creep.moveTo(closestHostile, {visualizePathStyle: {stroke: '#ff0000'}});
-        }  else  if (sourceKeeperRange > 5) {
-            creep.moveTo(sourceKeeper, {visualizePathStyle: {stroke: '#ff0000'}});
-        }else if (rangeToTarget < 3 || (creep.hitsMax - creep.hits > 1000)) {
-            console.log("Kommer jag hit?");
-            const fleePath = remoteUtil.calculateFleePath(creep, closestHostile, roomName);
-            console.log("Flee path: " + JSON.stringify(fleePath));
-            console.log(creep.moveByPath(fleePath.path));
+    const closestHostile = creep.room.find(FIND_HOSTILE_CREEPS);
+    if (closestHostile.length > 0) {
+        let attack = creep.rangedAttack(closestHostile[0]);
+        console.log("Attack result: " + JSON.stringify(attack));
+        if (attack === ERR_NOT_IN_RANGE) {
+            creep.moveTo(closestHostile[0], {visualizePathStyle: {stroke: '#ff0000'}});
+        } else if (attack === OK) {
+            Game.notify("Attacking hostile creep: " + closestHostile[0].owner.username + " in room: " + roomName);
+            creep.moveTo(closestHostile[0], {visualizePathStyle: {stroke: '#ff0000'}});
         }
-        creep.rangedAttack(closestHostile);
+    } else {
+        const positionAt = creep.room.getPositionAt(32, 39);
+        if (positionAt) {
+            creep.moveTo(positionAt, {visualizePathStyle: {stroke: '#ff0000'}});
+        }
     }
 }
 

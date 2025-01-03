@@ -37,8 +37,7 @@ const roleRemoteTransporter = {
  * @param {String} roomName
  * **/
 function withdraw(creep, roomName) {
-    creep.memory.collect = false;
-    if (creep.memory.collect ) {
+    if (creep.memory.collect && creep.store.getFreeCapacity() === 0) {
         creep.memory.collect = false;
     } else {
         const extractors = creep.room.find(FIND_STRUCTURES, {

@@ -66,7 +66,7 @@ module.exports.loop = function () {
                     roleRemoteHarvester.run(creep, 'E58S34', 'E59S34');
                     break;
                 case 'remoteAttacker':
-                    roleRemoteAttacker.run(creep, 'E58S34', 'E56S34');
+                    roleRemoteAttacker.run(creep, 'E58S34', 'E50S40');
                     break;
                 case 'remoteClaimer':
                     roleRemoteClaimer.run(creep, 'E58S34', 'E47S31');
@@ -78,7 +78,7 @@ module.exports.loop = function () {
                     roleRemoteHealer.run(creep, 'E58S34', 'E56S34');
                     break;
                 case 'remoteBioHarvester':
-                    roleRemoteBioHarvester.run(creep, 'E50S35');
+                    roleRemoteBioHarvester.run(creep, 'E50S36');
                     break;
             }
         });
@@ -86,7 +86,8 @@ module.exports.loop = function () {
             let room = Game.rooms[roomName];
             tower.guard(room);
             if (room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TERMINAL}}).length > 0) {
-                market();
+
+                market(roomName)
             }
             if (Memory[roomName] && Memory[roomName].factory)   {
                 factory.produce(Game.getObjectById(Memory[roomName].factory));

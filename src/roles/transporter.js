@@ -40,6 +40,13 @@ function switchContainer(creep) {
     }
 }
 
+function shouldTransferToFactory(creep) {
+    if (Memory[creep.room.name].factory === undefined) return false
+
+    const factory = Game.getObjectById(Memory[creep.room.name].factory);
+    return creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && factory.store.getUsedCapacity(RESOURCE_ENERGY) < 15000
+}
+
 const roleTransporter = {
 
     /** @param {Creep} creep **/
@@ -81,15 +88,14 @@ const roleTransporter = {
             } else if (tombstonesWithResources.length > 0) { // Tombstone energy
                 Object.keys(tombstonesWithResources[0].store).forEach(resourceType => {
                     if (creep.withdraw(tombstonesWithResources[0], resourceType) === ERR_NOT_IN_RANGE) {
-                        console.log("Moving to tombstone with resources");
-                        console.log(creep.moveTo(tombstonesWithResources[0],
+                        creep.moveTo(tombstonesWithResources[0],
                             {visualizePathStyle: {stroke: '#ff671a'}},
                             {
                                 swampCost: 0.5,
                                 plainCost: 10,
                                 maxRooms: 1,
                             }
-                        ));
+                        );
                     }
 
                 });
@@ -107,7 +113,7 @@ const roleTransporter = {
                 } else if (creep.withdraw(terminal, RESOURCE_CATALYZED_GHODIUM_ACID) === ERR_NOT_ENOUGH_RESOURCES) {
                     creep.memory.storing = true;
                 }
-            } else if (terminal && terminal.store[RESOURCE_BIOMASS] > 0 || Memory[creep.room.name].factory) { // Terminal lab energy
+            } else if (terminal && terminal.store[RESOURCE_BIOMASS] > 0 && Memory[creep.room.name].factory !== undefined) { // Terminal lab energy
                 if (creep.withdraw(terminal, RESOURCE_BIOMASS) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(terminal, {visualizePathStyle: {stroke: '#ff671a'}});
                 }
@@ -135,12 +141,11 @@ const roleTransporter = {
             const labs = creep.room.find(FIND_STRUCTURES, {filter: structure => structure.structureType === STRUCTURE_LAB});
             const hasFactoryMaterials = creep.store[RESOURCE_BIOMASS] > 0 || creep.store[RESOURCE_LEMERGIUM] > 0
 
-            if (hasFactoryMaterials && Memory[creep.room.name].factory === undefined ) {
+            if (hasFactoryMaterials && Memory[creep.room.name].factory === undefined) {
                 if (creep.transfer(terminal, RESOURCE_BIOMASS) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(terminal, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             } else if (hasFactoryMaterials) {
-                console.log("Transferring biomass to factory "  + JSON.stringify(Object.keys(creep.store)));
                 const factory = Game.getObjectById(Memory[creep.room.name].factory);
                 Object.keys(creep.store).forEach(resourceType => {
                     if (creep.transfer(factory, resourceType) === ERR_NOT_IN_RANGE) {
@@ -165,29 +170,33 @@ const roleTransporter = {
                 }
             } else {
 
-                if (Memory[creep.room.name].factory !== undefined && creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 ) {
+                if (shouldTransferToFactory(creep)) {
                     const factory = Game.getObjectById(Memory[creep.room.name].factory);
                     if (factory.store.getUsedCapacity(RESOURCE_ENERGY) < 15000 && creep.transfer(factory, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                         creep.moveTo(factory, {visualizePathStyle: {stroke: '#ffffff'}});
-                    } else {
+                    }
+                } else {
+                    if (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
+                        if (creep.transfer(creep.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                            creep.moveTo(creep.room.storage, {visualizePathStyle: {stroke: '#ffffff'}});
+                        }
+                    } else if (terminal && terminal.store.getFreeCapacity() > 0) {
+
                         Object.keys(creep.store).forEach(resourceType => {
                             if (creep.transfer(terminal, resourceType) === ERR_NOT_IN_RANGE) {
                                 creep.moveTo(terminal, {visualizePathStyle: {stroke: '#ffffff'}});
                             }
                         });
+                    } else {
+                        Object.keys(creep.store).forEach(resourceType => {
+                            if (creep.transfer(creep.room.storage, resourceType) === ERR_NOT_IN_RANGE) {
+                                creep.moveTo(creep.room.storage, {visualizePathStyle: {stroke: '#ffffff'}});
+                            }
+                        });
                     }
-                } else {
-                    // Transfer excess energy to storage
-                    if (!terminal) {
-                        terminal = creep.room.storage;
-                    }
-                    Object.keys(creep.store).forEach(resourceType => {
-                        if (creep.transfer(terminal, resourceType) === ERR_NOT_IN_RANGE) {
-                            creep.moveTo(terminal, {visualizePathStyle: {stroke: '#ffffff'}});
-                        }
-                    });
                 }
             }
+
         }
     }
 };
