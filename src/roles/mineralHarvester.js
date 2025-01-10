@@ -13,11 +13,9 @@ const roleHarvester = {
             filter: structure => structure.structureType === STRUCTURE_CONTAINER
         });
         const mineral = creep.room.find(FIND_MINERALS)[0]
-        // Attempt to withdraw or pick up energy
-        if (creep.harvest(mineral) === ERR_NOT_IN_RANGE) {
+        if (!(creep.pos.x === container.pos.x && creep.pos.y === container.pos.y) || creep.harvest(mineral) === ERR_NOT_IN_RANGE) {
             creep.moveTo(container, {visualizePathStyle: {stroke: '#ffaa00'}});
         }
-        creep.p
     }
 };
 

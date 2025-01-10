@@ -6,7 +6,7 @@ module.exports = function () {
             console.log('Clearing non-existing creep memory:', name);
         }
     }
-    if (Game.time%15000) {
+    if (Game.time%15000 ===0) {
         const orders = Game.market.orders;
         const filteredOrders = Object.keys(orders).filter(orderId => orders[orderId].remainingAmount === 0)
         filteredOrders.forEach(orderId => {

@@ -51,19 +51,19 @@ module.exports = function (roomName) {
     } else if ((!('builder' in creeps)) ) {
         role = 'builder';
         body = [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
-    } else if (!('upgrader' in creeps) || creeps['upgrader'].length < 2) {
+    } else if (!('upgrader' in creeps) || creeps['upgrader'].length < 3) {
         role = 'upgrader';
         body = [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
     } else if (!('mineralHarvester' in creeps) && mineralsToMine(room) && extractor.length > 0) {
         const maxSets = Math.floor(energyAvailable / 550);
         body = [].concat(...Array(maxSets).fill([WORK, WORK, WORK, WORK, WORK, MOVE])).splice(0, 50);
         role = 'mineralHarvester';
-    }  else if (!('remoteBioHarvester' in creeps) && roomName === 'E51S33' ) {
+    }  else if (!('remoteBioHarvester' in creeps) && roomName === 'E51S33' && false) {
         console.log("Spawning remoteBioHarvester");
         role = 'remoteBioHarvester';
         const maxSets = Math.floor(energyAvailable / 250);
         body = [].concat(...Array(maxSets).fill([WORK, CARRY, MOVE, MOVE]));
-    }else if (remoteAttackers.length < 1 && roomName === 'E51S33' ) {
+    }else if (remoteAttackers.length < 1 && roomName === 'E51S33' && false ) {
         role = 'remoteAttacker';
         body = [RANGED_ATTACK, RANGED_ATTACK, MOVE, MOVE];
     } else if (healers.length < 1 && false) {

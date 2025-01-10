@@ -41,7 +41,7 @@ function switchContainer(creep) {
 }
 
 function shouldTransferToFactory(creep) {
-    if (Memory[creep.room.name].factory === undefined) return false
+    if (Memory[creep.room.name] && Memory[creep.room.name].factory === undefined) return false
 
     const factory = Game.getObjectById(Memory[creep.room.name].factory);
     return creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && factory.store.getUsedCapacity(RESOURCE_ENERGY) < 15000
@@ -83,19 +83,16 @@ const roleTransporter = {
             // Attempt to withdraw or pick up energy
             if (droppedEnergy) { // Dropped energy
                 if (creep.pickup(droppedEnergy) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(droppedEnergy, {visualizePathStyle: {stroke: '#ff671a'}});
+                    creep.moveTo(droppedEnergy, {visualizePathStyle: {stroke: '#ff671a'}, maxRooms: 1}, );
                 }
             } else if (tombstonesWithResources.length > 0) { // Tombstone energy
                 Object.keys(tombstonesWithResources[0].store).forEach(resourceType => {
                     if (creep.withdraw(tombstonesWithResources[0], resourceType) === ERR_NOT_IN_RANGE) {
-                        creep.moveTo(tombstonesWithResources[0],
-                            {visualizePathStyle: {stroke: '#ff671a'}},
-                            {
-                                swampCost: 0.5,
-                                plainCost: 10,
-                                maxRooms: 1,
-                            }
-                        );
+                        creep.moveTo(
+                            tombstonesWithResources[0], {
+                                visualizePathStyle: {stroke: '#ff671a'},
+                                maxRooms: 1
+                            });
                     }
 
                 });
@@ -121,7 +118,7 @@ const roleTransporter = {
                 const container = Game.getObjectById(creep.memory.container);
                 Object.keys(container.store).forEach(resourceType => {
                     if (creep.withdraw(container, resourceType) === ERR_NOT_IN_RANGE) {
-                        creep.moveTo(container, {visualizePathStyle: {stroke: '#ff671a'}});
+                        creep.moveTo(container, {visualizePathStyle: {stroke: '#ff671a'}, maxRooms: 1, reusePath: 10});
                     }
                 });
             }
@@ -139,7 +136,7 @@ const roleTransporter = {
                 }
             });
             const labs = creep.room.find(FIND_STRUCTURES, {filter: structure => structure.structureType === STRUCTURE_LAB});
-            const hasFactoryMaterials = creep.store[RESOURCE_BIOMASS] > 0 || creep.store[RESOURCE_LEMERGIUM] > 0
+            const hasFactoryMaterials = creep.store[RESOURCE_BIOMASS] > 0 ;
 
             if (hasFactoryMaterials && Memory[creep.room.name].factory === undefined) {
                 if (creep.transfer(terminal, RESOURCE_BIOMASS) === ERR_NOT_IN_RANGE) {
@@ -153,6 +150,7 @@ const roleTransporter = {
                     }
                 })
             } else if (targets) {
+                console.log('Transfering to targets' + creep.transfer(targets, RESOURCE_ENERGY))
                 if (creep.transfer(targets, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets, {visualizePathStyle: {stroke: '#ffffff'}}, {maxRooms: 1});
                 }
@@ -176,27 +174,13 @@ const roleTransporter = {
                         creep.moveTo(factory, {visualizePathStyle: {stroke: '#ffffff'}});
                     }
                 } else {
-                    if (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0) {
-                        if (creep.transfer(creep.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    Object.keys(creep.store).forEach(resourceType => {
+                        if (creep.transfer(creep.room.storage, resourceType) === ERR_NOT_IN_RANGE) {
                             creep.moveTo(creep.room.storage, {visualizePathStyle: {stroke: '#ffffff'}});
                         }
-                    } else if (terminal && terminal.store.getFreeCapacity() > 0) {
-
-                        Object.keys(creep.store).forEach(resourceType => {
-                            if (creep.transfer(terminal, resourceType) === ERR_NOT_IN_RANGE) {
-                                creep.moveTo(terminal, {visualizePathStyle: {stroke: '#ffffff'}});
-                            }
-                        });
-                    } else {
-                        Object.keys(creep.store).forEach(resourceType => {
-                            if (creep.transfer(creep.room.storage, resourceType) === ERR_NOT_IN_RANGE) {
-                                creep.moveTo(creep.room.storage, {visualizePathStyle: {stroke: '#ffffff'}});
-                            }
-                        });
-                    }
+                    });
                 }
             }
-
         }
     }
 };
